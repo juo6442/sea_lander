@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "NeoDgm";
+    src: url("res/web/neodgm_pro.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+}
+
+div#container {
+    width: 100%;
+    text-align: center;
+    margin: 2em 0;
+}
+
+#screen {
+    width: 80vw;
+    height: 45vw;
+    min-width: 512px;
+    min-height: 288px;
+    background-color: black;
+}
