@@ -1,13 +1,18 @@
 import Environment from "./Environment";
+import { KeyListener } from "./KeyInput";
 
 export default class Game {
     private screen: Canvas;
     private buffer: Canvas;
 
+    private keyListener: KeyListener;
+
     constructor(screen: HTMLCanvasElement) {
         this.screen = new Canvas(screen);
-        this.buffer = new Canvas(this.createSameCanvas(screen));
-        this.buffer.context2d.imageSmoothingEnabled = false;
+        this.buffer = this.createSameCanvas(this.screen);
+        this.buffer.context.imageSmoothingEnabled = false;
+
+        this.keyListener = new KeyListener();
     }
 
     /**
@@ -16,6 +21,8 @@ export default class Game {
     public start() {
         setInterval(this.update.bind(this), 1000 / Environment.FPS);
         window.requestAnimationFrame(() => this.render());
+
+        this.keyListener.registerEventListener();
     }
 
     /**
@@ -29,9 +36,9 @@ export default class Game {
      */
     private render() {
         // TODO: Draw to this.buffer
-        this.screen.context2d.drawImage(this.buffer.canvas,
+        this.screen.context.drawImage(this.buffer.canvas,
                 0, 0,
-                this.screen.canvas.width, this.screen.height);
+                this.screen.width, this.screen.height);
 
         window.requestAnimationFrame(() => this.render());
     }
@@ -42,17 +49,17 @@ export default class Game {
      * @param canvas - Original canvas to refer
      * @returns A new canvas
      */
-    private createSameCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
+    private createSameCanvas(canvas: Canvas): Canvas {
         const newCanvas = document.createElement("canvas");
         newCanvas.width = canvas.width;
         newCanvas.height = canvas.height;
-        return newCanvas;
+        return new Canvas(newCanvas);
     }
 }
 
 class Canvas {
     readonly canvas: HTMLCanvasElement;
-    readonly context2d: CanvasRenderingContext2D;
+    readonly context: CanvasRenderingContext2D;
 
     get width() {
         return this.canvas.width;
@@ -65,8 +72,8 @@ class Canvas {
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
 
-        const context2d = canvas.getContext("2d");
-        if (!context2d) throw "2D canvas context is not available";
-        this.context2d = context2d;
+        const context = canvas.getContext("2d");
+        if (!context) throw "2D canvas context is not available";
+        this.context = context;
     }
 }
