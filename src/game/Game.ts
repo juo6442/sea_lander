@@ -26,13 +26,13 @@ export default class Game {
     }
 
     /**
-     * Updates all game entities for each frame.
+     * Called for each frame to update and run logic.
      */
     private update() {
     }
 
     /**
-     * Draws all game entities and schedules next frame rendering.
+     * Draws current status to buffer and schedules next rendering.
      */
     private render() {
         // TODO: Draw to this.buffer
