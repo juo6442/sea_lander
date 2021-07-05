@@ -31,18 +31,8 @@ export enum Key {
     OK = "Enter",
 }
 
-export interface KeyStatus {
-    /**
-     * Returns key status.
-     *
-     * @param key - Key to inspect
-     * @returns True if the key is pressed
-     */
-    isPressed(key: Key): boolean;
-}
-
-class SettableKeyStatus implements KeyStatus {
-    private status: Map<string, boolean>;
+export class KeyStatus {
+    protected status: Map<string, boolean>;
 
     constructor() {
         this.status = new Map();
@@ -51,6 +41,18 @@ class SettableKeyStatus implements KeyStatus {
         }
     }
 
+    /**
+     * Returns key status.
+     *
+     * @param key - Key to inspect
+     * @returns True if the key is pressed
+     */
+    public isPressed(key: Key): boolean {
+        return this.status.get(key) ?? false;
+    }
+}
+
+class SettableKeyStatus extends KeyStatus {
     /**
      * Set key status.
      *
@@ -61,9 +63,5 @@ class SettableKeyStatus implements KeyStatus {
         if (this.status.has(key)) {
             this.status.set(key, pressed);
         }
-    }
-
-    public isPressed(key: Key): boolean {
-        return this.status.get(key) ?? false;
     }
 }
