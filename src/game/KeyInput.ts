@@ -1,8 +1,8 @@
 export class KeyListener {
-    public _keyStatus: KeyStatusWritable;
+    private _keyStatus: SettableKeyStatus;
 
     constructor() {
-        this._keyStatus = new KeyStatusSettable();
+        this._keyStatus = new SettableKeyStatus();
     }
 
     get keyStatus(): KeyStatus {
@@ -41,7 +41,7 @@ export interface KeyStatus {
     isPressed(key: Key): boolean;
 }
 
-class KeyStatusSettable implements KeyStatus {
+class SettableKeyStatus implements KeyStatus {
     private status: Map<string, boolean>;
 
     constructor() {
@@ -54,10 +54,10 @@ class KeyStatusSettable implements KeyStatus {
     /**
      * Set key status.
      *
-     * @param key - Key to set
+     * @param key - Key string to set
      * @param pressed - True if the key is pressed
      */
-    public setPressed(key: Key, pressed: boolean): void {
+    public setPressed(key: string, pressed: boolean): void {
         if (this.status.has(key)) {
             this.status.set(key, pressed);
         }
