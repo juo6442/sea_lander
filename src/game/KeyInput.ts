@@ -45,7 +45,7 @@ class SettableKeyStatus implements KeyStatus {
     private status: Map<string, boolean>;
 
     constructor() {
-        this.status = new Map<string, boolean>();
+        this.status = new Map();
         for (const k of Object.values(Key)) {
             this.status.set(k, false);
         }

@@ -5,7 +5,7 @@ export class Scene {
     private entities: Map<string, Entity>;
 
     constructor() {
-        this.entities = new Map<string, Entity>();
+        this.entities = new Map();
     }
 
     /**
