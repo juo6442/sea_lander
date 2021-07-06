@@ -1,5 +1,6 @@
-import Entity from "./Entity";
-import { KeyStatus } from "../game/KeyInput";
+import Entity from "../Entity";
+import { KeyStatus } from "../../game/KeyInput";
+import IntroScene from "./IntroScene";
 
 export enum Scene {
     INTRO,
@@ -47,9 +48,9 @@ export class SceneFactory {
      * @param scene - Scene to create
      * @returns SceneEntity object
      */
-    public static getSceneEntity(scene: Scene): SceneEntity {
+    public static getSceneEntity(scene: Scene, manager: SceneManager): SceneEntity {
         switch (scene) {
-            case Scene.INTRO: throw "Not implemented"; // TODO:
+            case Scene.INTRO: return new IntroScene(manager);
             case Scene.TITLE: throw "Not implemented"; // TODO:
             case Scene.INGAME: throw "Not implemented"; // TODO:
             default: throw `Scene ${scene} is invalid`;

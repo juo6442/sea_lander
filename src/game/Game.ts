@@ -1,6 +1,6 @@
 import Environment from "./Environment";
 import { KeyListener } from "./KeyInput";
-import { Scene, SceneEntity, SceneFactory, SceneManager } from "../entity/Scene";
+import { Scene, SceneEntity, SceneFactory, SceneManager } from "../entity/scene/Scene";
 
 export default class Game implements SceneManager {
     private screen: Canvas;
@@ -19,7 +19,7 @@ export default class Game implements SceneManager {
     }
 
     public changeScene(scene: Scene): void {
-        this.currentScene = SceneFactory.getSceneEntity(scene);
+        this.currentScene = SceneFactory.getSceneEntity(scene, this);
     }
 
     /**
