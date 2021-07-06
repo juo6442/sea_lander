@@ -80,7 +80,7 @@ export class ResourceLoader {
      * ```
      * @returns Resource object contains loaded resources
      */
-    public async load() {
+    public async load(): Promise<SettableResource> {
         await Promise.all(this.resourcesToLoad);
         return this.resource;
     }

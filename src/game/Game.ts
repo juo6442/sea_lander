@@ -1,11 +1,14 @@
 import Environment from "./Environment";
 import { KeyListener } from "./KeyInput";
+import { Scene, SceneEntity, SceneFactory, SceneManager } from "../entity/Scene";
 
-export default class Game {
+export default class Game implements SceneManager {
     private screen: Canvas;
     private buffer: Canvas;
 
     private keyListener: KeyListener;
+
+    private currentScene: SceneEntity | undefined;
 
     constructor(screen: HTMLCanvasElement) {
         this.screen = new Canvas(screen);
@@ -15,27 +18,35 @@ export default class Game {
         this.keyListener = new KeyListener();
     }
 
+    public changeScene(scene: Scene): void {
+        this.currentScene = SceneFactory.getSceneEntity(scene);
+    }
+
     /**
      * Starts main loop and rendering.
      */
-    public start() {
+    public start(): void {
         setInterval(this.update.bind(this), 1000 / Environment.FPS);
         window.requestAnimationFrame(() => this.render());
 
         this.keyListener.registerEventListener();
+
+        this.changeScene(Scene.INTRO);
     }
 
     /**
      * Called for each frame to update and run logic.
      */
-    private update() {
+    private update(): void {
+        this.currentScene?.update(this.keyListener.keyStatus);
     }
 
     /**
      * Draws current status to buffer and schedules next rendering.
      */
-    private render() {
-        // TODO: Draw to this.buffer
+    private render(): void {
+        this.currentScene?.render(this.buffer.context);
+
         this.screen.context.drawImage(this.buffer.canvas,
                 0, 0,
                 this.screen.width, this.screen.height);
