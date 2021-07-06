@@ -1,11 +1,11 @@
-import { Resource, ResourceLoader } from "../../game/Resource";
+import Resource from "../../game/Resource";
 import { SceneEntity, SceneManager } from "./Scene";
 
 export default class IntroScene extends SceneEntity {
     constructor(manager: SceneManager) {
         super(manager);
 
-        new ResourceLoader()
+        new Resource.Loader()
                 .setFont("NeoDgm")
                 .setImage("play", "play.png")
                 .load()
