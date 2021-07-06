@@ -10,6 +10,16 @@ export default {
     },
 
     /**
+     * Fits the number into the range.
+     * @param min - Range min
+     * @param max - Range max
+     * @returns Arranged number
+     */
+    fitIn: function(n: number, min: number, max: number): number {
+        return Math.min(Math.max(min, n), max);
+    },
+
+    /**
      * Convert degree to radian
      * @param degree - Angle in degree
      * @returns Angle in radian
