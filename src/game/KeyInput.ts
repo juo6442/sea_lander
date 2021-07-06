@@ -34,7 +34,7 @@ export enum Key {
 export class KeyStatus {
     protected status: Map<string, boolean>;
 
-    constructor() {
+    protected constructor() {
         this.status = new Map();
         for (const k of Object.values(Key)) {
             this.status.set(k, false);
@@ -53,6 +53,10 @@ export class KeyStatus {
 }
 
 class SettableKeyStatus extends KeyStatus {
+    constructor() {
+        super();
+    }
+
     /**
      * Set key status.
      *

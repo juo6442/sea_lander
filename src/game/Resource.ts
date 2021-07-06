@@ -6,7 +6,7 @@ export class Resource {
     protected images: Map<string, HTMLImageElement>;
     protected audios: Map<string, HTMLAudioElement>;
 
-    constructor() {
+    protected constructor() {
         this.images = new Map();
         this.audios = new Map();
     }
@@ -37,6 +37,10 @@ export class Resource {
 }
 
 class SettableResource extends Resource {
+    constructor() {
+        super();
+    }
+
     /**
      * Adds resource
      * @param id - ID of resource
