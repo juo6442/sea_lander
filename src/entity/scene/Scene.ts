@@ -1,6 +1,5 @@
 import Entity from "../Entity";
 import { KeyStatus } from "../../game/KeyInput";
-import IntroScene from "./IntroScene";
 
 export enum Scene {
     INTRO,
@@ -39,21 +38,5 @@ export class SceneEntity implements Entity {
 
     protected changeScene(scene: Scene): void {
         this.sceneManager.changeScene(scene);
-    }
-}
-
-export class SceneFactory {
-    /**
-     * Create SceneEntity object.
-     * @param scene - Scene to create
-     * @returns SceneEntity object
-     */
-    public static getSceneEntity(scene: Scene, manager: SceneManager): SceneEntity {
-        switch (scene) {
-            case Scene.INTRO: return new IntroScene(manager);
-            case Scene.TITLE: throw "Not implemented"; // TODO:
-            case Scene.INGAME: throw "Not implemented"; // TODO:
-            default: throw `Scene ${scene} is invalid`;
-        }
     }
 }

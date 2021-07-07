@@ -1,6 +1,7 @@
 import Environment from "./Environment";
 import { KeyListener } from "./KeyInput";
-import { Scene, SceneEntity, SceneFactory, SceneManager } from "../entity/scene/Scene";
+import { Scene, SceneEntity, SceneManager } from "../entity/scene/Scene";
+import SceneFactory from "../entity/scene/SceneFactory";
 
 export default class Game implements SceneManager {
     private screen: Canvas;
