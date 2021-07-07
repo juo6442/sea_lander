@@ -11,16 +11,19 @@ export interface SceneManager {
     /**
      * Create a scene and change to it.
      * @param scene - Scene to change
+     * @param bundle - It will be passed to the new scene
      */
-    changeScene(scene: SceneId): void;
+    changeScene(scene: SceneId, bundle?: Bundle): void;
 }
 
 export default class Scene implements Entity {
     private sceneManager: SceneManager;
+    private bundle: Bundle;
     private entities: Map<string, Entity>;
 
-    constructor(sceneManager: SceneManager) {
+    constructor(sceneManager: SceneManager, bundle?: Bundle) {
         this.sceneManager = sceneManager;
+        this.bundle = bundle ?? new Bundle();
         this.entities = new Map();
     }
 
@@ -34,6 +37,10 @@ export default class Scene implements Entity {
 
     public isValid(): boolean {
         return true;
+    }
+
+    protected getFromBundle(key: string): any {
+        return this.bundle.get(key);
     }
 
     protected addEntity(key: string, e: Entity): void {
@@ -52,7 +59,23 @@ export default class Scene implements Entity {
         return e;
     }
 
-    protected changeScene(scene: SceneId): void {
-        this.sceneManager.changeScene(scene);
+    protected changeScene(scene: SceneId, bundle?: Bundle): void {
+        this.sceneManager.changeScene(scene, bundle);
+    }
+}
+
+export class Bundle {
+    private bundle: Map<string, any>;
+
+    constructor() {
+        this.bundle = new Map();
+    }
+
+    set(key: string, value: any) {
+        this.bundle.set(key, value);
+    }
+
+    get(key: string): any {
+        return this.bundle.get(key);
     }
 }

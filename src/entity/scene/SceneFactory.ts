@@ -1,5 +1,5 @@
 import LoadScene from "./LoadScene";
-import Scene, { SceneId, SceneManager } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 import TitleScene from "./TitleScene";
 
 export default class SceneFactory {
@@ -8,10 +8,10 @@ export default class SceneFactory {
      * @param scene - Scene ID to create
      * @returns Scene object
      */
-    public static getScene(scene: SceneId, manager: SceneManager): Scene {
+    public static getScene(scene: SceneId, manager: SceneManager, bundle?: Bundle): Scene {
         switch (scene) {
-            case SceneId.LOAD: return new LoadScene(manager);
-            case SceneId.TITLE: return new TitleScene(manager);
+            case SceneId.LOAD: return new LoadScene(manager, bundle);
+            case SceneId.TITLE: return new TitleScene(manager, bundle);
             case SceneId.INGAME: throw "Not implemented"; // TODO:
             default: throw `Scene ${scene} is invalid`;
         }

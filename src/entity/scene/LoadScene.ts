@@ -3,11 +3,11 @@ import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { SceneId, SceneManager } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class LoadScene extends Scene {
-    constructor(manager: SceneManager) {
-        super(manager);
+    constructor(manager: SceneManager, bundle?: Bundle) {
+        super(manager, bundle);
 
         new Resource.Loader()
                 .setImage("loading", "sprite/loading.png")
@@ -36,7 +36,11 @@ export default class LoadScene extends Scene {
 
         this.loadEntireGameResource().then(resource => {
             Logger.info("Resources are loaded");
-            this.changeScene(SceneId.TITLE);
+
+            const bundle = new Bundle();
+            bundle.set("resource", resource);
+
+            this.changeScene(SceneId.TITLE, bundle);
         });
     }
 

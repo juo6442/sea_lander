@@ -4,11 +4,11 @@ import Logger from "../../util/Logger";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { SceneManager } from "./Scene";
+import Scene, { Bundle, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
-    constructor(manager: SceneManager) {
-        super(manager);
+    constructor(manager: SceneManager, bundle?: Bundle) {
+        super(manager, bundle);
 
         new Resource.Loader()
                 .load()

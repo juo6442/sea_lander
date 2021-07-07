@@ -1,6 +1,6 @@
 import Environment from "./Environment";
 import { KeyListener } from "./KeyInput";
-import Scene, { SceneId, SceneManager } from "../entity/scene/Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "../entity/scene/Scene";
 import SceneFactory from "../entity/scene/SceneFactory";
 
 export default class Game implements SceneManager {
@@ -19,8 +19,8 @@ export default class Game implements SceneManager {
         this.keyListener = new KeyListener();
     }
 
-    public changeScene(scene: SceneId): void {
-        this.currentScene = SceneFactory.getScene(scene, this);
+    public changeScene(scene: SceneId, bundle?: Bundle): void {
+        this.currentScene = SceneFactory.getScene(scene, this, bundle);
     }
 
     /**
