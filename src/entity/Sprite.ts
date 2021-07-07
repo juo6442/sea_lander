@@ -100,7 +100,7 @@ export default class Sprite implements Entity {
             if (this.frames.length <= 0) {
                 this.frames.push(new Frame(
                         new Position(0, 0),
-                        this.size,
+                        new Size(this.image?.width ?? 0, this.image?.height ?? 0),
                         0));
             }
 
