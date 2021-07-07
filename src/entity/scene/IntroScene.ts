@@ -1,8 +1,8 @@
 import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
-import { SceneEntity, SceneManager } from "./Scene";
+import Scene, { SceneManager } from "./Scene";
 
-export default class IntroScene extends SceneEntity {
+export default class IntroScene extends Scene {
     constructor(manager: SceneManager) {
         super(manager);
 

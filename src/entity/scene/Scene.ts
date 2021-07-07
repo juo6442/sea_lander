@@ -1,7 +1,7 @@
 import Entity from "../Entity";
 import { KeyStatus } from "../../game/KeyInput";
 
-export enum Scene {
+export enum SceneId {
     INTRO,
     TITLE,
     INGAME,
@@ -12,10 +12,10 @@ export interface SceneManager {
      * Create a scene and change to it.
      * @param scene - Scene to change
      */
-    changeScene(scene: Scene): void;
+    changeScene(scene: SceneId): void;
 }
 
-export class SceneEntity implements Entity {
+export default class Scene implements Entity {
     private sceneManager: SceneManager;
     private entities: Map<string, Entity>;
 
@@ -52,7 +52,7 @@ export class SceneEntity implements Entity {
         return e;
     }
 
-    protected changeScene(scene: Scene): void {
+    protected changeScene(scene: SceneId): void {
         this.sceneManager.changeScene(scene);
     }
 }

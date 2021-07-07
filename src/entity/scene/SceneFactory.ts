@@ -1,17 +1,17 @@
 import IntroScene from "./IntroScene";
-import { Scene, SceneEntity, SceneManager } from "./Scene";
+import Scene, { SceneId, SceneManager } from "./Scene";
 
 export default class SceneFactory {
     /**
-     * Create SceneEntity object.
-     * @param scene - Scene to create
-     * @returns SceneEntity object
+     * Create Scene object.
+     * @param scene - Scene ID to create
+     * @returns Scene object
      */
-    public static getSceneEntity(scene: Scene, manager: SceneManager): SceneEntity {
+    public static getScene(scene: SceneId, manager: SceneManager): Scene {
         switch (scene) {
-            case Scene.INTRO: return new IntroScene(manager);
-            case Scene.TITLE: throw "Not implemented"; // TODO:
-            case Scene.INGAME: throw "Not implemented"; // TODO:
+            case SceneId.INTRO: return new IntroScene(manager);
+            case SceneId.TITLE: throw "Not implemented"; // TODO:
+            case SceneId.INGAME: throw "Not implemented"; // TODO:
             default: throw `Scene ${scene} is invalid`;
         }
     }

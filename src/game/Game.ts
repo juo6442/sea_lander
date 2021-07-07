@@ -1,6 +1,6 @@
 import Environment from "./Environment";
 import { KeyListener } from "./KeyInput";
-import { Scene, SceneEntity, SceneManager } from "../entity/scene/Scene";
+import Scene, { SceneId, SceneManager } from "../entity/scene/Scene";
 import SceneFactory from "../entity/scene/SceneFactory";
 
 export default class Game implements SceneManager {
@@ -9,7 +9,7 @@ export default class Game implements SceneManager {
 
     private keyListener: KeyListener;
 
-    private currentScene: SceneEntity | undefined;
+    private currentScene: Scene | undefined;
 
     constructor(screen: HTMLCanvasElement) {
         this.screen = new Canvas(screen);
@@ -19,8 +19,8 @@ export default class Game implements SceneManager {
         this.keyListener = new KeyListener();
     }
 
-    public changeScene(scene: Scene): void {
-        this.currentScene = SceneFactory.getSceneEntity(scene, this);
+    public changeScene(scene: SceneId): void {
+        this.currentScene = SceneFactory.getScene(scene, this);
     }
 
     /**
@@ -32,7 +32,7 @@ export default class Game implements SceneManager {
 
         this.keyListener.registerEventListener();
 
-        this.changeScene(Scene.INTRO);
+        this.changeScene(SceneId.INTRO);
     }
 
     /**
