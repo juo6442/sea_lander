@@ -36,6 +36,22 @@ export class SceneEntity implements Entity {
         return true;
     }
 
+    protected addEntity(key: string, e: Entity): void {
+        if (this.entities.has(key)) throw `Entity ${key} already exists`;
+        this.entities.set(key, e);
+    }
+
+    protected removeEntity(key: string): void {
+        const result = this.entities.delete(key);
+        if (!result) throw `Entity ${key} doesn't exist`;
+    }
+
+    protected getEntity(key: string): Entity {
+        const e = this.entities.get(key);
+        if (!e) throw `Entity ${key} doesn't exist`;
+        return e;
+    }
+
     protected changeScene(scene: Scene): void {
         this.sceneManager.changeScene(scene);
     }
