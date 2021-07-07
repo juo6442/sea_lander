@@ -1,5 +1,6 @@
 import IntroScene from "./IntroScene";
 import Scene, { SceneId, SceneManager } from "./Scene";
+import TitleScene from "./TitleScene";
 
 export default class SceneFactory {
     /**
@@ -10,7 +11,7 @@ export default class SceneFactory {
     public static getScene(scene: SceneId, manager: SceneManager): Scene {
         switch (scene) {
             case SceneId.INTRO: return new IntroScene(manager);
-            case SceneId.TITLE: throw "Not implemented"; // TODO:
+            case SceneId.TITLE: return new TitleScene(manager);
             case SceneId.INGAME: throw "Not implemented"; // TODO:
             default: throw `Scene ${scene} is invalid`;
         }
