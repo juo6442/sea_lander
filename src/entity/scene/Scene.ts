@@ -2,7 +2,7 @@ import Entity from "../Entity";
 import { KeyStatus } from "../../game/KeyInput";
 
 export enum SceneId {
-    INTRO,
+    LOAD,
     TITLE,
     INGAME,
 }

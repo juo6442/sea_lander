@@ -32,7 +32,7 @@ export default class Game implements SceneManager {
 
         this.keyListener.registerEventListener();
 
-        this.changeScene(SceneId.INTRO);
+        this.changeScene(SceneId.LOAD);
     }
 
     /**
