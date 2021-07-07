@@ -21,6 +21,7 @@ export default class Game implements SceneManager {
 
     public changeScene(scene: SceneId, bundle?: Bundle): void {
         this.currentScene = SceneFactory.getScene(scene, this, bundle);
+        this.currentScene.start();
     }
 
     /**

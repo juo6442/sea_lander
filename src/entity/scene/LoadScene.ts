@@ -8,7 +8,9 @@ import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 export default class LoadScene extends Scene {
     constructor(manager: SceneManager, bundle?: Bundle) {
         super(manager, bundle);
+    }
 
+    public override start(): void {
         new Resource.Loader()
                 .setImage("loading", "sprite/loading.png")
                 .load()
@@ -36,6 +38,8 @@ export default class LoadScene extends Scene {
 
         this.loadEntireGameResource().then(resource => {
             Logger.info("Resources are loaded");
+
+            // TODO: fade out image_loading
 
             const bundle = new Bundle();
             bundle.set("resource", resource);

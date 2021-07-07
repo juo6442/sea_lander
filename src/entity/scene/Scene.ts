@@ -27,6 +27,12 @@ export default class Scene implements Entity {
         this.entities = new Map();
     }
 
+    /**
+     * Start the scene.
+     */
+    public start(): void {
+    }
+
     public update(keyStatus: KeyStatus): void {
         this.entities.forEach(e => e.update(keyStatus));
     }
