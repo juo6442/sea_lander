@@ -1,6 +1,6 @@
-import { KeyStatus } from "../game/KeyInput.js";
-import NumberUtil from "../util/NumberUtil.js";
-import Entity, { Color, Position } from "./Entity.js";
+import { KeyStatus } from "../game/KeyInput";
+import NumberUtil from "../util/NumberUtil";
+import Entity, { Color, Position } from "./Entity";
 
 export default class Label implements Entity {
     private text: string;

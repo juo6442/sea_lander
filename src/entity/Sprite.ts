@@ -1,6 +1,6 @@
-import { KeyStatus } from "../game/KeyInput.js";
-import NumberUtil from "../util/NumberUtil.js";
-import Entity, { Position, Size } from "./Entity.js";
+import { KeyStatus } from "../game/KeyInput";
+import NumberUtil from "../util/NumberUtil";
+import Entity, { Position, Size } from "./Entity";
 
 export default class Sprite implements Entity {
     private image: HTMLImageElement | undefined;

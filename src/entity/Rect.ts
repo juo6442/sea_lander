@@ -1,7 +1,7 @@
-import Entity, { Color, Position, Size } from "./Entity.js";
-import Environment from "../game/Environment.js";
-import { KeyStatus } from "../game/KeyInput.js";
-import NumberUtil from "../util/NumberUtil.js";
+import Entity, { Color, Position, Size } from "./Entity";
+import Environment from "../game/Environment";
+import { KeyStatus } from "../game/KeyInput";
+import NumberUtil from "../util/NumberUtil";
 
 export default class Rect implements Entity {
     private size: Size;
