@@ -114,7 +114,7 @@ export default class Sprite implements Entity {
                     this.frames);
         }
 
-        public setImage(image: HTMLImageElement): Builder {
+        public setImage(image: HTMLImageElement | undefined): Builder {
             this.image = image;
             return this;
         }
