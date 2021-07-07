@@ -1,3 +1,4 @@
+import Environment from "../game/Environment";
 import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 import Entity, { Color, Position } from "./Entity";
@@ -5,7 +6,7 @@ import Entity, { Color, Position } from "./Entity";
 export default class Label implements Entity {
     private text: string;
     private font: string;
-    private size: number;
+    private pxSize: number;
     private color: Color;
     private position: Position;
     private align: TextAlign;
@@ -14,14 +15,14 @@ export default class Label implements Entity {
     private constructor(
             text: string,
             font: string,
-            size: number,
+            pxSize: number,
             color: Color,
             position: Position,
             align: TextAlign,
             radianAngle: number) {
         this.text = text;
         this.font = font;
-        this.size = size;
+        this.pxSize = pxSize;
         this.color = color;
         this.position = position;
         this.align = align;
@@ -41,7 +42,7 @@ export default class Label implements Entity {
 
         context.fillStyle =
                 `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
-        context.font = `${this.size}px ${this.font}`;
+        context.font = `${this.pxSize}px ${this.font}`;
 
         context.textAlign = this.align;
         context.textBaseline = "middle";
@@ -61,7 +62,7 @@ export default class Label implements Entity {
      */
     public measureWidth(context: CanvasRenderingContext2D): number {
         context.save();
-        context.font = `${this.size}px ${this.font}`;
+        context.font = `${this.pxSize}px ${this.font}`;
         const width = context.measureText(this.text).width;
         context.restore();
         return width;
@@ -70,7 +71,7 @@ export default class Label implements Entity {
     static Builder = class Builder {
         private text: string | undefined;
         private font: string | undefined;
-        private size: number | undefined;
+        private pxSize: number | undefined;
         private color: Color | undefined;
         private position: Position | undefined;
         private align: TextAlign | undefined;
@@ -79,8 +80,8 @@ export default class Label implements Entity {
         public build(): Label {
             return new Label(
                     this.text ?? "",
-                    this.font ?? "serif",
-                    this.size ?? 10,
+                    this.font ?? Environment.FONT_DEFAULT,
+                    this.pxSize ?? 10,
                     this.color ?? new Color(0, 0, 0),
                     this.position ?? new Position(0, 0),
                     this.align ?? TextAlign.ALIGN_START,
@@ -97,8 +98,8 @@ export default class Label implements Entity {
             return this;
         }
 
-        public setSize(size: number): Builder {
-            this.size = size;
+        public setSize(pxSize: number): Builder {
+            this.pxSize = pxSize;
             return this;
         }
 

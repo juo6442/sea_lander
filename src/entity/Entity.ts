@@ -48,26 +48,26 @@ export class Color {
     private _a: number;
 
     constructor(r: number, g: number, b: number, a: number = 1) {
-        this._r = NumberUtil.fitIn(r, 0, 1);
-        this._g = NumberUtil.fitIn(g, 0, 1);
-        this._b = NumberUtil.fitIn(b, 0, 1);
-        this._a = NumberUtil.fitIn(a, 0, 1);
+        this._r = NumberUtil.fitIn(r, 0, 255);
+        this._g = NumberUtil.fitIn(g, 0, 255);
+        this._b = NumberUtil.fitIn(b, 0, 255);
+        this._a = NumberUtil.fitIn(a, 0, 255);
     }
 
     set r(value: number) {
-        this._r = NumberUtil.fitIn(value, 0, 1);
+        this._r = NumberUtil.fitIn(value, 0, 255);
     }
 
     set g(value: number) {
-        this._g = NumberUtil.fitIn(value, 0, 1);
+        this._g = NumberUtil.fitIn(value, 0, 255);
     }
 
     set b(value: number) {
-        this._b = NumberUtil.fitIn(value, 0, 1);
+        this._b = NumberUtil.fitIn(value, 0, 255);
     }
 
     set a(value: number) {
-        this._a = NumberUtil.fitIn(value, 0, 1);
+        this._a = NumberUtil.fitIn(value, 0, 255);
     }
 
     get r() { return this._r; }
