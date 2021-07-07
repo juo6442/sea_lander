@@ -13,8 +13,8 @@ div#container {
 
 #screen {
     width: 80vw;
-    height: 45vw;
+    height: 60vw;
     min-width: 512px;
-    min-height: 288px;
+    min-height: 384;
     background-color: black;
 }
