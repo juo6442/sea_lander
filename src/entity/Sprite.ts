@@ -1,11 +1,11 @@
 import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
-import Entity, { Position, Size } from "./Entity";
+import Entity, { Color, Position, Size } from "./Entity";
 
 export default class Sprite extends Entity {
     public image: HTMLImageElement | undefined;
     public size: Size;
-    public alpha: number;
+    public color: Color;
     public position: Position;
     public alignCenter: boolean;
     public radianAngle: number;
@@ -17,7 +17,7 @@ export default class Sprite extends Entity {
     private constructor(
             image: HTMLImageElement | undefined,
             size: Size,
-            alpha: number,
+            color: Color,
             position: Position,
             alignCenter: boolean,
             radianAngle: number,
@@ -26,7 +26,7 @@ export default class Sprite extends Entity {
 
         this.image = image;
         this.size = size;
-        this.alpha = alpha;
+        this.color = color;
         this.position = position;
         this.alignCenter = alignCenter;
         this.radianAngle = radianAngle;
@@ -64,7 +64,9 @@ export default class Sprite extends Entity {
 
         context.translate(this.position.left, this.position.top);
         context.rotate(this.radianAngle);
-        context.globalAlpha = this.alpha;
+        context.globalAlpha = this.color.a;
+
+        // TODO: Implement tinting
 
         context.drawImage(
                 this.image,
@@ -89,7 +91,7 @@ export default class Sprite extends Entity {
     static Builder = class Builder {
         private image: HTMLImageElement | undefined;
         private size: Size | undefined;
-        private alpha: number | undefined;
+        private color: Color | undefined;
         private position: Position | undefined;
         private alignCenter: boolean | undefined;
         private radianAngle: number | undefined;
@@ -116,7 +118,7 @@ export default class Sprite extends Entity {
             return new Sprite(
                     this.image,
                     this.size,
-                    this.alpha ?? 1,
+                    this.color ?? new Color(0, 0, 0, 1),
                     this.position ?? new Position(0, 0),
                     this.alignCenter ?? false,
                     this.radianAngle ?? 0,
@@ -133,8 +135,8 @@ export default class Sprite extends Entity {
             return this;
         }
 
-        public setAlpha(alpha: number): Builder {
-            this.alpha = NumberUtil.fitIn(alpha, 0, 1);
+        public setColor(r: number, g: number, b: number, a: number = 1): Builder {
+            this.color = new Color(r, g, b, a);
             return this;
         }
 
