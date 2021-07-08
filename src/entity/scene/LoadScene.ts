@@ -1,5 +1,6 @@
 import Environment from "../../game/Environment";
 import Resource from "../../game/Resource";
+import { CommonScript } from "../../script/CommonScript";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
@@ -32,16 +33,24 @@ export default class LoadScene extends Scene {
                     Environment.VIEWPORT_HEIGHT - 44 - 5)
                 .build());
 
+        this.addEntity("image_logo", new Sprite.Builder()
+                .setImage(resource.getImage("logo"))
+                .setAlignCenter(true)
+                .setPosition(
+                    Environment.VIEWPORT_WIDTH / 2,
+                    Environment.VIEWPORT_HEIGHT / 2)
+                .build());
+
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
 
-            this.pushScript(CommonScript.Fade(this.getEntity("image_loading"), 0, 0.5));
-            this.pushScript(CommonScript.Fade(this.getEntity("image_logo"), 1, 0.5));
-            this.pushScript(CommonScript.Run(() => {
-                // TODO: audio SE-HA
-            });
-            this.pushScript(CommonScript.Wait(3));
-            this.pushScript(CommonScript.Fade(this.getEntity("image_logo"), 0, 0.5));
+            this.pushScript(new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 0.5));
+            this.pushScript(new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 0.5));
+            this.pushScript(new CommonScript.Run(() => {
+                // TODO: Play audio SE-HA
+            }));
+            this.pushScript(new CommonScript.Wait(3));
+            this.pushScript(new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 0.5));
 
             this.setScriptFinishedCallback(() => {
                 const bundle = new Bundle();
