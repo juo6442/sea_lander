@@ -34,7 +34,9 @@ export default abstract class Scene extends Entity {
      */
     public abstract start(): void;
 
-    public update(keyStatus: KeyStatus): void {
+    public override update(keyStatus: KeyStatus): void {
+        super.update(keyStatus);
+
         this.entities.forEach(e => e.update(keyStatus));
     }
 

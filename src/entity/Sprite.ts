@@ -49,7 +49,9 @@ export default class Sprite extends Entity {
         return this.frames[this.currentFrameIndex];
     }
 
-    public update(keyStatus: KeyStatus): void {
+    public override update(keyStatus: KeyStatus): void {
+        super.update(keyStatus);
+
         if (this.currentFrame.duration) {
             this.updateFrame();
         }

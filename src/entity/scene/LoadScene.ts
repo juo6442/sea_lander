@@ -3,13 +3,9 @@ import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
+import Scene, { Bundle, SceneId } from "./Scene";
 
 export default class LoadScene extends Scene {
-    constructor(manager: SceneManager, bundle?: Bundle) {
-        super(manager, bundle);
-    }
-
     public override start(): void {
         new Resource.Loader()
                 .setImage("loading", "sprite/loading.png")
@@ -36,21 +32,30 @@ export default class LoadScene extends Scene {
                     Environment.VIEWPORT_HEIGHT - 44 - 5)
                 .build());
 
-        this.loadEntireGameResource().then(resource => {
+        this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
 
-            // TODO: fade out image_loading
+            this.pushScript(CommonScript.Fade(this.getEntity("image_loading"), 0, 0.5));
+            this.pushScript(CommonScript.Fade(this.getEntity("image_logo"), 1, 0.5));
+            this.pushScript(CommonScript.Run(() => {
+                // TODO: audio SE-HA
+            });
+            this.pushScript(CommonScript.Wait(3));
+            this.pushScript(CommonScript.Fade(this.getEntity("image_logo"), 0, 0.5));
 
-            const bundle = new Bundle();
-            bundle.set("resource", resource);
+            this.setScriptFinishedCallback(() => {
+                const bundle = new Bundle();
+                bundle.set("resource", resource);
 
-            this.changeScene(SceneId.TITLE, bundle);
+                this.changeScene(SceneId.TITLE, bundle);
+            });
         });
     }
 
     private loadEntireGameResource(): Promise<Resource> {
         return new Resource.Loader()
                 .setFont("NeoDgm")
+                .setImage("logo", "sprite/logo.png")
                 .setImage("room", "sprite/room.png")
                 .setImage("sea_arm_l", "sprite/sea_arm_l.png")
                 .setImage("sea_arm_r", "sprite/sea_arm_r.png")

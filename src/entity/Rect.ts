@@ -25,9 +25,6 @@ export default class Rect extends Entity {
         this.radianAngle = radianAngle;
     }
 
-    public update(keyStatus: KeyStatus): void {
-    }
-
     public render(context: CanvasRenderingContext2D): void {
         context.save();
 

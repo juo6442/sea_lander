@@ -1,28 +1,62 @@
 import { KeyStatus } from "../game/KeyInput";
+import Script from "../script/Script";
 import NumberUtil from "../util/NumberUtil";
 
 export default abstract class Entity {
     private _invalidated: boolean;
+    private scriptQueue: Script[];
+    private onScriptFinished: (() => void) | undefined;
 
     constructor() {
         this._invalidated = false;
+        this.scriptQueue = new Array();
     }
 
     get invalidated(): boolean {
         return this._invalidated;
     }
 
+    protected get currentScript(): Script | undefined {
+        return this.scriptQueue[0];
+    }
+
     /**
      * Updates its status per each frame.
      * @param keyStatus - Key status
      */
-    public abstract update(keyStatus: KeyStatus): void;
+    public update(keyStatus: KeyStatus): void {
+        if (this.currentScript && this.currentScript.finished) {
+            this.scriptQueue.shift();
+            if (!this.scriptQueue && this.onScriptFinished) {
+                this.onScriptFinished();
+                this.onScriptFinished = undefined;
+            }
+        }
+        this.currentScript?.update(keyStatus);
+    }
 
     /**
      * Draws this entity.
      * @param context - Context of the canvas to draw this
      */
     public abstract render(context: CanvasRenderingContext2D): void;
+
+    /**
+     * Add script to queue.
+     * @param script - Script to run
+     */
+    public pushScript(script: Script): void {
+        this.scriptQueue.push(script);
+    }
+
+    /**
+     * Set callback to run when script queue is empty.
+     * The callback will be discarded after run once.
+     * @param callback - Callback to run
+     */
+    public setScriptFinishedCallback(callback?: (() => void)) {
+        this.onScriptFinished = callback;
+    }
 
     /**
      * Invalidate this entity. The owner may use this information for managing.
