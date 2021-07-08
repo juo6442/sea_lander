@@ -27,14 +27,14 @@ export default abstract class Script {
     }
 }
 
-export interface PositionEntity {
+export interface EntityWithPosition {
     position: Position;
 }
 
-export interface SizeEntity {
+export interface EntityWithSize {
     size: Size;
 }
 
-export interface ColoredEntity {
+export interface EntityWithColor {
     color: Color;
 }
