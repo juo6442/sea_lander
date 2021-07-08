@@ -4,13 +4,13 @@ import NumberUtil from "../util/NumberUtil";
 import Entity, { Color, Position } from "./Entity";
 
 export default class Label implements Entity {
-    private text: string;
-    private font: string;
-    private pxSize: number;
-    private color: Color;
-    private position: Position;
-    private align: TextAlign;
-    private radianAngle: number;
+    public text: string;
+    public font: string;
+    public pxSize: number;
+    public color: Color;
+    public position: Position;
+    public align: TextAlign;
+    public radianAngle: number;
 
     private constructor(
             text: string,

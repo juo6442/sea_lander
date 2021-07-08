@@ -3,13 +3,13 @@ import NumberUtil from "../util/NumberUtil";
 import Entity, { Position, Size } from "./Entity";
 
 export default class Sprite implements Entity {
-    private image: HTMLImageElement | undefined;
-    private size: Size;
-    private alpha: number;
-    private position: Position;
-    private alignCenter: boolean;
-    private radianAngle: number;
-    private frames: Frame[];
+    public image: HTMLImageElement | undefined;
+    public size: Size;
+    public alpha: number;
+    public position: Position;
+    public alignCenter: boolean;
+    public radianAngle: number;
+    public frames: Frame[];
 
     private currentFrameIndex: number;
     private currentFramePhase: number;

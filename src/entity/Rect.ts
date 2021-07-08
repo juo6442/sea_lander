@@ -4,11 +4,11 @@ import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 
 export default class Rect implements Entity {
-    private size: Size;
-    private color: Color;
-    private position: Position;
-    private alignCenter: boolean;
-    private radianAngle: number;
+    public size: Size;
+    public color: Color;
+    public position: Position;
+    public alignCenter: boolean;
+    public radianAngle: number;
 
     private constructor(
             size: Size,
