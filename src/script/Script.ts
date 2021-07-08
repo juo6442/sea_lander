@@ -2,10 +2,15 @@ import { Color, Position, Size } from "../entity/Entity";
 import { KeyStatus } from "../game/KeyInput";
 
 export default abstract class Script {
+    readonly isInfinite: boolean;
     private _finished: boolean;
 
-    constructor() {
+    /**
+     * @param isInfinite - Set for informative purpose
+     */
+    constructor(isInfinite?: boolean) {
         this._finished = false;
+        this.isInfinite = isInfinite ?? false;
     }
 
     get finished(): boolean {

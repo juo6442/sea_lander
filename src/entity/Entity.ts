@@ -4,11 +4,13 @@ import NumberUtil from "../util/NumberUtil";
 
 export default abstract class Entity {
     private _invalidated: boolean;
+    private scriptList: Script[];
     private scriptQueue: Script[];
     private onScriptFinished: (() => void) | undefined;
 
     constructor() {
         this._invalidated = false;
+        this.scriptList = new Array();
         this.scriptQueue = new Array();
     }
 
@@ -25,14 +27,8 @@ export default abstract class Entity {
      * @param keyStatus - Key status
      */
     public update(keyStatus: KeyStatus): void {
-        if (this.currentScript && this.currentScript.finished) {
-            this.scriptQueue.shift();
-            if (!this.scriptQueue && this.onScriptFinished) {
-                this.onScriptFinished();
-                this.onScriptFinished = undefined;
-            }
-        }
-        this.currentScript?.update(keyStatus);
+        this.runParallelScripts(keyStatus);
+        this.runSequentialScripts(keyStatus);
     }
 
     /**
@@ -42,10 +38,24 @@ export default abstract class Entity {
     public abstract render(context: CanvasRenderingContext2D): void;
 
     /**
-     * Add script to queue.
+     * Add script to queue. These scripts are runs parallelly.
+     * Script will be discarded after run if it is not infinite.
+     * @param script - Script to run
+     */
+    public addParallelScript(script: Script): void {
+        this.scriptList.push(script);
+    }
+
+    /**
+     * Add script to queue. These scripts are runs sequentially.
+     * If all scripts are ran, the callback is called if exists.
+     * Don't add script runs infinitely.
+     * @see {@link Entity.setScriptFinishedCallback} for the callback.
+     * @see {@link Entity.addParallelScript} for an infinite script.
      * @param script - Script to run
      */
     public pushScript(script: Script): void {
+        if (script.isInfinite) throw "Cannot push infinite script to script queue";
         this.scriptQueue.push(script);
     }
 
@@ -64,6 +74,24 @@ export default abstract class Entity {
      */
     protected invalidate(): void {
         this._invalidated = true;
+    }
+
+    private runParallelScripts(keyStatus: KeyStatus): void {
+        this.scriptList.forEach(script => {
+            script.update(keyStatus);
+        });
+        this.scriptList = this.scriptList.filter(script => !script.finished);
+    }
+
+    private runSequentialScripts(keyStatus: KeyStatus): void {
+        if (this.currentScript && this.currentScript.finished) {
+            this.scriptQueue.shift();
+            if (!this.scriptQueue && this.onScriptFinished) {
+                this.onScriptFinished();
+                this.onScriptFinished = undefined;
+            }
+        }
+        this.currentScript?.update(keyStatus);
     }
 }
 
