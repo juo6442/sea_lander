@@ -3,7 +3,7 @@ import Environment from "../game/Environment";
 import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 
-export default class Rect implements Entity {
+export default class Rect extends Entity {
     public size: Size;
     public color: Color;
     public position: Position;
@@ -16,6 +16,8 @@ export default class Rect implements Entity {
             position: Position,
             alignCenter: boolean,
             radianAngle: number) {
+        super();
+
         this.size = size;
         this.color = color;
         this.position = position;
@@ -40,10 +42,6 @@ export default class Rect implements Entity {
                 this.size.width, this.size.height);
 
         context.restore();
-    }
-
-    public isValid(): boolean {
-        return true;
     }
 
     static Builder = class Builder {

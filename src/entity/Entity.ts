@@ -1,24 +1,36 @@
 import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 
-export default interface Entity {
+export default abstract class Entity {
+    private _invalidated: boolean;
+
+    constructor() {
+        this._invalidated = false;
+    }
+
+    get invalidated(): boolean {
+        return this._invalidated;
+    }
+
     /**
      * Updates its status per each frame.
      * @param keyStatus - Key status
      */
-    update(keyStatus: KeyStatus): void;
+    public abstract update(keyStatus: KeyStatus): void;
 
     /**
      * Draws this entity.
      * @param context - Context of the canvas to draw this
      */
-    render(context: CanvasRenderingContext2D): void;
+    public abstract render(context: CanvasRenderingContext2D): void;
 
     /**
-     * Returns its validation. The owner may use this information for managing.
-     * @returns false if it's invalidated
+     * Invalidate this entity. The owner may use this information for managing.
+     * The status can be checked using `Entity.invalidated()`.
      */
-    isValid(): boolean;
+    protected invalidate(): void {
+        this._invalidated = true;
+    }
 }
 
 export class Position {

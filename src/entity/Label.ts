@@ -3,7 +3,7 @@ import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 import Entity, { Color, Position } from "./Entity";
 
-export default class Label implements Entity {
+export default class Label extends Entity {
     public text: string;
     public font: string;
     public pxSize: number;
@@ -20,6 +20,8 @@ export default class Label implements Entity {
             position: Position,
             align: TextAlign,
             radianAngle: number) {
+        super();
+
         this.text = text;
         this.font = font;
         this.pxSize = pxSize;
@@ -49,10 +51,6 @@ export default class Label implements Entity {
         context.fillText(this.text, 0, 0);
 
         context.restore();
-    }
-
-    public isValid(): boolean {
-        return true;
     }
 
     /**

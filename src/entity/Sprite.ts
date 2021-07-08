@@ -2,16 +2,16 @@ import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 import Entity, { Position, Size } from "./Entity";
 
-export default class Sprite implements Entity {
+export default class Sprite extends Entity {
     public image: HTMLImageElement | undefined;
     public size: Size;
     public alpha: number;
     public position: Position;
     public alignCenter: boolean;
     public radianAngle: number;
-    public frames: Frame[];
 
-    private currentFrameIndex: number;
+    private frames: Frame[];
+    private _currentFrameIndex: number;
     private currentFramePhase: number;
 
     private constructor(
@@ -22,6 +22,8 @@ export default class Sprite implements Entity {
             alignCenter: boolean,
             radianAngle: number,
             frames: Frame[]) {
+        super();
+
         this.image = image;
         this.size = size;
         this.alpha = alpha;
@@ -30,8 +32,17 @@ export default class Sprite implements Entity {
         this.radianAngle = radianAngle;
         this.frames = frames;
 
-        this.currentFrameIndex = 0;
+        this._currentFrameIndex = 0;
         this.currentFramePhase = 0;
+    }
+
+    set currentFrameIndex(value: number) {
+        this._currentFrameIndex = value;
+        this.currentFramePhase = 0;
+    }
+
+    get currentFrameIndex(): number {
+        return this._currentFrameIndex;
     }
 
     private get currentFrame(): Frame {
@@ -62,10 +73,6 @@ export default class Sprite implements Entity {
                 this.size.width, this.size.height);
 
         context.restore();
-    }
-
-    public isValid(): boolean {
-        return true;
     }
 
     private updateFrame() {

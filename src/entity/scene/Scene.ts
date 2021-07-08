@@ -16,12 +16,14 @@ export interface SceneManager {
     changeScene(scene: SceneId, bundle?: Bundle): void;
 }
 
-export default class Scene implements Entity {
+export default abstract class Scene extends Entity {
     private sceneManager: SceneManager;
     private bundle: Bundle;
     private entities: Map<string, Entity>;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
+        super();
+
         this.sceneManager = sceneManager;
         this.bundle = bundle ?? new Bundle();
         this.entities = new Map();
@@ -30,8 +32,7 @@ export default class Scene implements Entity {
     /**
      * Start the scene.
      */
-    public start(): void {
-    }
+    public abstract start(): void;
 
     public update(keyStatus: KeyStatus): void {
         this.entities.forEach(e => e.update(keyStatus));
@@ -39,10 +40,6 @@ export default class Scene implements Entity {
 
     public render(context: CanvasRenderingContext2D): void {
         this.entities.forEach(e => e.render(context));
-    }
-
-    public isValid(): boolean {
-        return true;
     }
 
     protected getFromBundle(key: string): any {
