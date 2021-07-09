@@ -2,24 +2,48 @@ import { KeyStatus } from "../game/KeyInput";
 import Script from "../script/Script";
 import NumberUtil from "../util/NumberUtil";
 
+class SequentialScriptManager {
+    public onScriptFinished: (() => void) | undefined;
+
+    private queue: (() => Script)[];
+    private currentScript: Script | undefined;
+
+    constructor() {
+        this.queue = new Array();
+    }
+
+    public push(scriptBuilder: () => Script): void {
+        this.queue.push(scriptBuilder);
+    }
+
+    public update(keyStatus: KeyStatus): void {
+        if (this.currentScript) {
+            this.currentScript.update(keyStatus);
+            if (this.currentScript.finished) this.currentScript = undefined;
+        } else {
+            if (this.queue) {
+                this.currentScript = this.queue.shift()?.();
+            } else {
+                this.onScriptFinished?.()
+                this.onScriptFinished = undefined;
+            }
+        }
+    }
+}
+
 export default abstract class Entity {
     private _invalidated: boolean;
-    private scriptList: Script[];
-    private scriptQueue: Script[];
-    private onScriptFinished: (() => void) | undefined;
+    private parallellyRunningScriptList: Script[];
+    private sequentialScriptManager: SequentialScriptManager;
 
     constructor() {
         this._invalidated = false;
-        this.scriptList = new Array();
-        this.scriptQueue = new Array();
+        this.parallellyRunningScriptList = new Array();
+        this.sequentialScriptManager = new SequentialScriptManager();
     }
 
     get invalidated(): boolean {
         return this._invalidated;
-    }
-
-    protected get currentScript(): Script | undefined {
-        return this.scriptQueue[0];
     }
 
     /**
@@ -27,8 +51,8 @@ export default abstract class Entity {
      * @param keyStatus - Key status
      */
     public update(keyStatus: KeyStatus): void {
-        this.runParallelScripts(keyStatus);
-        this.runSequentialScripts(keyStatus);
+        this.runParallellyRunningScripts(keyStatus);
+        this.sequentialScriptManager.update(keyStatus);
     }
 
     /**
@@ -42,8 +66,8 @@ export default abstract class Entity {
      * Script will be discarded after run if it is not infinite.
      * @param script - Script to run
      */
-    public addParallelScript(script: Script): void {
-        this.scriptList.push(script);
+    public addParallellyRunningScript(script: Script): void {
+        this.parallellyRunningScriptList.push(script);
     }
 
     /**
@@ -52,11 +76,10 @@ export default abstract class Entity {
      * Don't add script runs infinitely.
      * @see {@link Entity.setScriptFinishedCallback} for the callback.
      * @see {@link Entity.addParallelScript} for an infinite script.
-     * @param script - Script to run
+     * @param scriptBuilder - Function that returns a script object
      */
-    public pushScript(script: Script): void {
-        if (script.isInfinite) throw "Cannot push infinite script to script queue";
-        this.scriptQueue.push(script);
+    public pushScript(scriptBuilder: () => Script): void {
+        this.sequentialScriptManager.push(scriptBuilder);
     }
 
     /**
@@ -65,7 +88,7 @@ export default abstract class Entity {
      * @param callback - Callback to run
      */
     public setScriptFinishedCallback(callback?: (() => void)) {
-        this.onScriptFinished = callback;
+        this.sequentialScriptManager.onScriptFinished = callback;
     }
 
     /**
@@ -76,22 +99,12 @@ export default abstract class Entity {
         this._invalidated = true;
     }
 
-    private runParallelScripts(keyStatus: KeyStatus): void {
-        this.scriptList.forEach(script => {
+    private runParallellyRunningScripts(keyStatus: KeyStatus): void {
+        this.parallellyRunningScriptList.forEach(script => {
             script.update(keyStatus);
         });
-        this.scriptList = this.scriptList.filter(script => !script.finished);
-    }
-
-    private runSequentialScripts(keyStatus: KeyStatus): void {
-        if (this.currentScript && this.currentScript.finished) {
-            this.scriptQueue.shift();
-            if (!this.scriptQueue && this.onScriptFinished) {
-                this.onScriptFinished();
-                this.onScriptFinished = undefined;
-            }
-        }
-        this.currentScript?.update(keyStatus);
+        this.parallellyRunningScriptList =
+                this.parallellyRunningScriptList.filter(script => !script.finished);
     }
 }
 

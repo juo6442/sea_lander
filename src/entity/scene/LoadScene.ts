@@ -7,7 +7,7 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId } from "./Scene";
 
 export default class LoadScene extends Scene {
-    public override start(): void {
+    public start(): void {
         new Resource.Loader()
                 .setImage("loading", "sprite/loading.png")
                 .load()
@@ -33,24 +33,25 @@ export default class LoadScene extends Scene {
                     Environment.VIEWPORT_HEIGHT - 44 - 5)
                 .build());
 
-        this.addEntity("image_logo", new Sprite.Builder()
-                .setImage(resource.getImage("logo"))
-                .setAlignCenter(true)
-                .setPosition(
-                    Environment.VIEWPORT_WIDTH / 2,
-                    Environment.VIEWPORT_HEIGHT / 2)
-                .build());
-
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
 
-            this.pushScript(new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 0.5));
-            this.pushScript(new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 0.5));
-            this.pushScript(new CommonScript.Run(() => {
+            this.addEntity("image_logo", new Sprite.Builder()
+                    .setImage(resource.getImage("logo"))
+                    .setColor(0, 0, 0, 0)
+                    .setAlignCenter(true)
+                    .setPosition(
+                        Environment.VIEWPORT_WIDTH / 2,
+                        Environment.VIEWPORT_HEIGHT / 2)
+                    .build());
+
+            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 15));
+            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 30));
+            this.pushScript(() => new CommonScript.Run(() => {
                 // TODO: Play audio SE-HA
             }));
-            this.pushScript(new CommonScript.Wait(3));
-            this.pushScript(new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 0.5));
+            this.pushScript(() => new CommonScript.Wait(90));
+            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 30));
 
             this.setScriptFinishedCallback(() => {
                 const bundle = new Bundle();
