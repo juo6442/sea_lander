@@ -3,6 +3,7 @@ import { KeyStatus } from "../../game/KeyInput";
 
 export enum SceneId {
     LOAD,
+    INTRO,
     TITLE,
     INGAME,
 }

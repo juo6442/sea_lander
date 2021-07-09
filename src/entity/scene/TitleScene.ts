@@ -7,12 +7,9 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
-    constructor(manager: SceneManager, bundle?: Bundle) {
-        super(manager, bundle);
+    public start(): void {
+        Logger.info("Start TitleScene");
 
-        new Resource.Loader()
-                .load()
-                .then(resource => this.onResourceLoad(resource));
     }
 
     private onResourceLoad(resource: Resource): void {
