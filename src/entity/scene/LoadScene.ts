@@ -8,6 +8,8 @@ import Scene, { Bundle, SceneId } from "./Scene";
 
 export default class LoadScene extends Scene {
     public start(): void {
+        Logger.info("Start LoadScene");
+
         new Resource.Loader()
                 .setImage("loading", "sprite/loading.png")
                 .load()
@@ -35,30 +37,7 @@ export default class LoadScene extends Scene {
 
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
-
-            this.addEntity("image_logo", new Sprite.Builder()
-                    .setImage(resource.getImage("logo"))
-                    .setColor(0, 0, 0, 0)
-                    .setAlignCenter(true)
-                    .setPosition(
-                        Environment.VIEWPORT_WIDTH / 2,
-                        Environment.VIEWPORT_HEIGHT / 2)
-                    .build());
-
-            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 15));
-            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 30));
-            this.pushScript(() => new CommonScript.Run(() => {
-                // TODO: Play audio SE-HA
-            }));
-            this.pushScript(() => new CommonScript.Wait(90));
-            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 30));
-
-            this.setScriptFinishedCallback(() => {
-                const bundle = new Bundle();
-                bundle.set("resource", resource);
-
-                this.changeScene(SceneId.TITLE, bundle);
-            });
+            this.showLogo(resource);
         });
     }
 
@@ -75,5 +54,31 @@ export default class LoadScene extends Scene {
                 .setImage("sea_head", "sprite/sea_head.png")
                 .setImage("sea_fire", "sprite/sea_fire.png")
                 .load();
+    }
+
+    private showLogo(resource: Resource): void {
+        this.addEntity("image_logo", new Sprite.Builder()
+                .setImage(resource.getImage("logo"))
+                .setColor(0, 0, 0, 0)
+                .setAlignCenter(true)
+                .setPosition(
+                    Environment.VIEWPORT_WIDTH / 2,
+                    Environment.VIEWPORT_HEIGHT / 2)
+                .build());
+
+        this.pushScript(() => new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 15));
+        this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 30));
+        this.pushScript(() => new CommonScript.Run(() => {
+            // TODO: Play audio SE-HA
+        }));
+        this.pushScript(() => new CommonScript.Wait(90));
+        this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 30));
+
+        this.setScriptFinishedCallback(() => {
+            const bundle = new Bundle();
+            bundle.set("resource", resource);
+
+            this.changeScene(SceneId.TITLE, bundle);
+        });
     }
 }
