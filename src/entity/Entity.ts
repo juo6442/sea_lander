@@ -3,8 +3,6 @@ import Script from "../script/Script";
 import NumberUtil from "../util/NumberUtil";
 
 class SequentialScriptManager {
-    public onScriptFinished: (() => void) | undefined;
-
     private queue: (() => Script)[];
     private currentScript: Script | undefined;
 
@@ -21,24 +19,19 @@ class SequentialScriptManager {
             this.currentScript.update(keyStatus);
             if (this.currentScript.finished) this.currentScript = undefined;
         } else {
-            if (this.queue) {
-                this.currentScript = this.queue.shift()?.();
-            } else {
-                this.onScriptFinished?.()
-                this.onScriptFinished = undefined;
-            }
+            this.currentScript = this.queue.shift()?.();
         }
     }
 }
 
 export default abstract class Entity {
     private _invalidated: boolean;
-    private parallellyRunningScriptList: Script[];
+    private runningScriptList: Script[];
     private sequentialScriptManager: SequentialScriptManager;
 
     constructor() {
         this._invalidated = false;
-        this.parallellyRunningScriptList = new Array();
+        this.runningScriptList = new Array();
         this.sequentialScriptManager = new SequentialScriptManager();
     }
 
@@ -51,7 +44,7 @@ export default abstract class Entity {
      * @param keyStatus - Key status
      */
     public update(keyStatus: KeyStatus): void {
-        this.runParallellyRunningScripts(keyStatus);
+        this.updateRunningScripts(keyStatus);
         this.sequentialScriptManager.update(keyStatus);
     }
 
@@ -62,33 +55,22 @@ export default abstract class Entity {
     public abstract render(context: CanvasRenderingContext2D): void;
 
     /**
-     * Add script to queue. These scripts are runs parallelly.
-     * Script will be discarded after run if it is not infinite.
+     * Add script and run. These scripts are runs parallelly.
+     * Script will be discarded after finish.
      * @param script - Script to run
      */
-    public addParallellyRunningScript(script: Script): void {
-        this.parallellyRunningScriptList.push(script);
+    public runScript(script: Script): void {
+        this.runningScriptList.push(script);
     }
 
     /**
      * Add script to queue. These scripts are runs sequentially.
-     * If all scripts are ran, the callback is called if exists.
      * Don't add script runs infinitely.
-     * @see {@link Entity.setScriptFinishedCallback} for the callback.
      * @see {@link Entity.addParallelScript} for an infinite script.
      * @param scriptBuilder - Function that returns a script object
      */
     public pushScript(scriptBuilder: () => Script): void {
         this.sequentialScriptManager.push(scriptBuilder);
-    }
-
-    /**
-     * Set callback to run when script queue is empty.
-     * The callback will be discarded after run once.
-     * @param callback - Callback to run
-     */
-    public setScriptFinishedCallback(callback?: (() => void)) {
-        this.sequentialScriptManager.onScriptFinished = callback;
     }
 
     /**
@@ -99,12 +81,12 @@ export default abstract class Entity {
         this._invalidated = true;
     }
 
-    private runParallellyRunningScripts(keyStatus: KeyStatus): void {
-        this.parallellyRunningScriptList.forEach(script => {
+    private updateRunningScripts(keyStatus: KeyStatus): void {
+        this.runningScriptList.forEach(script => {
             script.update(keyStatus);
         });
-        this.parallellyRunningScriptList =
-                this.parallellyRunningScriptList.filter(script => !script.finished);
+        this.runningScriptList =
+                this.runningScriptList.filter(script => !script.finished);
     }
 }
 
