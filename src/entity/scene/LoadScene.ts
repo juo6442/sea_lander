@@ -21,7 +21,7 @@ export default class LoadScene extends Scene {
 
         this.addEntity("rect_bg", new Rect.Builder()
                 .setSizeFullscreen()
-                .setColor(0, 0, 0)
+                .setColor(255, 255, 255)
                 .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
