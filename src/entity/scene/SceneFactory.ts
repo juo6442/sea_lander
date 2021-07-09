@@ -1,3 +1,4 @@
+import InGameScene from "./InGameScene";
 import IntroScene from "./IntroScene";
 import LoadScene from "./LoadScene";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
@@ -14,7 +15,7 @@ export default class SceneFactory {
             case SceneId.LOAD: return new LoadScene(manager, bundle);
             case SceneId.INTRO: return new IntroScene(manager, bundle);
             case SceneId.TITLE: return new TitleScene(manager, bundle);
-            case SceneId.INGAME: throw "Not implemented"; // TODO:
+            case SceneId.INGAME: return new InGameScene(manager, bundle);
             default: throw `Scene ${scene} is invalid`;
         }
     }

@@ -5,7 +5,7 @@ import Logger from "../../util/Logger";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { Bundle, SceneManager } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
     private resource: Resource;
@@ -21,15 +21,13 @@ export default class TitleScene extends Scene {
     public start(): void {
         Logger.info("Start TitleScene");
 
-        this.resource = this.getFromBundle("resource") as Resource;
-
-
         this.addEntity("rect_bg", new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
                 .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
+
         /*
         TODO: Show title images
         TODO: Show scoreboard (highlight latest score)
@@ -42,19 +40,27 @@ export default class TitleScene extends Scene {
                 .setSize(30)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT / 2)
                 .build());
+
+        this.showTitle();
     }
 
-    public override update(keyStatus: KeyStatus) {
+    public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
     }
 
-    private waitOkKey(keyStatus: KeyStatus): void {
-        if (keyStatus.isPressed(Key.OK)) {
-            this.isWaitingInput = false;
+    private showTitle(): void {
+        this.isWaitingInput = true;
+    }
 
-            // TODO: Switch to PlayScene
-        }
+    private waitOkKey(keyStatus: KeyStatus): void {
+        if (!keyStatus.isPressed(Key.OK)) return;
+
+        this.isWaitingInput = false;
+
+        const bundle = new Bundle();
+        bundle.set("resource", this.resource);
+        this.changeScene(SceneId.INGAME, bundle);
     }
 }
