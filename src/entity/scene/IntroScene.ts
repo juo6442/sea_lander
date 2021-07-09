@@ -4,15 +4,19 @@ import { CommonScript } from "../../script/CommonScript";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { Bundle, SceneId } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class IntroScene extends Scene {
-    private resource: Resource | undefined;
+    private resource: Resource;
+
+    constructor(sceneManager: SceneManager, bundle?: Bundle) {
+        super(sceneManager, bundle);
+
+        this.resource = this.getFromBundle("resource");
+    }
 
     public start(): void {
         Logger.info("Start IntroScene");
-
-        this.resource = this.getFromBundle("resource") as Resource;
 
         this.addEntity("rect_bg", new Rect.Builder()
                 .setSizeFullscreen()
