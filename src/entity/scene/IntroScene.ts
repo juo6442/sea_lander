@@ -7,14 +7,6 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class IntroScene extends Scene {
-    private resource: Resource;
-
-    constructor(sceneManager: SceneManager, bundle?: Bundle) {
-        super(sceneManager, bundle);
-
-        this.resource = Resource.global!;
-    }
-
     public start(): void {
         Logger.info("Start IntroScene");
 
@@ -26,7 +18,7 @@ export default class IntroScene extends Scene {
                 .build());
 
         this.addEntity("image_logo", new Sprite.Builder()
-                .setImage(this.resource.getImage("logo"))
+                .setImage(Resource.global?.getImage("logo"))
                 .setColor(0, 0, 0, 0)
                 .setAlignCenter(true)
                 .setPosition(
@@ -34,10 +26,10 @@ export default class IntroScene extends Scene {
                     Environment.VIEWPORT_HEIGHT / 2)
                 .build());
 
-        this.showLogo(this.resource);
+        this.showLogo();
     }
 
-    private showLogo(resource: Resource): void {
+    private showLogo(): void {
         this.pushScript(() => new CommonScript.Wait(50));
         this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 1, 30));
         this.pushScript(() => new CommonScript.Run(() => {

@@ -8,13 +8,11 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
-    private resource: Resource;
     private isWaitingInput: boolean;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
-        this.resource = Resource.global!;
         this.isWaitingInput = false;
     }
 
