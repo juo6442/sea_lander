@@ -2,28 +2,6 @@ import { KeyStatus } from "../game/KeyInput";
 import Script from "../script/Script";
 import NumberUtil from "../util/NumberUtil";
 
-class SequentialScriptManager {
-    private queue: (() => Script)[];
-    private currentScript: Script | undefined;
-
-    constructor() {
-        this.queue = new Array();
-    }
-
-    public push(scriptBuilder: () => Script): void {
-        this.queue.push(scriptBuilder);
-    }
-
-    public update(keyStatus: KeyStatus): void {
-        if (this.currentScript) {
-            this.currentScript.update(keyStatus);
-            if (this.currentScript.finished) this.currentScript = undefined;
-        } else {
-            this.currentScript = this.queue.shift()?.();
-        }
-    }
-}
-
 export default abstract class Entity {
     private _invalidated: boolean;
     private runningScriptList: Script[];
@@ -87,6 +65,28 @@ export default abstract class Entity {
         });
         this.runningScriptList =
                 this.runningScriptList.filter(script => !script.finished);
+    }
+}
+
+class SequentialScriptManager {
+    private queue: (() => Script)[];
+    private currentScript: Script | undefined;
+
+    constructor() {
+        this.queue = new Array();
+    }
+
+    public push(scriptBuilder: () => Script): void {
+        this.queue.push(scriptBuilder);
+    }
+
+    public update(keyStatus: KeyStatus): void {
+        if (this.currentScript) {
+            this.currentScript.update(keyStatus);
+            if (this.currentScript.finished) this.currentScript = undefined;
+        } else {
+            this.currentScript = this.queue.shift()?.();
+        }
     }
 }
 
