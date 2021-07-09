@@ -4,7 +4,7 @@ import { CommonScript } from "../../script/CommonScript";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { Bundle, SceneId } from "./Scene";
+import Scene, { SceneId } from "./Scene";
 
 export default class LoadScene extends Scene {
     public start(): void {
@@ -37,13 +37,11 @@ export default class LoadScene extends Scene {
 
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
+            Resource.global = resource;
 
             this.pushScript(() => new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 10));
             this.pushScript(() => new CommonScript.Run(() => {
-                const bundle = new Bundle();
-                bundle.set("resource", resource);
-
-                this.changeScene(SceneId.INTRO, bundle);
+                this.changeScene(SceneId.INTRO);
             }));
         });
     }

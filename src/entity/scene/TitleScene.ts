@@ -14,7 +14,7 @@ export default class TitleScene extends Scene {
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
-        this.resource = this.getFromBundle("resource");
+        this.resource = Resource.global!;
         this.isWaitingInput = false;
     }
 
@@ -59,8 +59,6 @@ export default class TitleScene extends Scene {
 
         this.isWaitingInput = false;
 
-        const bundle = new Bundle();
-        bundle.set("resource", this.resource);
-        this.changeScene(SceneId.INGAME, bundle);
+        this.changeScene(SceneId.INGAME);
     }
 }

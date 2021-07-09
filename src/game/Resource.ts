@@ -3,6 +3,8 @@ import Logger from "../util/Logger";
 const RES_DIR = "../../res/";
 
 export default class Resource {
+    public static global: Resource | undefined;
+
     private images: Map<string, HTMLImageElement>;
     private audios: Map<string, HTMLAudioElement>;
 

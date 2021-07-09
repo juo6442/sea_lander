@@ -12,7 +12,7 @@ export default class IntroScene extends Scene {
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
-        this.resource = this.getFromBundle("resource");
+        this.resource = Resource.global!;
     }
 
     public start(): void {
@@ -46,10 +46,7 @@ export default class IntroScene extends Scene {
         this.pushScript(() => new CommonScript.Wait(90));
         this.pushScript(() => new CommonScript.Fade(this.getEntity("image_logo") as Sprite, 0, 30));
         this.pushScript(() => new CommonScript.Run(() => {
-            const bundle = new Bundle();
-            bundle.set("resource", resource);
-
-            this.changeScene(SceneId.TITLE, bundle);
+            this.changeScene(SceneId.TITLE);
         }));
     }
 }

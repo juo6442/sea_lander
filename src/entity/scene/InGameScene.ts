@@ -12,7 +12,7 @@ export default class InGameScene extends Scene {
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
-        this.resource = this.getFromBundle("resource");
+        this.resource = Resource.global!;
     }
 
     public start(): void {
