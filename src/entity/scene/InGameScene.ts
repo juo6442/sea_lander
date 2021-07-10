@@ -45,7 +45,7 @@ export default class InGameScene extends Scene {
 
         this.seaHead = new SeaHead(
                 this.playerStatus,
-                new Position(Environment.VIEWPORT_WIDTH / 2, 0));
+                new Position(Environment.VIEWPORT_WIDTH / 2, 150));
         this.addEntity("actor_seahead", this.seaHead);
     }
 

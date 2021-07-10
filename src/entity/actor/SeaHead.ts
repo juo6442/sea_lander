@@ -28,7 +28,7 @@ export default class SeaHead extends Entity {
         this.radianAngleVelocity = 0;
 
         this.airResistance = 0.995;
-        this.gravity = 0.05;
+        this.gravity = 0.07;
         this.fuelUpEfficiency = 0.2;
         this.fuelAngleEfficiency = 0.001;
 
