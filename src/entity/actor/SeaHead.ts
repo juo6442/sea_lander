@@ -43,10 +43,6 @@ export default class SeaHead extends Entity {
                 .build();
     }
 
-     /**
-     * Updates its status per each frame.
-     * @param keyStatus - Key status
-     */
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
