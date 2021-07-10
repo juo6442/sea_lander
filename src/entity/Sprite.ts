@@ -37,7 +37,7 @@ export default class Sprite extends Entity {
     }
 
     set currentFrameIndex(value: number) {
-        this._currentFrameIndex = value;
+        this._currentFrameIndex = value % this.frames.length;
         this.currentFramePhase = 0;
     }
 
@@ -52,7 +52,7 @@ export default class Sprite extends Entity {
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
-        if (this.currentFrame.duration) {
+        if (this.currentFrame.duration > 0) {
             this.updateFrame();
         }
     }
@@ -102,17 +102,17 @@ export default class Sprite extends Entity {
         }
 
         public build(): Sprite {
-            if (!this.size) {
-                this.size = new Size(
-                        this.image?.width ?? 0,
-                        this.image?.height ?? 0);
-            }
-
             if (this.frames.length <= 0) {
                 this.frames.push(new Frame(
                         new Position(0, 0),
                         new Size(this.image?.width ?? 0, this.image?.height ?? 0),
                         0));
+            }
+
+            if (!this.size) {
+                this.size = new Size(
+                        this.frames[0].size.width ?? 0,
+                        this.frames[0].size.height ?? 0);
             }
 
             return new Sprite(
