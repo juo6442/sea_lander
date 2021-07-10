@@ -6,6 +6,7 @@ import Logger from "../../util/Logger";
 import SeaHead from "../actor/SeaHead";
 import { Position } from "../Entity";
 import Sprite from "../Sprite";
+import LifeIndicator from "../ui/LifeIndicator";
 import Scene, { Bundle, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene {
@@ -31,6 +32,8 @@ export default class InGameScene extends Scene {
                 .setImage(this.resource.getImage("room"))
                 .setSize(Environment.VIEWPORT_WIDTH, Environment.VIEWPORT_HEIGHT)
                 .build());
+
+        this.addEntity("ui_life", new LifeIndicator(new Position(5, 5), this.playerStatus));
 
         this.initGame();
     }

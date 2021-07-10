@@ -57,6 +57,7 @@ export default class Sprite extends Entity {
 
     public render(context: CanvasRenderingContext2D): void {
         if (!this.image) return;
+        if (this.color.a <= 0) return;
 
         context.save();
 
