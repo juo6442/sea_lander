@@ -4,9 +4,15 @@ import { CommonScript } from "../../script/CommonScript";
 import Logger from "../../util/Logger";
 import Rect from "../Rect";
 import Sprite from "../Sprite";
-import Scene, { SceneId } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class LoadScene extends Scene {
+    private loadingSprite: Sprite | undefined;
+
+    constructor(sceneManager: SceneManager, bundle?: Bundle) {
+        super(sceneManager, bundle);
+    }
+
     public start(): void {
         Logger.info("Start LoadScene");
 
@@ -19,26 +25,27 @@ export default class LoadScene extends Scene {
     private onResourceLoad(resource: Resource): void {
         Logger.info("LoadScene is loaded");
 
-        this.addEntity("rect_bg", new Rect.Builder()
+        this.addEntity(new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
                 .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
 
-        this.addEntity("image_loading", new Sprite.Builder()
+        this.loadingSprite = new Sprite.Builder()
                 .setImage(resource.getImage("loading"))
                 .setAlignCenter(false)
                 .setPosition(
                     Environment.VIEWPORT_WIDTH - 478 - 10,
                     Environment.VIEWPORT_HEIGHT - 112 - 10)
-                .build());
+                .build()
+        this.addEntity(this.loadingSprite);
 
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");
             Resource.global = resource;
 
-            this.pushScript(() => new CommonScript.Fade(this.getEntity("image_loading") as Sprite, 0, 10));
+            this.pushScript(() => new CommonScript.Fade(this.loadingSprite!, 0, 10));
             this.pushScript(() => new CommonScript.Run(() => {
                 this.changeScene(SceneId.INTRO);
             }));
@@ -52,6 +59,7 @@ export default class LoadScene extends Scene {
                 .setImage("room", "sprite/room.png")
                 .setImage("life", "sprite/life.png")
                 .setImage("fuel", "sprite/fuel.png")
+                .setImage("crash", "sprite/crash.png")
                 .setImage("sea_arm_l", "sprite/sea_arm_l.png")
                 .setImage("sea_arm_r", "sprite/sea_arm_r.png")
                 .setImage("sea_leg_l", "sprite/sea_leg_l.png")

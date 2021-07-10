@@ -21,7 +21,7 @@ export interface SceneManager {
 export default abstract class Scene extends Entity {
     private sceneManager: SceneManager;
     private bundle: Bundle;
-    private entities: Map<string, Entity>;
+    private entityList: Entity[];
     private runningScriptList: Script[];
     private sequentialScriptManager: SequentialScriptManager;
 
@@ -30,7 +30,7 @@ export default abstract class Scene extends Entity {
 
         this.sceneManager = sceneManager;
         this.bundle = bundle ?? new Bundle();
-        this.entities = new Map();
+        this.entityList = new Array();
         this.runningScriptList = new Array();
         this.sequentialScriptManager = new SequentialScriptManager();
     }
@@ -43,11 +43,13 @@ export default abstract class Scene extends Entity {
     public update(keyStatus: KeyStatus): void {
         this.updateRunningScripts(keyStatus);
         this.sequentialScriptManager.update(keyStatus);
-        this.entities.forEach(e => e.update(keyStatus));
+
+        this.entityList.forEach(e => e.update(keyStatus));
+        this.entityList = this.entityList.filter(e => !e.invalidated);
     }
 
     public render(context: CanvasRenderingContext2D): void {
-        this.entities.forEach(e => e.render(context));
+        this.entityList.forEach(e => e.render(context));
     }
 
     /**
@@ -73,18 +75,8 @@ export default abstract class Scene extends Entity {
         return this.bundle.get(key);
     }
 
-    protected addEntity(key: string, e: Entity): void {
-        this.entities.set(key, e);
-    }
-
-    protected removeEntity(key: string): void {
-        this.entities.delete(key);
-    }
-
-    protected getEntity(key: string): Entity {
-        const e = this.entities.get(key);
-        if (!e) throw `Entity ${key} doesn't exist`;
-        return e;
+    protected addEntity(e: Entity): void {
+        this.entityList.push(e);
     }
 
     protected changeScene(scene: SceneId, bundle?: Bundle): void {

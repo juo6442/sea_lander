@@ -28,7 +28,7 @@ export default abstract class Entity {
      * Invalidate this entity. The owner may use this information for managing.
      * The status can be checked using `Entity.invalidated()`.
      */
-    protected invalidate(): void {
+    public invalidate(): void {
         this._invalidated = true;
     }
 }

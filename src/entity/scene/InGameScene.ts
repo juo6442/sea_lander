@@ -3,6 +3,7 @@ import { KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
+import CrashEffect from "../actor/CrashEffect";
 import SeaHead from "../actor/SeaHead";
 import { Position } from "../Entity";
 import Sprite from "../Sprite";
@@ -27,15 +28,15 @@ export default class InGameScene extends Scene {
     public start(): void {
         Logger.info("Start InGameScene");
 
-        this.addEntity("image_bg", new Sprite.Builder()
+        this.addEntity(new Sprite.Builder()
                 .setAlignCenter(false)
                 .setPosition(0, 0)
                 .setImage(this.resource.getImage("room"))
                 .setSize(Environment.VIEWPORT_WIDTH, Environment.VIEWPORT_HEIGHT)
                 .build());
 
-        this.addEntity("ui_life", new LifeIndicator(new Position(10, 10), this.playerStatus));
-        this.addEntity("ui_fuel", new FuelIndicator(new Position(450, 10), this.playerStatus));
+        this.addEntity(new LifeIndicator(new Position(10, 10), this.playerStatus));
+        this.addEntity(new FuelIndicator(new Position(450, 10), this.playerStatus));
 
         this.initGame();
     }
@@ -46,7 +47,7 @@ export default class InGameScene extends Scene {
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 150));
-        this.addEntity("actor_seahead", this.seaHead);
+        this.addEntity(this.seaHead);
     }
 
     public override update(keyStatus: KeyStatus): void {
@@ -64,6 +65,8 @@ export default class InGameScene extends Scene {
         if (!this.seaHead) return;
         if (this.seaHead.position.top < InGameScene.GROUND_TOP) return;
 
+        this.seaHead.invalidate();
+        this.addEntity(new CrashEffect(this.seaHead.position, 150));
         this.playerStatus.life--;
 
         Logger.info(`Crashed, ${this.playerStatus.life} life remains`);
@@ -71,7 +74,6 @@ export default class InGameScene extends Scene {
         if (this.playerStatus.life <= 0) {
             this.gameOver();
         } else {
-            // TODO: show crash effect
             this.initGame();
         }
     }
@@ -80,8 +82,8 @@ export default class InGameScene extends Scene {
     }
 
     private gameOver(): void {
+        this.seaHead?.invalidate();
         this.seaHead = undefined;
-        this.removeEntity("actor_seahead");
 
         // TODO: show gameover propmt and score
     }

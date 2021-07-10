@@ -14,30 +14,29 @@ export default class TitleScene extends Scene {
         super(sceneManager, bundle);
 
         this.isWaitingInput = false;
-    }
 
-    public start(): void {
-        Logger.info("Start TitleScene");
-
-        this.addEntity("rect_bg", new Rect.Builder()
+        this.addEntity(new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
                 .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
-
-        /*
-        TODO: Show title images
-        TODO: Show scoreboard (highlight latest score)
-        */
-
-        this.addEntity("label_pressEnter", new Label.Builder()
+        this.addEntity(new Label.Builder()
                 .setAlign(TextAlign.ALIGN_CENTER)
                 .setColor(0, 0, 0)
                 .setText("엔터를 누르면 시작합니다")
                 .setSize(30)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT / 2)
                 .build());
+    }
+
+    public start(): void {
+        Logger.info("Start TitleScene");
+
+        /*
+        TODO: Show title images
+        TODO: Show scoreboard (highlight latest score)
+        */
 
         this.showTitle();
     }
