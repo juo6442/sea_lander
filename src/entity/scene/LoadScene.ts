@@ -59,6 +59,7 @@ export default class LoadScene extends Scene {
                 .setImage("sea_body", "sprite/sea_body.png")
                 .setImage("sea_head", "sprite/sea_head.png")
                 .setImage("sea_fire", "sprite/sea_fire.png")
+                .setImage("sea_arrow", "sprite/sea_arrow.png")
                 .load();
     }
 }

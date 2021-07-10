@@ -3,6 +3,7 @@ import { Key, KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import Entity, { Position } from "../Entity";
+import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";
 
 export default class SeaHead extends Entity {
@@ -18,6 +19,8 @@ export default class SeaHead extends Entity {
 
     private playerStatus: PlayerStatus;
     private headSprite: Sprite;
+    private arrowSprite: Sprite;
+    private arrowLabel: Label;
 
     constructor(playerStatus: PlayerStatus, position: Position) {
         super();
@@ -40,6 +43,17 @@ export default class SeaHead extends Entity {
                 .setPosition(0, 0)
                 .addFrame(0, 0, 212, 176, 0)
                 .addFrame(212, 0, 212, 176, 0)
+                .build();
+        this.arrowSprite = new Sprite.Builder()
+                .setAlignCenter(true)
+                .setImage(Resource.global?.getImage("sea_arrow"))
+                .setPosition(0, 250)
+                .build();
+        this.arrowLabel = new Label.Builder()
+                .setAlign(TextAlign.ALIGN_CENTER)
+                .setColor(0, 0, 0)
+                .setSize(70)
+                .setPosition(0, 330)
                 .build();
     }
 
@@ -64,6 +78,14 @@ export default class SeaHead extends Entity {
             context.restore();
         });
 
+        if (this.position.top < 0) {
+            this.arrowLabel.text = `${Math.floor(-this.position.top / 50)}m`;
+            this.arrowLabel.position.left = this.arrowSprite.position.left = this.position.left;
+
+            this.arrowLabel.render(context);
+            this.arrowSprite.render(context);
+        }
+
         // TODO: draw fogs?
     }
 
@@ -75,7 +97,7 @@ export default class SeaHead extends Entity {
     }
 
     private applyVelocity() {
-        this.position.left += this.velocity.left;
+        this.position.left += this.velocity.left + Environment.VIEWPORT_WIDTH;
         this.position.left %= Environment.VIEWPORT_WIDTH;
         this.position.top  += this.velocity.top;
         this.radianAngle += this.radianAngleVelocity;
