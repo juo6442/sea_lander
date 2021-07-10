@@ -50,13 +50,11 @@ export default abstract class Scene extends Entity {
     }
 
     protected addEntity(key: string, e: Entity): void {
-        if (this.entities.has(key)) throw `Entity ${key} already exists`;
         this.entities.set(key, e);
     }
 
     protected removeEntity(key: string): void {
-        const result = this.entities.delete(key);
-        if (!result) throw `Entity ${key} doesn't exist`;
+        this.entities.delete(key);
     }
 
     protected getEntity(key: string): Entity {

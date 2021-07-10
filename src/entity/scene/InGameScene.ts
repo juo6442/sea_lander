@@ -5,11 +5,12 @@ import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
 import SeaHead from "../actor/SeaHead";
 import { Position } from "../Entity";
-import Rect from "../Rect";
 import Sprite from "../Sprite";
 import Scene, { Bundle, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene {
+    private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
+
     private resource: Resource;
     private playerStatus: PlayerStatus;
     private seaHead: SeaHead | undefined;
@@ -35,6 +36,8 @@ export default class InGameScene extends Scene {
     }
 
     public initGame(): void {
+        this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
+
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 0));
@@ -43,5 +46,38 @@ export default class InGameScene extends Scene {
 
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
+
+        this.checkDocking();
+        this.checkCrash();
+    }
+
+    private checkDocking(): void {
+        if (!this.seaHead) return;
+    }
+
+    private checkCrash(): void {
+        if (!this.seaHead) return;
+        if (this.seaHead.position.top < InGameScene.GROUND_TOP) return;
+
+        this.playerStatus.life--;
+
+        Logger.info(`Crashed, ${this.playerStatus.life} life remains`);
+
+        if (this.playerStatus.life <= 0) {
+            this.gameOver();
+        } else {
+            // TODO: show crash effect
+            this.initGame();
+        }
+    }
+
+    private success() : void {
+    }
+
+    private gameOver(): void {
+        this.seaHead = undefined;
+        this.removeEntity("actor_seahead");
+
+        // TODO: show gameover propmt and score
     }
 }
