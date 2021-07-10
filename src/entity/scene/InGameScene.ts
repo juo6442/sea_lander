@@ -6,6 +6,7 @@ import Logger from "../../util/Logger";
 import SeaHead from "../actor/SeaHead";
 import { Position } from "../Entity";
 import Sprite from "../Sprite";
+import FuelIndicator from "../ui/FuelIndicator";
 import LifeIndicator from "../ui/LifeIndicator";
 import Scene, { Bundle, SceneManager } from "./Scene";
 
@@ -33,7 +34,8 @@ export default class InGameScene extends Scene {
                 .setSize(Environment.VIEWPORT_WIDTH, Environment.VIEWPORT_HEIGHT)
                 .build());
 
-        this.addEntity("ui_life", new LifeIndicator(new Position(5, 5), this.playerStatus));
+        this.addEntity("ui_life", new LifeIndicator(new Position(10, 10), this.playerStatus));
+        this.addEntity("ui_fuel", new FuelIndicator(new Position(450, 10), this.playerStatus));
 
         this.initGame();
     }
