@@ -30,8 +30,8 @@ export default class LoadScene extends Scene {
                 .setImage(resource.getImage("loading"))
                 .setAlignCenter(false)
                 .setPosition(
-                    Environment.VIEWPORT_WIDTH - 478 - 5,
-                    Environment.VIEWPORT_HEIGHT - 112 - 5)
+                    Environment.VIEWPORT_WIDTH - 478 - 10,
+                    Environment.VIEWPORT_HEIGHT - 112 - 10)
                 .build());
 
         this.loadEntireGameResource().then((resource: Resource) => {
@@ -50,6 +50,7 @@ export default class LoadScene extends Scene {
                 .setFont("NeoDgm")
                 .setImage("logo", "sprite/logo.png")
                 .setImage("room", "sprite/room.png")
+                .setImage("life", "sprite/life.png")
                 .setImage("sea_arm_l", "sprite/sea_arm_l.png")
                 .setImage("sea_arm_r", "sprite/sea_arm_r.png")
                 .setImage("sea_leg_l", "sprite/sea_leg_l.png")
