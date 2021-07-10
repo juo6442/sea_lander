@@ -1,16 +1,11 @@
 import { KeyStatus } from "../game/KeyInput";
-import Script from "../script/Script";
 import NumberUtil from "../util/NumberUtil";
 
 export default abstract class Entity {
     private _invalidated: boolean;
-    private runningScriptList: Script[];
-    private sequentialScriptManager: SequentialScriptManager;
 
     constructor() {
         this._invalidated = false;
-        this.runningScriptList = new Array();
-        this.sequentialScriptManager = new SequentialScriptManager();
     }
 
     get invalidated(): boolean {
@@ -21,10 +16,7 @@ export default abstract class Entity {
      * Updates its status per each frame.
      * @param keyStatus - Key status
      */
-    public update(keyStatus: KeyStatus): void {
-        this.updateRunningScripts(keyStatus);
-        this.sequentialScriptManager.update(keyStatus);
-    }
+    public abstract update(keyStatus: KeyStatus): void;
 
     /**
      * Draws this entity.
@@ -33,60 +25,11 @@ export default abstract class Entity {
     public abstract render(context: CanvasRenderingContext2D): void;
 
     /**
-     * Add script and run. These scripts are runs parallelly.
-     * Script will be discarded after finish.
-     * @param script - Script to run
-     */
-    public runScript(script: Script): void {
-        this.runningScriptList.push(script);
-    }
-
-    /**
-     * Add script to queue. These scripts are runs sequentially.
-     * Don't add script runs infinitely.
-     * @see {@link Entity.addParallelScript} for an infinite script.
-     * @param scriptBuilder - Function that returns a script object
-     */
-    public pushScript(scriptBuilder: () => Script): void {
-        this.sequentialScriptManager.push(scriptBuilder);
-    }
-
-    /**
      * Invalidate this entity. The owner may use this information for managing.
      * The status can be checked using `Entity.invalidated()`.
      */
     protected invalidate(): void {
         this._invalidated = true;
-    }
-
-    private updateRunningScripts(keyStatus: KeyStatus): void {
-        this.runningScriptList.forEach(script => {
-            script.update(keyStatus);
-        });
-        this.runningScriptList =
-                this.runningScriptList.filter(script => !script.finished);
-    }
-}
-
-class SequentialScriptManager {
-    private queue: (() => Script)[];
-    private currentScript: Script | undefined;
-
-    constructor() {
-        this.queue = new Array();
-    }
-
-    public push(scriptBuilder: () => Script): void {
-        this.queue.push(scriptBuilder);
-    }
-
-    public update(keyStatus: KeyStatus): void {
-        if (this.currentScript) {
-            this.currentScript.update(keyStatus);
-            if (this.currentScript.finished) this.currentScript = undefined;
-        } else {
-            this.currentScript = this.queue.shift()?.();
-        }
     }
 }
 

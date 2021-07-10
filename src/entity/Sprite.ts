@@ -50,8 +50,6 @@ export default class Sprite extends Entity {
     }
 
     public override update(keyStatus: KeyStatus): void {
-        super.update(keyStatus);
-
         if (this.currentFrame.duration > 0) {
             this.updateFrame();
         }
@@ -158,7 +156,7 @@ export default class Sprite extends Entity {
         public addFrame(
                 sourceLeft: number, sourceTop: number,
                 sourceWidth: number, sourceHeight: number,
-                duration: number): Builder {
+                duration: number = 0): Builder {
             this.frames.push(new Frame(
                     new Position(sourceLeft, sourceTop),
                     new Size(sourceWidth, sourceHeight),

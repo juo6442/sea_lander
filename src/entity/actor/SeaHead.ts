@@ -43,9 +43,7 @@ export default class SeaHead extends Entity {
                 .build();
     }
 
-    public override update(keyStatus: KeyStatus): void {
-        super.update(keyStatus);
-
+    public update(keyStatus: KeyStatus): void {
         this.handleBoost(keyStatus);
         this.updateVelocity();
         this.applyVelocity();

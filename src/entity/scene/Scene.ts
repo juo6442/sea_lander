@@ -1,5 +1,6 @@
 import Entity from "../Entity";
 import { KeyStatus } from "../../game/KeyInput";
+import Script from "../../script/Script";
 
 export enum SceneId {
     LOAD,
@@ -21,6 +22,8 @@ export default abstract class Scene extends Entity {
     private sceneManager: SceneManager;
     private bundle: Bundle;
     private entities: Map<string, Entity>;
+    private runningScriptList: Script[];
+    private sequentialScriptManager: SequentialScriptManager;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super();
@@ -28,6 +31,8 @@ export default abstract class Scene extends Entity {
         this.sceneManager = sceneManager;
         this.bundle = bundle ?? new Bundle();
         this.entities = new Map();
+        this.runningScriptList = new Array();
+        this.sequentialScriptManager = new SequentialScriptManager();
     }
 
     /**
@@ -35,14 +40,33 @@ export default abstract class Scene extends Entity {
      */
     public abstract start(): void;
 
-    public override update(keyStatus: KeyStatus): void {
-        super.update(keyStatus);
-
+    public update(keyStatus: KeyStatus): void {
+        this.updateRunningScripts(keyStatus);
+        this.sequentialScriptManager.update(keyStatus);
         this.entities.forEach(e => e.update(keyStatus));
     }
 
     public render(context: CanvasRenderingContext2D): void {
         this.entities.forEach(e => e.render(context));
+    }
+
+    /**
+     * Add script and run. These scripts are runs parallelly.
+     * Script will be discarded after finish.
+     * @param script - Script to run
+     */
+    public runScript(script: Script): void {
+        this.runningScriptList.push(script);
+    }
+
+    /**
+     * Add script to queue. These scripts are runs sequentially.
+     * Don't add script runs infinitely.
+     * @see {@link Entity.addParallelScript} for an infinite script.
+     * @param scriptBuilder - Function that returns a script object
+     */
+    public pushScript(scriptBuilder: () => Script): void {
+        this.sequentialScriptManager.push(scriptBuilder);
     }
 
     protected getFromBundle(key: string): any {
@@ -65,6 +89,36 @@ export default abstract class Scene extends Entity {
 
     protected changeScene(scene: SceneId, bundle?: Bundle): void {
         this.sceneManager.changeScene(scene, bundle);
+    }
+
+    private updateRunningScripts(keyStatus: KeyStatus): void {
+        this.runningScriptList.forEach(script => {
+            script.update(keyStatus);
+        });
+        this.runningScriptList =
+                this.runningScriptList.filter(script => !script.finished);
+    }
+}
+
+class SequentialScriptManager {
+    private queue: (() => Script)[];
+    private currentScript: Script | undefined;
+
+    constructor() {
+        this.queue = new Array();
+    }
+
+    public push(scriptBuilder: () => Script): void {
+        this.queue.push(scriptBuilder);
+    }
+
+    public update(keyStatus: KeyStatus): void {
+        if (this.currentScript) {
+            this.currentScript.update(keyStatus);
+            if (this.currentScript.finished) this.currentScript = undefined;
+        } else {
+            this.currentScript = this.queue.shift()?.();
+        }
     }
 }
 

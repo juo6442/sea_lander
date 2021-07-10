@@ -31,6 +31,8 @@ export default class Label extends Entity {
         this.radianAngle = radianAngle;
     }
 
+    public update(keyStatus: KeyStatus): void {}
+
     public render(context: CanvasRenderingContext2D): void {
         if (this.text.length <= 0) return;
 
