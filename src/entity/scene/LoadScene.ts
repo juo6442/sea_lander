@@ -29,10 +29,9 @@ export default class LoadScene extends Scene {
         this.addEntity("image_loading", new Sprite.Builder()
                 .setImage(resource.getImage("loading"))
                 .setAlignCenter(false)
-                .setSize(196, 44)
                 .setPosition(
-                    Environment.VIEWPORT_WIDTH - 196 - 5,
-                    Environment.VIEWPORT_HEIGHT - 44 - 5)
+                    Environment.VIEWPORT_WIDTH - 478 - 5,
+                    Environment.VIEWPORT_HEIGHT - 112 - 5)
                 .build());
 
         this.loadEntireGameResource().then((resource: Resource) => {
