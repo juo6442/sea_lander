@@ -63,7 +63,7 @@ export class Color {
         this._r = NumberUtil.fitIn(r, 0, 255);
         this._g = NumberUtil.fitIn(g, 0, 255);
         this._b = NumberUtil.fitIn(b, 0, 255);
-        this._a = NumberUtil.fitIn(a, 0, 255);
+        this._a = NumberUtil.fitIn(a, 0, 1);
     }
 
     set r(value: number) {
@@ -79,7 +79,7 @@ export class Color {
     }
 
     set a(value: number) {
-        this._a = NumberUtil.fitIn(value, 0, 255);
+        this._a = NumberUtil.fitIn(value, 0, 1);
     }
 
     get r() { return this._r; }
