@@ -54,10 +54,10 @@ export default class SeaHead extends Entity {
             0,
             -Environment.VIEWPORT_WIDTH,
             +Environment.VIEWPORT_WIDTH
-        ].forEach(leftOffset => {
+        ].forEach(loopOffset => {
             context.save();
 
-            context.translate(this.position.left + leftOffset, this.position.top);
+            context.translate(this.position.left + loopOffset, this.position.top);
             context.rotate(this.radianAngle);
             this.headSprite.render(context);
 
