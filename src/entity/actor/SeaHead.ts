@@ -33,9 +33,9 @@ export default class SeaHead extends Entity {
         this.radius = 50;
 
         this.airResistance = 0.995;
-        this.gravity = 0.07;
-        this.fuelUpEfficiency = 0.2;
-        this.fuelAngleEfficiency = 0.001;
+        this.gravity = 0.075;
+        this.fuelUpEfficiency = 0.4;
+        this.fuelAngleEfficiency = 0.002;
 
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
@@ -45,6 +45,7 @@ export default class SeaHead extends Entity {
                 .setPosition(0, 0)
                 .addFrame(0, 0, 212, 176, 0)
                 .addFrame(212, 0, 212, 176, 0)
+                .addFrame(424, 0, 212, 176, 0)
                 .build();
         this.arrowSprite = new Sprite.Builder()
                 .setOriginCenter()
@@ -63,6 +64,8 @@ export default class SeaHead extends Entity {
         this.handleBoost(keyStatus);
         this.updateVelocity();
         this.applyVelocity();
+
+        if (this.playerStatus.fuel <= 0) this.headSprite.currentFrameIndex = 2;
     }
 
     public render(context: CanvasRenderingContext2D): void {
@@ -108,11 +111,6 @@ export default class SeaHead extends Entity {
     private handleBoost(keyStatus: KeyStatus) {
         const boosted = this.boostUp(keyStatus) || this.boostAngle(keyStatus);
         this.headSprite.currentFrameIndex = (boosted ? 1 : 0);
-
-        if (this.playerStatus.fuel > 0) {
-            this.boostUp(keyStatus);
-            this.boostAngle(keyStatus);
-        }
     }
 
     private boostUp(keyStatus: KeyStatus): boolean {
