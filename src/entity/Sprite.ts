@@ -62,14 +62,11 @@ export default class Sprite extends Entity {
 
         context.save();
 
-        context.translate(this.origin.left, this.origin.top);
-        context.rotate(this.radianAngle);
-        context.translate(-this.origin.left, -this.origin.top);
-
         context.translate(this.position.left, this.position.top);
-        context.globalAlpha = this.color.a;
+        context.rotate(this.radianAngle);
 
         // TODO: Implement tinting
+        context.globalAlpha = this.color.a;
 
         context.drawImage(
                 this.image,
