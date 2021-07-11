@@ -4,6 +4,7 @@ import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import Logger from "../../util/Logger";
 import CrashEffect from "../actor/CrashEffect";
+import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import { Position } from "../Entity";
 import Sprite from "../Sprite";
@@ -17,6 +18,7 @@ export default class InGameScene extends Scene {
     private resource: Resource;
     private playerStatus: PlayerStatus;
     private seaHead: SeaHead | undefined;
+    private seaBody: SeaBody | undefined;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
@@ -43,6 +45,13 @@ export default class InGameScene extends Scene {
     public initGame(): void {
         this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
 
+        this.seaBody?.invalidate();
+        this.seaBody = new SeaBody(
+                this.playerStatus,
+                new Position(Environment.VIEWPORT_WIDTH / 2, InGameScene.GROUND_TOP - 95));
+        this.addEntity(this.seaBody);
+
+        this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 150));
@@ -56,6 +65,22 @@ export default class InGameScene extends Scene {
         this.checkCrash();
     }
 
+    public override render(context: CanvasRenderingContext2D): void {
+        super.render(context);
+
+        if (Environment.DEBUG) {
+            context.save();
+            context.strokeStyle = "rgb(0, 255, 0)";
+            context.lineWidth = 2;
+            context.beginPath();
+            context.moveTo(0, InGameScene.GROUND_TOP);
+            context.lineTo(Environment.VIEWPORT_WIDTH, InGameScene.GROUND_TOP);
+            context.stroke();
+            context.closePath();
+            context.restore();
+        }
+    }
+
     private checkDocking(): void {
         if (!this.seaHead) return;
     }
@@ -64,9 +89,10 @@ export default class InGameScene extends Scene {
         if (!this.seaHead) return;
         if (this.seaHead.position.top < InGameScene.GROUND_TOP) return;
 
-        this.seaHead.invalidate();
         this.addEntity(new CrashEffect(this.seaHead.position, 120));
         this.playerStatus.life--;
+        this.seaHead.invalidate();
+        this.seaHead = undefined;
 
         Logger.info(`Crashed, ${this.playerStatus.life} life remains`);
 
@@ -81,9 +107,6 @@ export default class InGameScene extends Scene {
     }
 
     private gameOver(): void {
-        this.seaHead?.invalidate();
-        this.seaHead = undefined;
-
         // TODO: show gameover propmt and score
     }
 }
