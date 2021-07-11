@@ -7,16 +7,17 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class IntroScene extends Scene {
+    private bgRect: Rect;
     private logoSprite: Sprite;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
-        this.addEntity(new Rect.Builder()
+        this.bgRect = new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
                 .setPosition(0, 0)
-                .build());
+                .build();
         this.logoSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("logo"))
                 .setColor(0, 0, 0, 0)
@@ -25,13 +26,17 @@ export default class IntroScene extends Scene {
                     Environment.VIEWPORT_WIDTH / 2,
                     Environment.VIEWPORT_HEIGHT / 2)
                 .build();
-        this.addEntity(this.logoSprite);
     }
 
     public start(): void {
         Logger.info("Start IntroScene");
 
         this.showLogo();
+    }
+
+    public render(context: CanvasRenderingContext2D): void {
+        this.bgRect.render(context);
+        this.logoSprite.render(context);
     }
 
     private showLogo(): void {

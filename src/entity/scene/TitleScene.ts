@@ -8,6 +8,9 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
+    private bgRect: Rect;
+    private promptLabel: Label;
+
     private isWaitingInput: boolean;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
@@ -15,18 +18,18 @@ export default class TitleScene extends Scene {
 
         this.isWaitingInput = false;
 
-        this.addEntity(new Rect.Builder()
+        this.bgRect = new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
                 .setPosition(0, 0)
-                .build());
-        this.addEntity(new Label.Builder()
+                .build();
+        this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
                 .setColor(0, 0, 0)
                 .setText("엔터를 누르면 시작합니다")
-                .setSize(30)
+                .setSize(40)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT / 2)
-                .build());
+                .build();
     }
 
     public start(): void {
@@ -44,6 +47,11 @@ export default class TitleScene extends Scene {
         super.update(keyStatus);
 
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
+    }
+
+    public render(context: CanvasRenderingContext2D): void {
+        this.bgRect.render(context);
+        this.promptLabel.render(context);
     }
 
     private showTitle(): void {

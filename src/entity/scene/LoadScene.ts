@@ -7,10 +7,17 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class LoadScene extends Scene {
+    private bgRect: Rect;
     private loadingSprite: Sprite | undefined;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
+
+        this.bgRect = new Rect.Builder()
+                .setSizeFullscreen()
+                .setColor(255, 255, 255)
+                .setPosition(0, 0)
+                .build();
     }
 
     public start(): void {
@@ -22,14 +29,13 @@ export default class LoadScene extends Scene {
                 .then(resource => this.onResourceLoad(resource));
     }
 
+    public render(context: CanvasRenderingContext2D): void {
+        this.bgRect.render(context);
+        this.loadingSprite?.render(context);
+    }
+
     private onResourceLoad(resource: Resource): void {
         Logger.info("LoadScene is loaded");
-
-        this.addEntity(new Rect.Builder()
-                .setSizeFullscreen()
-                .setColor(255, 255, 255)
-                .setPosition(0, 0)
-                .build());
 
         this.loadingSprite = new Sprite.Builder()
                 .setImage(resource.getImage("loading"))
@@ -37,7 +43,6 @@ export default class LoadScene extends Scene {
                     Environment.VIEWPORT_WIDTH - 478 - 10,
                     Environment.VIEWPORT_HEIGHT - 112 - 10)
                 .build()
-        this.addEntity(this.loadingSprite);
 
         this.loadEntireGameResource().then((resource: Resource) => {
             Logger.info("Resources are loaded");

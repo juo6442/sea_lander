@@ -7,7 +7,7 @@ import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../actor/CrashEffect";
 import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
-import { Position } from "../Entity";
+import Entity, { Position } from "../Entity";
 import Sprite from "../Sprite";
 import FuelIndicator from "../ui/FuelIndicator";
 import LifeIndicator from "../ui/LifeIndicator";
@@ -20,8 +20,13 @@ export default class InGameScene extends Scene {
     private resource: Resource;
     private playerStatus: PlayerStatus;
     private dockingCriteriaChecker: DockingCriteriaChecker;
+
+    private bgSprite: Sprite;
+    private lifeUi: LifeIndicator;
+    private fuelUi: FuelIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
+    private effectEntities: Entity[];
 
     private inResult: boolean;
 
@@ -34,14 +39,14 @@ export default class InGameScene extends Scene {
 
         this.inResult = false;
 
-        this.addEntity(new Sprite.Builder()
+        this.bgSprite = new Sprite.Builder()
                 .setPosition(0, 0)
                 .setImage(this.resource.getImage("room"))
                 .setSize(Environment.VIEWPORT_WIDTH, Environment.VIEWPORT_HEIGHT)
-                .build());
-
-        this.addEntity(new LifeIndicator(new Position(10, 10), this.playerStatus));
-        this.addEntity(new FuelIndicator(new Position(450, 10), this.playerStatus));
+                .build();
+        this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
+        this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
+        this.effectEntities = new Array();
     }
 
     public start(): void {
@@ -57,18 +62,25 @@ export default class InGameScene extends Scene {
         this.seaBody = new SeaBody(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, InGameScene.GROUND_TOP - 95));
-        this.addEntity(this.seaBody);
 
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 150));
-        this.addEntity(this.seaHead);
     }
 
     public override update(keyStatus: KeyStatus): void {
+        super.update(keyStatus);
+
+        this.effectEntities.forEach(e => e.update(keyStatus));
+        this.effectEntities = this.effectEntities.filter(e => !e.invalidated);
+        this.lifeUi.update(keyStatus);
+        this.fuelUi.update(keyStatus);
+
         if (!this.inResult) {
-            super.update(keyStatus);
+            this.seaBody?.update(keyStatus);
+            this.seaHead?.update(keyStatus);
+
             this.dockingCriteriaChecker.update(this.seaHead);
 
             if (this.isDockingPosition()) {
@@ -84,7 +96,13 @@ export default class InGameScene extends Scene {
     }
 
     public override render(context: CanvasRenderingContext2D): void {
-        super.render(context);
+        this.bgSprite.render(context);
+        this.seaBody?.render(context);
+        this.seaHead?.render(context);
+        this.effectEntities.forEach(e => e.render(context));
+
+        this.lifeUi.render(context);
+        this.fuelUi.render(context);
 
         if (Environment.DEBUG) {
             context.save();
@@ -118,9 +136,8 @@ export default class InGameScene extends Scene {
     private crash(): void {
         if (!this.seaHead) return;
 
-        this.addEntity(new CrashEffect(this.seaHead.position));
+        this.effectEntities.push(new CrashEffect(this.seaHead.position));
         this.playerStatus.life--;
-        this.seaHead.invalidate();
         this.seaHead = undefined;
 
         Logger.info(`Crashed, ${this.playerStatus.life} life remains`);
@@ -134,6 +151,7 @@ export default class InGameScene extends Scene {
 
     private onSuccess(): void {
         this.inResult = true;
+        console.log(this.seaHead);
     }
 
     private onGameOver(): void {

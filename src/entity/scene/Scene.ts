@@ -21,8 +21,6 @@ export interface SceneManager {
 export default abstract class Scene extends Entity {
     private sceneManager: SceneManager;
     private bundle: Bundle;
-    private entityList: Entity[];
-    private runningScriptList: Script[];
     private sequentialScriptManager: SequentialScriptManager;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
@@ -30,8 +28,6 @@ export default abstract class Scene extends Entity {
 
         this.sceneManager = sceneManager;
         this.bundle = bundle ?? new Bundle();
-        this.entityList = new Array();
-        this.runningScriptList = new Array();
         this.sequentialScriptManager = new SequentialScriptManager();
     }
 
@@ -41,24 +37,7 @@ export default abstract class Scene extends Entity {
     public abstract start(): void;
 
     public update(keyStatus: KeyStatus): void {
-        this.updateRunningScripts(keyStatus);
         this.sequentialScriptManager.update(keyStatus);
-
-        this.entityList.forEach(e => e.update(keyStatus));
-        this.entityList = this.entityList.filter(e => !e.invalidated);
-    }
-
-    public render(context: CanvasRenderingContext2D): void {
-        this.entityList.forEach(e => e.render(context));
-    }
-
-    /**
-     * Add script and run. These scripts are runs parallelly.
-     * Script will be discarded after finish.
-     * @param script - Script to run
-     */
-    public runScript(script: Script): void {
-        this.runningScriptList.push(script);
     }
 
     /**
@@ -75,20 +54,8 @@ export default abstract class Scene extends Entity {
         return this.bundle.get(key);
     }
 
-    protected addEntity(e: Entity): void {
-        this.entityList.push(e);
-    }
-
     protected changeScene(scene: SceneId, bundle?: Bundle): void {
         this.sceneManager.changeScene(scene, bundle);
-    }
-
-    private updateRunningScripts(keyStatus: KeyStatus): void {
-        this.runningScriptList.forEach(script => {
-            script.update(keyStatus);
-        });
-        this.runningScriptList =
-                this.runningScriptList.filter(script => !script.finished);
     }
 }
 
