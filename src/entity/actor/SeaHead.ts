@@ -11,6 +11,7 @@ export default class SeaHead extends Entity {
     public velocity: Position;
     public radianAngle: number;
     public radianAngleVelocity: number;
+    public radius: number;
 
     private airResistance: number;
     private gravity: number;
@@ -29,6 +30,7 @@ export default class SeaHead extends Entity {
         this.velocity = new Position(0, 0);
         this.radianAngle = 0;
         this.radianAngleVelocity = 0;
+        this.radius = 50;
 
         this.airResistance = 0.995;
         this.gravity = 0.07;

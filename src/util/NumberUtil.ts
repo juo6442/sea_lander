@@ -1,6 +1,6 @@
 export default {
     /**
-     * Returns random numbe between [min, max)
+     * Returns random number between [min, max)
      * @param min - Range min
      * @param max - Range max
      * @returns Random number
@@ -17,6 +17,17 @@ export default {
      */
     fitIn: function(n: number, min: number, max: number): number {
         return Math.min(Math.max(min, n), max);
+    },
+
+    /**
+     * Return if the number is between [min, max]
+     * @param n - number
+     * @param min - Range min
+     * @param max - Range max
+     * @returns True if n is between min and max
+     */
+    isBetween: function(n: number, min: number, max: number): boolean {
+        return min <= n && n <= max;
     },
 
     /**
