@@ -81,7 +81,7 @@ export default class Label extends Entity {
                     this.pxSize ?? 10,
                     this.color ?? new Color(0, 0, 0),
                     this.position ?? new Position(0, 0),
-                    this.align ?? TextAlign.ALIGN_START,
+                    this.align ?? TextAlign.START,
                     this.radianAngle ?? 0);
         }
 
@@ -123,7 +123,7 @@ export default class Label extends Entity {
 }
 
 export enum TextAlign {
-    ALIGN_START = "start",
-    ALIGN_END = "end",
-    ALIGN_CENTER = "center",
+    START = "start",
+    END = "end",
+    CENTER = "center",
 }

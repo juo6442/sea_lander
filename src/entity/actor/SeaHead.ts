@@ -50,7 +50,7 @@ export default class SeaHead extends Entity {
                 .setPosition(0, 250)
                 .build();
         this.arrowLabel = new Label.Builder()
-                .setAlign(TextAlign.ALIGN_CENTER)
+                .setAlign(TextAlign.CENTER)
                 .setColor(0, 0, 0)
                 .setSize(70)
                 .setPosition(0, 330)

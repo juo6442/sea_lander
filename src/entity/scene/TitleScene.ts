@@ -21,7 +21,7 @@ export default class TitleScene extends Scene {
                 .setPosition(0, 0)
                 .build());
         this.addEntity(new Label.Builder()
-                .setAlign(TextAlign.ALIGN_CENTER)
+                .setAlign(TextAlign.CENTER)
                 .setColor(0, 0, 0)
                 .setText("엔터를 누르면 시작합니다")
                 .setSize(30)
