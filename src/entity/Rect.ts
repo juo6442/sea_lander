@@ -7,21 +7,21 @@ export default class Rect extends Entity {
     public size: Size;
     public color: Color;
     public position: Position;
-    public alignCenter: boolean;
+    public origin: Position;
     public radianAngle: number;
 
     private constructor(
             size: Size,
             color: Color,
             position: Position,
-            alignCenter: boolean,
+            origin: Position,
             radianAngle: number) {
         super();
 
         this.size = size;
         this.color = color;
         this.position = position;
-        this.alignCenter = alignCenter;
+        this.origin = origin;
         this.radianAngle = radianAngle;
     }
 
@@ -30,14 +30,16 @@ export default class Rect extends Entity {
     public render(context: CanvasRenderingContext2D): void {
         context.save();
 
-        context.translate(this.position.left, this.position.top);
+        context.translate(this.origin.left, this.origin.top);
         context.rotate(this.radianAngle);
+        context.translate(-this.origin.left, -this.origin.top);
+
+        context.translate(this.position.left, this.position.top);
 
         context.fillStyle =
                 `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
         context.fillRect(
-                this.alignCenter ? -this.size.width / 2 : 0,
-                this.alignCenter ? -this.size.height / 2 : 0,
+                -this.origin.left, -this.origin.top,
                 this.size.width, this.size.height);
 
         context.restore();
@@ -47,15 +49,28 @@ export default class Rect extends Entity {
         private size: Size | undefined;
         private color: Color | undefined;
         private position: Position | undefined;
-        private alignCenter: boolean | undefined;
+        private origin: Position | undefined;
+        private originCenter: boolean;
         private radianAngle: number | undefined;
 
+        constructor() {
+            this.originCenter = false;
+        }
+
         public build(): Rect {
+            if (!this.size) {
+                this.size = new Size(0, 0);
+            }
+
+            if (this.originCenter) {
+                this.origin = new Position(this.size.width / 2, this.size.height / 2);
+            }
+
             return new Rect(
-                    this.size ?? new Size(0, 0),
+                    this.size,
                     this.color ?? new Color(0, 0, 0),
                     this.position ?? new Position(0, 0),
-                    this.alignCenter ?? false,
+                    this.origin ?? new Position(0, 0),
                     this.radianAngle ?? 0);
         }
 
@@ -79,8 +94,14 @@ export default class Rect extends Entity {
             return this;
         }
 
-        public setAlignCenter(alignCenter: boolean): Builder {
-            this.alignCenter = alignCenter;
+        public setOrigin(left: number, top: number): Builder {
+            this.originCenter = false;
+            this.origin = new Position(left, top);
+            return this;
+        }
+
+        public setOriginCenter(): Builder {
+            this.originCenter = true;
             return this;
         }
 

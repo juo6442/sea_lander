@@ -29,7 +29,6 @@ export default class InGameScene extends Scene {
         Logger.info("Start InGameScene");
 
         this.addEntity(new Sprite.Builder()
-                .setAlignCenter(false)
                 .setPosition(0, 0)
                 .setImage(this.resource.getImage("room"))
                 .setSize(Environment.VIEWPORT_WIDTH, Environment.VIEWPORT_HEIGHT)

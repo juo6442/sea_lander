@@ -18,7 +18,6 @@ export default class TitleScene extends Scene {
         this.addEntity(new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
-                .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
         this.addEntity(new Label.Builder()

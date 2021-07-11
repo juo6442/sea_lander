@@ -25,7 +25,7 @@ export default class CrashEffect extends Entity {
         this.distance = 0;
 
         this.particleSprite = new Sprite.Builder()
-                .setAlignCenter(true)
+                .setOriginCenter()
                 .setImage(Resource.global?.getImage("crash"))
                 .setPosition(0, 0)
                 .addFrame(0  , 0, 150, 150, 7)

@@ -37,7 +37,7 @@ export default class SeaHead extends Entity {
 
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
-                .setAlignCenter(true)
+                .setOriginCenter()
                 .setAngle(this.radianAngle)
                 .setImage(Resource.global?.getImage("sea_head"))
                 .setPosition(0, 0)
@@ -45,7 +45,7 @@ export default class SeaHead extends Entity {
                 .addFrame(212, 0, 212, 176, 0)
                 .build();
         this.arrowSprite = new Sprite.Builder()
-                .setAlignCenter(true)
+                .setOriginCenter()
                 .setImage(Resource.global?.getImage("sea_arrow"))
                 .setPosition(0, 250)
                 .build();

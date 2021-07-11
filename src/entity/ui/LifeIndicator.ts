@@ -28,17 +28,14 @@ export default class LifeIndicator extends Entity {
 
         this.livingSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("life"))
-                .setAlignCenter(false)
                 .addFrame(0, 0, 130, 111)
                 .build();
         this.fallingSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("life"))
-                .setAlignCenter(false)
                 .addFrame(130, 0, 130, 111)
                 .build();
         this.fogSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("life"))
-                .setAlignCenter(false)
                 .addFrame(260, 0, 130, 111)
                 .setColor(0, 0, 0, 0)
                 .build();

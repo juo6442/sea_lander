@@ -1,3 +1,4 @@
+import Environment from "../game/Environment";
 import { KeyStatus } from "../game/KeyInput";
 import NumberUtil from "../util/NumberUtil";
 import Entity, { Color, Position, Size } from "./Entity";
@@ -7,7 +8,7 @@ export default class Sprite extends Entity {
     public size: Size;
     public color: Color;
     public position: Position;
-    public alignCenter: boolean;
+    public origin: Position;
     public radianAngle: number;
 
     private frames: Frame[];
@@ -19,7 +20,7 @@ export default class Sprite extends Entity {
             size: Size,
             color: Color,
             position: Position,
-            alignCenter: boolean,
+            origin: Position,
             radianAngle: number,
             frames: Frame[]) {
         super();
@@ -28,7 +29,7 @@ export default class Sprite extends Entity {
         this.size = size;
         this.color = color;
         this.position = position;
-        this.alignCenter = alignCenter;
+        this.origin = origin;
         this.radianAngle = radianAngle;
         this.frames = frames;
 
@@ -61,8 +62,11 @@ export default class Sprite extends Entity {
 
         context.save();
 
-        context.translate(this.position.left, this.position.top);
+        context.translate(this.origin.left, this.origin.top);
         context.rotate(this.radianAngle);
+        context.translate(-this.origin.left, -this.origin.top);
+
+        context.translate(this.position.left, this.position.top);
         context.globalAlpha = this.color.a;
 
         // TODO: Implement tinting
@@ -71,8 +75,7 @@ export default class Sprite extends Entity {
                 this.image,
                 this.currentFrame.position.left, this.currentFrame.position.top,
                 this.currentFrame.size.width, this.currentFrame.size.height,
-                this.alignCenter ? -this.size.width / 2 : 0,
-                this.alignCenter ? -this.size.height / 2 : 0,
+                -this.origin.left, -this.origin.top,
                 this.size.width, this.size.height);
 
         context.restore();
@@ -92,11 +95,13 @@ export default class Sprite extends Entity {
         private size: Size | undefined;
         private color: Color | undefined;
         private position: Position | undefined;
-        private alignCenter: boolean | undefined;
+        private origin: Position | undefined;
+        private originCenter: boolean;
         private radianAngle: number | undefined;
         private frames: Frame[];
 
         constructor() {
+            this.originCenter = false;
             this.frames = [];
         }
 
@@ -114,12 +119,16 @@ export default class Sprite extends Entity {
                         this.frames[0].size.height ?? 0);
             }
 
+            if (this.originCenter) {
+                this.origin = new Position(this.size.width / 2, this.size.height / 2);
+            }
+
             return new Sprite(
                     this.image,
                     this.size,
                     this.color ?? new Color(0, 0, 0, 1),
                     this.position ?? new Position(0, 0),
-                    this.alignCenter ?? false,
+                    this.origin ?? new Position(0, 0),
                     this.radianAngle ?? 0,
                     this.frames);
         }
@@ -144,8 +153,14 @@ export default class Sprite extends Entity {
             return this;
         }
 
-        public setAlignCenter(alignCenter: boolean): Builder {
-            this.alignCenter = alignCenter;
+        public setOrigin(left: number, top: number): Builder {
+            this.originCenter = false;
+            this.origin = new Position(left, top);
+            return this;
+        }
+
+        public setOriginCenter(): Builder {
+            this.originCenter = true;
             return this;
         }
 

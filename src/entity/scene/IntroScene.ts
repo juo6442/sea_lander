@@ -15,13 +15,12 @@ export default class IntroScene extends Scene {
         this.addEntity(new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
-                .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
         this.logoSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("logo"))
                 .setColor(0, 0, 0, 0)
-                .setAlignCenter(true)
+                .setOriginCenter()
                 .setPosition(
                     Environment.VIEWPORT_WIDTH / 2,
                     Environment.VIEWPORT_HEIGHT / 2)

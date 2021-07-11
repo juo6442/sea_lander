@@ -28,13 +28,11 @@ export default class LoadScene extends Scene {
         this.addEntity(new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(255, 255, 255)
-                .setAlignCenter(false)
                 .setPosition(0, 0)
                 .build());
 
         this.loadingSprite = new Sprite.Builder()
                 .setImage(resource.getImage("loading"))
-                .setAlignCenter(false)
                 .setPosition(
                     Environment.VIEWPORT_WIDTH - 478 - 10,
                     Environment.VIEWPORT_HEIGHT - 112 - 10)
