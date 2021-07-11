@@ -15,7 +15,7 @@ import Scene, { Bundle, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
-    private static readonly DOCKING_TOLERANCE_X = 70;
+    private static readonly DOCKING_TOLERANCE_X = 20;
 
     private resource: Resource;
     private playerStatus: PlayerStatus;
@@ -177,7 +177,7 @@ export class DockingCriteriaChecker {
         if (!head) return;
         this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -1, 1);
         this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -1, 1);
-        this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.5, 0.5);
-        this.angle = NumberUtil.isBetween(head.radianAngle, -0.5, 0.5);
+        this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.01, 0.01);
+        this.angle = NumberUtil.isBetween(head.radianAngle, -0.2, 0.2);
     }
  }
