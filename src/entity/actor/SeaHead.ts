@@ -94,6 +94,10 @@ export default class SeaHead extends Entity {
         // TODO: draw fogs?
     }
 
+    public setSuccessFace(): void {
+        this.headSprite.currentFrameIndex = 0;
+    }
+
     private updateVelocity() {
         this.velocity.top += this.gravity;
         this.velocity.left *= this.airResistance;

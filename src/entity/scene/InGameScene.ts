@@ -156,6 +156,7 @@ export default class InGameScene extends Scene {
     private onSuccess(): void {
         this.inResult = true;
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
+        this.seaHead!.setSuccessFace();
     }
 
     private onGameOver(): void {
