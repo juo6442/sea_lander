@@ -180,9 +180,9 @@ export class DockingCriteria {
 
     public update(head: SeaHead | undefined): void {
         if (!head) return;
-        this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -1, 1);
-        this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -1, 1);
-        this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.01, 0.01);
+        this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -2.5, 2.5);
+        this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -2.5, 2.5);
+        this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
         this.angle = NumberUtil.isBetween(head.radianAngle, -0.2, 0.2);
     }
  }
