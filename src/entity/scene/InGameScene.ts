@@ -7,6 +7,7 @@ import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../actor/CrashEffect";
 import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
+import SuccessEffect from "../actor/SuccessEffect";
 import Entity, { Position } from "../Entity";
 import Sprite from "../Sprite";
 import DockingIndicator from "../ui/DockingIndicator";
@@ -139,9 +140,7 @@ export default class InGameScene extends Scene {
     }
 
     private crash(): void {
-        if (!this.seaHead) return;
-
-        this.effectEntities.push(new CrashEffect(this.seaHead.position));
+        this.effectEntities.push(new CrashEffect(this.seaHead!.position));
         this.playerStatus.life--;
         this.seaHead = undefined;
 
@@ -156,7 +155,7 @@ export default class InGameScene extends Scene {
 
     private onSuccess(): void {
         this.inResult = true;
-        console.log(this.seaHead);
+        this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
     }
 
     private onGameOver(): void {
