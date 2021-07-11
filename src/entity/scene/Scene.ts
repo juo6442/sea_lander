@@ -1,6 +1,7 @@
 import Entity from "../Entity";
 import { KeyStatus } from "../../game/KeyInput";
 import Script from "../../script/Script";
+import SequentialScriptRunner from "../../script/SequencialScriptRunner";
 
 export enum SceneId {
     LOAD,
@@ -21,14 +22,14 @@ export interface SceneManager {
 export default abstract class Scene extends Entity {
     private sceneManager: SceneManager;
     private bundle: Bundle;
-    private sequentialScriptManager: SequentialScriptManager;
+    private scriptRunner: SequentialScriptRunner;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super();
 
         this.sceneManager = sceneManager;
         this.bundle = bundle ?? new Bundle();
-        this.sequentialScriptManager = new SequentialScriptManager();
+        this.scriptRunner = new SequentialScriptRunner();
     }
 
     /**
@@ -37,17 +38,17 @@ export default abstract class Scene extends Entity {
     public abstract start(): void;
 
     public update(keyStatus: KeyStatus): void {
-        this.sequentialScriptManager.update(keyStatus);
+        this.scriptRunner.update(keyStatus);
     }
 
     /**
-     * Add script to queue. These scripts are runs sequentially.
+     * Add script to queue. These scripts run sequentially.
      * Don't add script runs infinitely.
      * @see {@link Entity.addParallelScript} for an infinite script.
      * @param scriptBuilder - Function that returns a script object
      */
     public pushScript(scriptBuilder: () => Script): void {
-        this.sequentialScriptManager.push(scriptBuilder);
+        this.scriptRunner.push(scriptBuilder);
     }
 
     protected getFromBundle(key: string): any {
@@ -56,28 +57,6 @@ export default abstract class Scene extends Entity {
 
     protected changeScene(scene: SceneId, bundle?: Bundle): void {
         this.sceneManager.changeScene(scene, bundle);
-    }
-}
-
-class SequentialScriptManager {
-    private queue: (() => Script)[];
-    private currentScript: Script | undefined;
-
-    constructor() {
-        this.queue = new Array();
-    }
-
-    public push(scriptBuilder: () => Script): void {
-        this.queue.push(scriptBuilder);
-    }
-
-    public update(keyStatus: KeyStatus): void {
-        if (this.currentScript) {
-            this.currentScript.update(keyStatus);
-            if (this.currentScript.finished) this.currentScript = undefined;
-        } else {
-            this.currentScript = this.queue.shift()?.();
-        }
     }
 }
 
