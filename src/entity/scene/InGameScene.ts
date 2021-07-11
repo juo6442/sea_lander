@@ -9,6 +9,7 @@ import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import Entity, { Position } from "../Entity";
 import Sprite from "../Sprite";
+import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
 import LifeIndicator from "../ui/LifeIndicator";
 import Scene, { Bundle, SceneManager } from "./Scene";
@@ -19,11 +20,12 @@ export default class InGameScene extends Scene {
 
     private resource: Resource;
     private playerStatus: PlayerStatus;
-    private dockingCriteriaChecker: DockingCriteriaChecker;
+    private dockingCriteria: DockingCriteria;
 
     private bgSprite: Sprite;
     private lifeUi: LifeIndicator;
     private fuelUi: FuelIndicator;
+    private dockingUi: DockingIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
     private effectEntities: Entity[];
@@ -35,7 +37,7 @@ export default class InGameScene extends Scene {
 
         this.resource = Resource.global!;
         this.playerStatus = new PlayerStatus();
-        this.dockingCriteriaChecker = new DockingCriteriaChecker();
+        this.dockingCriteria = new DockingCriteria();
 
         this.inResult = false;
 
@@ -46,6 +48,7 @@ export default class InGameScene extends Scene {
                 .build();
         this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
+        this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
         this.effectEntities = new Array();
     }
 
@@ -76,15 +79,16 @@ export default class InGameScene extends Scene {
         this.effectEntities = this.effectEntities.filter(e => !e.invalidated);
         this.lifeUi.update(keyStatus);
         this.fuelUi.update(keyStatus);
+        this.dockingUi.update(keyStatus);
 
         if (!this.inResult) {
             this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
 
-            this.dockingCriteriaChecker.update(this.seaHead);
+            this.dockingCriteria.update(this.seaHead);
 
             if (this.isDockingPosition()) {
-                if (this.dockingCriteriaChecker.check()) {
+                if (this.dockingCriteria.check()) {
                     this.onSuccess();
                 } else {
                     this.crash();
@@ -103,6 +107,7 @@ export default class InGameScene extends Scene {
 
         this.lifeUi.render(context);
         this.fuelUi.render(context);
+        this.dockingUi.render(context);
 
         if (Environment.DEBUG) {
             context.save();
@@ -159,7 +164,7 @@ export default class InGameScene extends Scene {
     }
 }
 
-export class DockingCriteriaChecker {
+export class DockingCriteria {
     public horizontalVelocity: boolean;
     public verticalVelocity: boolean;
     public angleVelocity: boolean;
