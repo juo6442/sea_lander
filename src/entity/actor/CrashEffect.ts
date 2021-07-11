@@ -45,11 +45,11 @@ export default class CrashEffect extends Entity {
     }
 
     public render(context: CanvasRenderingContext2D): void {
-        context.save()
+        context.save();
         context.translate(this.position.left, this.position.top);
 
         [0, 45, 90, 135, 180, 225, 270, 315].forEach(angle => {
-            context.save()
+            context.save();
             context.rotate(NumberUtil.toRadian(angle));
 
             context.translate(this.distance, 0);
