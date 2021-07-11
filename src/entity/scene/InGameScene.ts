@@ -89,7 +89,7 @@ export default class InGameScene extends Scene {
         if (!this.seaHead) return;
         if (this.seaHead.position.top < InGameScene.GROUND_TOP) return;
 
-        this.addEntity(new CrashEffect(this.seaHead.position, 120));
+        this.addEntity(new CrashEffect(this.seaHead.position));
         this.playerStatus.life--;
         this.seaHead.invalidate();
         this.seaHead = undefined;

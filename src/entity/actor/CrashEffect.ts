@@ -14,13 +14,13 @@ export default class CrashEffect extends Entity {
 
     private particleSprite: Sprite;
 
-    constructor(position: Position, duration: number) {
+    constructor(position: Position) {
         super();
 
         this.position = position;
 
-        this.duration = duration;
-        this.remainDuration = duration;
+        this.duration = 120;
+        this.remainDuration = this.duration;
         this.speed = 6;
         this.distance = 0;
 
@@ -48,7 +48,7 @@ export default class CrashEffect extends Entity {
         context.save();
         context.translate(this.position.left, this.position.top);
 
-        [0, 45, 90, 135, 180, 225, 270, 315].forEach(angle => {
+        for (let angle = 0; angle < 360; angle += 45) {
             context.save();
             context.rotate(NumberUtil.toRadian(angle));
 
@@ -58,7 +58,7 @@ export default class CrashEffect extends Entity {
             this.particleSprite.render(context);
 
             context.restore();
-        });
+        };
 
         context.restore();
     }
