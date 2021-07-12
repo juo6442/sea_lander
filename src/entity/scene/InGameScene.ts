@@ -69,7 +69,7 @@ export default class InGameScene extends Scene implements InGameListener {
     onGameOverScreenClosed(): void {
         const bundle = new Bundle();
         bundle.set("score", this.playerStatus.score);
-        this.changeScene(SceneId.TITLE);
+        this.changeScene(SceneId.TITLE, bundle);
     }
 
     public start(): void {
