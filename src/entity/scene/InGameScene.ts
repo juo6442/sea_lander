@@ -16,6 +16,7 @@ import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
 import GameOverScreen from "../ui/GameOverScreen";
 import LifeIndicator from "../ui/LifeIndicator";
+import ScoreIndicator from "../ui/ScoreIndicator";
 import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
@@ -31,6 +32,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private lifeUi: LifeIndicator;
     private fuelUi: FuelIndicator;
     private dockingUi: DockingIndicator;
+    private scoreUi: ScoreIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
     private effectEntities: Entity[];
@@ -55,6 +57,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
+        this.scoreUi = new ScoreIndicator(new Position(1400, 15));
         this.effectEntities = new Array();
     }
 
@@ -80,6 +83,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.resultScreen = undefined;
 
         this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
+        this.scoreUi.score = this.playerStatus.score;
 
         this.seaBody?.invalidate();
         this.seaBody = new SeaBody(
@@ -100,6 +104,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi.update(keyStatus);
         this.fuelUi.update(keyStatus);
         this.dockingUi.update(keyStatus);
+        this.scoreUi.update(keyStatus);
 
         if (this.status === GameStatus.PLAY) {
             this.seaBody?.update(keyStatus);
@@ -132,6 +137,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi.render(context);
         this.fuelUi.render(context);
         this.dockingUi.render(context);
+        this.scoreUi.render(context);
 
         this.resultScreen?.render(context);
 
