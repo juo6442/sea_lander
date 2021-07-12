@@ -29,7 +29,7 @@ export default class GameOverScreen extends Entity {
 
         this.listener = listener;
 
-        this.scoreDuration = score <= 0 ? 1 : Math.min(130, score);
+        this.scoreDuration = score <= 0 ? 1 : Math.min(110, score);
         this.scoreElapsedDuration = 0;
         this.score = score;
 

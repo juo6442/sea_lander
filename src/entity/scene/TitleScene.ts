@@ -58,7 +58,7 @@ export default class TitleScene extends Scene {
         this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
                 .setColor(0, 0, 0, 0)
-                .setText("엔터를 누르면 시작합니다")
+                .setText("엔터 키를 누르면 시작합니다")
                 .setSize(70)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.85)
                 .build();

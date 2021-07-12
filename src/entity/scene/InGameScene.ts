@@ -22,7 +22,7 @@ import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
-    private static readonly DOCKING_TOLERANCE_X = 20;
+    private static readonly DOCKING_TOLERANCE_X = 30;
 
     private resource: Resource;
     private playerStatus: PlayerStatus;
@@ -93,7 +93,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
-                new Position(Environment.VIEWPORT_WIDTH / 2, 150));
+                new Position(Environment.VIEWPORT_WIDTH / 2, 400));
     }
 
     public override update(keyStatus: KeyStatus): void {
@@ -222,9 +222,9 @@ export class DockingCriteria {
     public update(head: SeaHead | undefined): void {
         if (!head) return;
         this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -2.5, 2.5);
-        this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -2.5, 2.5);
+        this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -4, 3.5);
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
-        this.angle = !NumberUtil.isBetween(head.radianAngle, 0.2, -0.2 + (Math.PI * 2));
+        this.angle = !NumberUtil.isBetween(head.radianAngle, 0.3, -0.3 + (Math.PI * 2));
 
     }
 }
