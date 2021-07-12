@@ -41,6 +41,8 @@ export default class SuccessScreen extends Entity {
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.22)
                 .setSize(230)
                 .setColor(110, 30, 170)
+                .setShadowColor(0, 0, 0, 0.3)
+                .setShadowDistance(10, 10)
                 .setText("성공!")
                 .build();
         this.score1Label = new Label.Builder()

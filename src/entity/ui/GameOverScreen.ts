@@ -48,6 +48,8 @@ export default class GameOverScreen extends Entity {
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.3)
                 .setSize(230)
                 .setColor(70, 0, 130)
+                .setShadowColor(0, 0, 0, 0.3)
+                .setShadowDistance(10, 10)
                 .setText("게임 끝")
                 .build();
         this.scoreLabel = new Label.Builder()
