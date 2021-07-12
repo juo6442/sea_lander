@@ -3,11 +3,13 @@ export default class PlayerStatus {
     public static readonly FUEL_FULL = 1000;
 
     public level: number;
+    public score: number;
     public life: number;
     public fuel: number;
 
     constructor() {
         this.level = 1;
+        this.score = 0;
         this.life = PlayerStatus.LIFE_FULL;
         this.fuel = PlayerStatus.FUEL_FULL;
     }

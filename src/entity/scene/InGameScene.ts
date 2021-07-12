@@ -65,8 +65,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
     onGameOverScreenClosed(): void {
         const bundle = new Bundle();
-        // TODO: set real score
-        bundle.set("score", 9999);
+        bundle.set("score", this.playerStatus.score);
         this.changeScene(SceneId.TITLE);
     }
 
@@ -190,12 +189,13 @@ export default class InGameScene extends Scene implements InGameListener {
                 this.seaHead!.position.left - this.seaBody!.position.left,
                 this.seaHead!.radianAngle);
         this.resultScreen = new SuccessScreen(score, this);
+        this.playerStatus.score += score.totalScore;
     }
 
     private onGameOver(): void {
         this.status = GameStatus.GAMEOVER;
-        // TODO: pass real score
-        this.resultScreen = new GameOverScreen(9999, this);
+        this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
+        // TODO: save score
     }
 }
 
