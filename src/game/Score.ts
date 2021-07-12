@@ -10,7 +10,7 @@ export class ScoreCalculator {
             positionDiff: number,
             angle: number) {
         this.fuelScore = fuel;
-        this.positionScore = Math.floor(Math.pow(2, -Math.abs(positionDiff / 10)) * 1000);
+        this.positionScore = Math.floor(Math.pow(2, -Math.abs(positionDiff / 10)) * 500);
         this.angleScore = Math.floor(Math.pow(2, -angle) * 500);
 
         Logger.log("Score calculated");
