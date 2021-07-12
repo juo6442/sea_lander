@@ -1,6 +1,7 @@
 import Environment from "../../game/Environment";
 import { Key, KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
+import { CommonScript } from "../../script/CommonScript";
 import Logger from "../../util/Logger";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
@@ -8,8 +9,10 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
-    private bgRect: Rect;
+    private bgSprite: Sprite;
+    private headSprite: Sprite;
     private promptLabel: Label;
+    private headTransition: CommonScript.WaveTransition;
 
     private isWaitingInput: boolean;
 
@@ -18,10 +21,12 @@ export default class TitleScene extends Scene {
 
         this.isWaitingInput = false;
 
-        this.bgRect = new Rect.Builder()
-                .setSizeFullscreen()
-                .setColor(255, 255, 255)
-                .setPosition(0, 0)
+        this.bgSprite = new Sprite.Builder()
+                .setImage(Resource.global?.getImage("title_bg"))
+                .build();
+        this.headSprite = new Sprite.Builder()
+                .setImage(Resource.global?.getImage("title_head"))
+                .setPosition(582, -40)
                 .build();
         this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
@@ -30,13 +35,14 @@ export default class TitleScene extends Scene {
                 .setSize(40)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT / 2)
                 .build();
+        this.headTransition = new CommonScript.WaveTransition(
+                this.headSprite, 0, 40, 240, CommonScript.WaveTransition.LOOP_INFINITE);
     }
 
     public start(): void {
         Logger.info("Start TitleScene");
 
         /*
-        TODO: Show title images
         TODO: Show scoreboard (highlight latest score)
         */
 
@@ -46,11 +52,13 @@ export default class TitleScene extends Scene {
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
+        this.headTransition.update();
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
     }
 
     public render(context: CanvasRenderingContext2D): void {
-        this.bgRect.render(context);
+        this.bgSprite.render(context);
+        this.headSprite.render(context);
         this.promptLabel.render(context);
     }
 

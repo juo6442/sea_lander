@@ -59,6 +59,8 @@ export default class LoadScene extends Scene {
         return new Resource.Loader()
                 .setFont("NeoDgm")
                 .setImage("logo", "sprite/logo.png")
+                .setImage("title_bg", "sprite/title_bg.png")
+                .setImage("title_head", "sprite/title_head.png")
                 .setImage("room", "sprite/room.png")
                 .setImage("life", "sprite/life.png")
                 .setImage("fuel", "sprite/fuel.png")
