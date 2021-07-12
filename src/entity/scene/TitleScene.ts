@@ -13,7 +13,8 @@ export default class TitleScene extends Scene {
     private bgSprite: Sprite;
     private headSprite: Sprite;
     private promptLabel: Label;
-    private headTransition: CommonScript.WaveTransition;
+    private headTransitionScript: CommonScript.WaveTransition;
+    private promptBlinkScript: CommonScript.Blink | undefined;
 
     private isWaitingInput: boolean;
 
@@ -35,12 +36,12 @@ export default class TitleScene extends Scene {
                 .build();
         this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
-                .setColor(0, 0, 0)
+                .setColor(0, 0, 0, 0)
                 .setText("엔터를 누르면 시작합니다")
-                .setSize(40)
-                .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT / 2)
+                .setSize(70)
+                .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.85)
                 .build();
-        this.headTransition = new CommonScript.WaveTransition(
+        this.headTransitionScript = new CommonScript.WaveTransition(
                 this.headSprite, 0, 40, 240, CommonScript.WaveTransition.LOOP_INFINITE);
     }
 
@@ -49,6 +50,8 @@ export default class TitleScene extends Scene {
 
         this.pushScript(() => { return new CommonScript.Fade(this.fadeRect, 0, 30) });
         this.pushScript(() => { return new CommonScript.Run(() => {
+            this.promptLabel.color.a = 1;
+            this.promptBlinkScript = new CommonScript.Blink(this.promptLabel, 60);
             this.isWaitingInput = true;
         })});
         /*
@@ -59,7 +62,8 @@ export default class TitleScene extends Scene {
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
-        this.headTransition.update();
+        this.promptBlinkScript?.update();
+        this.headTransitionScript.update();
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
     }
 
@@ -74,6 +78,7 @@ export default class TitleScene extends Scene {
         if (!keyStatus.isPressed(Key.OK)) return;
 
         this.isWaitingInput = false;
+        this.promptLabel.color.a = 0;
 
         this.changeScene(SceneId.INGAME);
     }
