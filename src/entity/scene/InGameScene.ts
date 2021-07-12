@@ -2,7 +2,7 @@ import Environment from "../../game/Environment";
 import { KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
-import { ScoreCalculator } from "../../game/Score";
+import { Score, ScoreCalculator } from "../../game/Score";
 import Logger from "../../util/Logger";
 import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../actor/CrashEffect";
@@ -201,7 +201,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private onGameOver(): void {
         this.status = GameStatus.GAMEOVER;
         this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
-        // TODO: save score
+        Score.setScore(this.playerStatus.score);
     }
 }
 
