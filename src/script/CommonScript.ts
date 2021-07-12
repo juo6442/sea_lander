@@ -109,7 +109,7 @@ export namespace CommonScript {
         }
     }
 
-    export class WaveTransitionScript extends Script {
+    export class WaveTransition extends Script {
         static readonly LOOP_INFINITE = -1;
 
         private entity: EntityWithPosition;
@@ -158,7 +158,7 @@ export namespace CommonScript {
         private onThisCycleFinished() {
             this.remainCurrentCycle = this.cycle;
 
-            if (this.remainLoop === WaveTransitionScript.LOOP_INFINITE) return;
+            if (this.remainLoop === WaveTransition.LOOP_INFINITE) return;
             if (--this.remainLoop <= 0) {
                 this.entity.position = this.initialPosition;
                 this.finish();
@@ -166,7 +166,7 @@ export namespace CommonScript {
         }
     }
 
-    export class BlinkScript extends Script {
+    export class Blink extends Script {
         private entity: EntityWithColor;
         private duration: number;
 

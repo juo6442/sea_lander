@@ -20,7 +20,7 @@ export default class SuccessScreen extends Entity {
     private score3Label: Label;
     private scoreLabel: Label;
     private promptLabel: Label;
-    private promptBlinkScript: CommonScript.BlinkScript | undefined;
+    private promptBlinkScript: CommonScript.Blink | undefined;
 
     private currentUpdate: ((keyStatus: KeyStatus) => void) | undefined;
     private scriptRunner: SequentialScriptRunner;
@@ -175,7 +175,7 @@ export default class SuccessScreen extends Entity {
         this.scriptRunner.push(() => { return new CommonScript.Wait(50) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.promptLabel.color.a = 1;
-            this.promptBlinkScript = new CommonScript.BlinkScript(this.promptLabel, 60);
+            this.promptBlinkScript = new CommonScript.Blink(this.promptLabel, 60);
             this.currentUpdate = this.updatePrompt;
         })});
     }
