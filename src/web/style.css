@@ -8,7 +8,7 @@
 div#container {
     width: 100%;
     text-align: center;
-    margin: 2em 0;
+    margin: 1em 0;
 }
 
 #screen {
@@ -17,4 +17,26 @@ div#container {
     min-width: 512px;
     min-height: 384;
     background-color: black;
+}
+
+footer {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+
+    color: rgb(35, 31, 41);
+    font-size: small;
+    text-align: center;
+    line-height: 140%;
+    word-wrap: break-word;
+}
+
+footer p {
+    font-style: normal;
+}
+
+a.footerLink:link,
+a.footerLink:visited,
+a.footerLink:hover,
+a.footerLink:active {
+    color: rgb(120, 100, 150);
 }
