@@ -2,6 +2,7 @@ import Environment from "../../game/Environment";
 import { Key, KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
+import NumberUtil from "../../util/NumberUtil";
 import Entity, { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";
@@ -13,10 +14,11 @@ export default class SeaHead extends Entity {
     public radianAngleVelocity: number;
     public radius: number;
 
-    private airResistance: number;
-    private gravity: number;
-    private fuelUpEfficiency: number;
-    private fuelAngleEfficiency: number;
+    private readonly airResistance: number;
+    private readonly gravity: number;
+    private readonly fuelUpEfficiency: number;
+    private readonly fuelAngleEfficiency: number;
+    private readonly angleInstability: number;
 
     private playerStatus: PlayerStatus;
     private headSprite: Sprite;
@@ -36,6 +38,7 @@ export default class SeaHead extends Entity {
         this.gravity = 0.075;
         this.fuelUpEfficiency = 0.4;
         this.fuelAngleEfficiency = 0.002;
+        this.angleInstability = 0.0001;
 
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
@@ -125,6 +128,9 @@ export default class SeaHead extends Entity {
         const yProjection = Math.cos(this.radianAngle);
         this.velocity.left += xProjection * this.fuelUpEfficiency;
         this.velocity.top  -= yProjection * this.fuelUpEfficiency;
+
+        this.radianAngleVelocity +=
+                NumberUtil.random(-this.angleInstability, +this.angleInstability);
 
         this.playerStatus.fuel -= 1;
 
