@@ -51,11 +51,11 @@ export default abstract class Scene extends Entity {
         this.scriptRunner.push(scriptBuilder);
     }
 
-    protected getFromBundle(key: string): any {
+    public getFromBundle(key: string): any {
         return this.bundle.get(key);
     }
 
-    protected changeScene(scene: SceneId, bundle?: Bundle): void {
+    public changeScene(scene: SceneId, bundle?: Bundle): void {
         this.sceneManager.changeScene(scene, bundle);
     }
 }
