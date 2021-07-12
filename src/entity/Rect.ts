@@ -30,11 +30,8 @@ export default class Rect extends Entity {
     public render(context: CanvasRenderingContext2D): void {
         context.save();
 
-        context.translate(this.origin.left, this.origin.top);
-        context.rotate(this.radianAngle);
-        context.translate(-this.origin.left, -this.origin.top);
-
         context.translate(this.position.left, this.position.top);
+        context.rotate(this.radianAngle);
 
         context.fillStyle =
                 `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
