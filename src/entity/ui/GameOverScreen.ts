@@ -5,10 +5,10 @@ import SequentialScriptRunner from "../../script/SequencialScriptRunner";
 import Entity from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
-import Scene, { Bundle, SceneId } from "../scene/Scene";
+import { InGameListener } from "../scene/InGameScene";
 
 export default class GameOverScreen extends Entity {
-    private scene: Scene;
+    private listener: InGameListener;
 
     private scoreDuration: number;
     private scoreElapsedDuration: number;
@@ -25,10 +25,10 @@ export default class GameOverScreen extends Entity {
     private currentUpdate: ((keyStatus: KeyStatus) => void) | undefined;
     private scriptRunner: SequentialScriptRunner;
 
-    constructor(score: number, scene: Scene) {
+    constructor(score: number, listener: InGameListener) {
         super();
 
-        this.scene = scene;
+        this.listener = listener;
 
         this.scoreDuration = Math.min(130, score);
         this.scoreElapsedDuration = 0;
@@ -128,9 +128,7 @@ export default class GameOverScreen extends Entity {
         this.scriptRunner.push(() => { return new CommonScript.Fade(this.fadeRect, 1, 30) });
         this.scriptRunner.push(() => { return new CommonScript.Wait(30) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
-            const bundle = new Bundle();
-            bundle.set("score", this.score);
-            this.scene.changeScene(SceneId.TITLE, bundle);
+            this.listener.onGameOverScreenClosed();
         })});
     }
 }

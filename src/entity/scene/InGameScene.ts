@@ -15,9 +15,9 @@ import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
 import GameOverScreen from "../ui/GameOverScreen";
 import LifeIndicator from "../ui/LifeIndicator";
-import Scene, { Bundle, SceneManager } from "./Scene";
+import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
-export default class InGameScene extends Scene {
+export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
     private static readonly DOCKING_TOLERANCE_X = 20;
 
@@ -54,6 +54,17 @@ export default class InGameScene extends Scene {
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
         this.effectEntities = new Array();
+    }
+
+    onSuccessScreenClosed(): void {
+        throw new Error("Method not implemented.");
+    }
+
+    onGameOverScreenClosed(): void {
+        const bundle = new Bundle();
+        // TODO: set real score
+        bundle.set("score", 9999);
+        this.changeScene(SceneId.TITLE);
     }
 
     public start(): void {
@@ -195,6 +206,11 @@ export class DockingCriteria {
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
         this.angle = NumberUtil.isBetween(head.radianAngle, -0.2, 0.2);
     }
+}
+
+export interface InGameListener {
+    onSuccessScreenClosed(): void;
+    onGameOverScreenClosed(): void;
 }
 
 const enum GameStatus {

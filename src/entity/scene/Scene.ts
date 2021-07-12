@@ -47,15 +47,15 @@ export default abstract class Scene extends Entity {
      * @see {@link Entity.addParallelScript} for an infinite script.
      * @param scriptBuilder - Function that returns a script object
      */
-    public pushScript(scriptBuilder: () => Script): void {
+    protected pushScript(scriptBuilder: () => Script): void {
         this.scriptRunner.push(scriptBuilder);
     }
 
-    public getFromBundle(key: string): any {
+    protected getFromBundle(key: string): any {
         return this.bundle.get(key);
     }
 
-    public changeScene(scene: SceneId, bundle?: Bundle): void {
+    protected changeScene(scene: SceneId, bundle?: Bundle): void {
         this.sceneManager.changeScene(scene, bundle);
     }
 }
