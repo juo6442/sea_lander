@@ -9,8 +9,9 @@ export default class Label extends Entity {
     public pxSize: number;
     public color: Color;
     public position: Position;
+    public shadowColor: Color | undefined;
+    public shadowDistance: Position | undefined;
     public align: TextAlign;
-    public radianAngle: number;
 
     private constructor(
             text: string,
@@ -18,8 +19,9 @@ export default class Label extends Entity {
             pxSize: number,
             color: Color,
             position: Position,
-            align: TextAlign,
-            radianAngle: number) {
+            shadowColor: Color | undefined,
+            shadowDistance: Position | undefined,
+            align: TextAlign) {
         super();
 
         this.text = text;
@@ -27,8 +29,9 @@ export default class Label extends Entity {
         this.pxSize = pxSize;
         this.color = color;
         this.position = position;
+        this.shadowColor = shadowColor;
+        this.shadowDistance = shadowDistance;
         this.align = align;
-        this.radianAngle = radianAngle;
     }
 
     public update(keyStatus: KeyStatus): void {}
@@ -38,15 +41,21 @@ export default class Label extends Entity {
 
         context.save();
 
+        context.font = `${this.pxSize}px ${this.font}`;
+        context.textAlign = this.align;
+        context.textBaseline = "middle";
         context.translate(this.position.left, this.position.top);
-        context.rotate(this.radianAngle);
+
+        if (this.shadowColor && this.shadowDistance) {
+            context.translate(this.shadowDistance.left, this.shadowDistance.top);
+            context.fillStyle =
+                    `rgba(${this.shadowColor.r}, ${this.shadowColor.g}, ${this.shadowColor.b}, ${this.shadowColor.a})`;
+            context.fillText(this.text, 0, 0);
+            context.translate(-this.shadowDistance.left, -this.shadowDistance.top);
+        }
 
         context.fillStyle =
                 `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
-        context.font = `${this.pxSize}px ${this.font}`;
-
-        context.textAlign = this.align;
-        context.textBaseline = "middle";
         context.fillText(this.text, 0, 0);
 
         context.restore();
@@ -71,8 +80,9 @@ export default class Label extends Entity {
         private pxSize: number | undefined;
         private color: Color | undefined;
         private position: Position | undefined;
+        private shadowColor: Color | undefined;
+        private shadowDistance: Position | undefined;
         private align: TextAlign | undefined;
-        private radianAngle: number | undefined;
 
         public build(): Label {
             return new Label(
@@ -81,8 +91,9 @@ export default class Label extends Entity {
                     this.pxSize ?? 10,
                     this.color ?? new Color(0, 0, 0),
                     this.position ?? new Position(0, 0),
-                    this.align ?? TextAlign.START,
-                    this.radianAngle ?? 0);
+                    this.shadowColor,
+                    this.shadowDistance,
+                    this.align ?? TextAlign.START);
         }
 
         public setText(text: string): Builder {
@@ -100,6 +111,16 @@ export default class Label extends Entity {
             return this;
         }
 
+        public setShadowColor(r: number, g: number, b: number, a: number = 1): Builder {
+            this.shadowColor = new Color(r, g, b, a);
+            return this;
+        }
+
+        public setShadowDistance(left: number, top: number): Builder {
+            this.shadowDistance = new Position(left, top);
+            return this;
+        }
+
         public setColor(r: number, g: number, b: number, a: number = 1): Builder {
             this.color = new Color(r, g, b, a);
             return this;
@@ -112,11 +133,6 @@ export default class Label extends Entity {
 
         public setAlign(align: TextAlign): Builder {
             this.align = align;
-            return this;
-        }
-
-        public setAngle(degree: number): Builder {
-            this.radianAngle = NumberUtil.toRadian(degree);
             return this;
         }
     }
