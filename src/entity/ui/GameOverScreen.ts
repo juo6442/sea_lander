@@ -13,7 +13,6 @@ export default class GameOverScreen extends Entity {
     private scoreDuration: number;
     private scoreElapsedDuration: number;
     private score: number;
-    private displayingScore: number;
 
     private bgRect: Rect;
     private fadeRect: Rect;
@@ -33,7 +32,6 @@ export default class GameOverScreen extends Entity {
         this.scoreDuration = Math.min(130, score);
         this.scoreElapsedDuration = 0;
         this.score = score;
-        this.displayingScore = 0;
 
         this.scriptRunner = new SequentialScriptRunner();
 
@@ -94,8 +92,8 @@ export default class GameOverScreen extends Entity {
 
     private updateScore(keyStatus: KeyStatus): void {
         this.scoreElapsedDuration++;
-        this.displayingScore = Math.floor(this.score * (this.scoreElapsedDuration / this.scoreDuration));
-        this.scoreLabel.text = `최종 점수: ${this.displayingScore}`;
+        const displayingScore = Math.floor(this.score * (this.scoreElapsedDuration / this.scoreDuration));
+        this.scoreLabel.text = `최종 점수: ${displayingScore}`;
 
         if (this.scoreElapsedDuration >= this.scoreDuration) {
             this.currentUpdate = this.updatePrePrompt;
