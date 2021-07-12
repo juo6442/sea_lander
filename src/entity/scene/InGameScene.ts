@@ -9,9 +9,11 @@ import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import SuccessEffect from "../actor/SuccessEffect";
 import Entity, { Position } from "../Entity";
+import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";
 import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
+import GameOverScreen from "../ui/GameOverScreen";
 import LifeIndicator from "../ui/LifeIndicator";
 import Scene, { Bundle, SceneManager } from "./Scene";
 
@@ -31,7 +33,8 @@ export default class InGameScene extends Scene {
     private seaBody: SeaBody | undefined;
     private effectEntities: Entity[];
 
-    private inResult: boolean;
+    private status: GameStatus;
+    private gameOverScreen: GameOverScreen | undefined;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
@@ -40,7 +43,7 @@ export default class InGameScene extends Scene {
         this.playerStatus = new PlayerStatus();
         this.dockingCriteria = new DockingCriteria();
 
-        this.inResult = false;
+        this.status = GameStatus.PLAY;
 
         this.bgSprite = new Sprite.Builder()
                 .setPosition(0, 0)
@@ -82,7 +85,7 @@ export default class InGameScene extends Scene {
         this.fuelUi.update(keyStatus);
         this.dockingUi.update(keyStatus);
 
-        if (!this.inResult) {
+        if (this.status === GameStatus.PLAY) {
             this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
 
@@ -97,6 +100,9 @@ export default class InGameScene extends Scene {
             } else if (this.isHeadOnGround()) {
                 this.crash();
             }
+        } else if (this.status === GameStatus.RESULT) {
+        } else if (this.status === GameStatus.GAMEOVER) {
+            this.gameOverScreen?.update(keyStatus);
         }
     }
 
@@ -109,6 +115,8 @@ export default class InGameScene extends Scene {
         this.lifeUi.render(context);
         this.fuelUi.render(context);
         this.dockingUi.render(context);
+
+        this.gameOverScreen?.render(context);
 
         if (Environment.DEBUG) {
             context.save();
@@ -154,13 +162,15 @@ export default class InGameScene extends Scene {
     }
 
     private onSuccess(): void {
-        this.inResult = true;
+        this.status = GameStatus.RESULT;
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
         this.seaHead!.setSuccessFace();
     }
 
     private onGameOver(): void {
-        // TODO: show gameover propmt and score
+        this.status = GameStatus.GAMEOVER;
+        // TODO: pass real score
+        this.gameOverScreen = new GameOverScreen(9999, this);
     }
 }
 
@@ -185,4 +195,8 @@ export class DockingCriteria {
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
         this.angle = NumberUtil.isBetween(head.radianAngle, -0.2, 0.2);
     }
- }
+}
+
+const enum GameStatus {
+    PLAY, RESULT, GAMEOVER
+}
