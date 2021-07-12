@@ -12,6 +12,7 @@ export default class TitleScene extends Scene {
     private fadeRect: Rect;
     private bgSprite: Sprite;
     private headSprite: Sprite;
+    private titleLabel: Label;
     private promptLabel: Label;
     private headTransitionScript: CommonScript.WaveTransition;
     private promptBlinkScript: CommonScript.Blink | undefined;
@@ -33,6 +34,15 @@ export default class TitleScene extends Scene {
         this.headSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("title_head"))
                 .setPosition(582, -40)
+                .build();
+        this.titleLabel = new Label.Builder()
+                .setAlign(TextAlign.START)
+                .setColor(230, 80, 255, 1)
+                .setPosition(140, 280)
+                .setShadowColor(0, 0, 0, 0.6)
+                .setShadowDistance(20, 20)
+                .setText("세아랜더")
+                .setSize(290)
                 .build();
         this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
@@ -70,6 +80,7 @@ export default class TitleScene extends Scene {
     public render(context: CanvasRenderingContext2D): void {
         this.bgSprite.render(context);
         this.headSprite.render(context);
+        this.titleLabel.render(context);
         this.promptLabel.render(context);
         this.fadeRect.render(context);
     }
