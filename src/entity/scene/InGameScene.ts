@@ -2,6 +2,7 @@ import Environment from "../../game/Environment";
 import { KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
+import { ScoreCalculator } from "../../game/Score";
 import Logger from "../../util/Logger";
 import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../actor/CrashEffect";
@@ -15,6 +16,7 @@ import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
 import GameOverScreen from "../ui/GameOverScreen";
 import LifeIndicator from "../ui/LifeIndicator";
+import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene implements InGameListener {
@@ -34,7 +36,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private effectEntities: Entity[];
 
     private status: GameStatus;
-    private gameOverScreen: GameOverScreen | undefined;
+    private resultScreen: Entity | undefined;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
@@ -57,7 +59,8 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     onSuccessScreenClosed(): void {
-        throw new Error("Method not implemented.");
+        // TODO: stage++
+        this.initGame();
     }
 
     onGameOverScreenClosed(): void {
@@ -74,6 +77,9 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private initGame(): void {
+        this.status = GameStatus.PLAY;
+        this.resultScreen = undefined;
+
         this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
 
         this.seaBody?.invalidate();
@@ -111,9 +117,10 @@ export default class InGameScene extends Scene implements InGameListener {
             } else if (this.isHeadOnGround()) {
                 this.crash();
             }
-        } else if (this.status === GameStatus.RESULT) {
+        } else if (this.status === GameStatus.SUCCESS) {
+            this.resultScreen?.update(keyStatus);
         } else if (this.status === GameStatus.GAMEOVER) {
-            this.gameOverScreen?.update(keyStatus);
+            this.resultScreen?.update(keyStatus);
         }
     }
 
@@ -127,7 +134,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.fuelUi.render(context);
         this.dockingUi.render(context);
 
-        this.gameOverScreen?.render(context);
+        this.resultScreen?.render(context);
 
         if (Environment.DEBUG) {
             context.save();
@@ -173,15 +180,22 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private onSuccess(): void {
-        this.status = GameStatus.RESULT;
+        this.status = GameStatus.SUCCESS;
+
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
         this.seaHead!.setSuccessFace();
+
+        const score = new ScoreCalculator(
+                this.playerStatus.fuel,
+                this.seaHead!.position.left - this.seaBody!.position.left,
+                this.seaHead!.radianAngle);
+        this.resultScreen = new SuccessScreen(score, this);
     }
 
     private onGameOver(): void {
         this.status = GameStatus.GAMEOVER;
         // TODO: pass real score
-        this.gameOverScreen = new GameOverScreen(9999, this);
+        this.resultScreen = new GameOverScreen(9999, this);
     }
 }
 
@@ -214,5 +228,5 @@ export interface InGameListener {
 }
 
 const enum GameStatus {
-    PLAY, RESULT, GAMEOVER
+    PLAY, SUCCESS, GAMEOVER
 }
