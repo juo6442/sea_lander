@@ -9,14 +9,16 @@ export class ScoreCalculator {
             fuel: number,
             positionDiff: number,
             angle: number) {
+        const refineAngle = angle >= Math.PI ? angle - 2 * Math.PI : angle;
+
         this.fuelScore = fuel;
         this.positionScore = Math.floor(Math.pow(2, -Math.abs(positionDiff / 10)) * 500);
-        this.angleScore = Math.floor(Math.pow(2, -Math.abs(angle)) * 500);
+        this.angleScore = Math.floor(Math.pow(2, -Math.abs(refineAngle)) * 500);
 
         Logger.log("Score calculated");
         Logger.log(`- fuel: ${fuel} -> ${this.fuelScore}`);
         Logger.log(`- position: ${positionDiff} -> ${this.positionScore}`);
-        Logger.log(`- angle: ${angle} -> ${this.angleScore}`);
+        Logger.log(`- angle: ${refineAngle} -> ${this.angleScore}`);
     }
 
     get totalScore(): number {
