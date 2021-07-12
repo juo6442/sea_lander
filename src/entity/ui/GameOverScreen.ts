@@ -41,7 +41,7 @@ export default class GameOverScreen extends Entity {
                 .build();
         this.fadeRect = new Rect.Builder()
                 .setSizeFullscreen()
-                .setColor(0, 0, 0, 0)
+                .setColor(255, 255, 255, 0)
                 .build();
         this.titleLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
@@ -123,7 +123,7 @@ export default class GameOverScreen extends Entity {
     private updateFadeOut(keyStatus: KeyStatus): void {
         this.currentUpdate = undefined;
 
-        this.scriptRunner.push(() => { return new CommonScript.Fade(this.fadeRect, 1, 30) });
+        this.scriptRunner.push(() => { return new CommonScript.Fade(this.fadeRect, 1, 50) });
         this.scriptRunner.push(() => { return new CommonScript.Wait(30) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.listener.onGameOverScreenClosed();

@@ -9,6 +9,7 @@ import Sprite from "../Sprite";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class TitleScene extends Scene {
+    private fadeRect: Rect;
     private bgSprite: Sprite;
     private headSprite: Sprite;
     private promptLabel: Label;
@@ -21,6 +22,10 @@ export default class TitleScene extends Scene {
 
         this.isWaitingInput = false;
 
+        this.fadeRect = new Rect.Builder()
+                .setSizeFullscreen()
+                .setColor(255, 255, 255, 1)
+                .build();
         this.bgSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("title_bg"))
                 .build();
@@ -42,11 +47,13 @@ export default class TitleScene extends Scene {
     public start(): void {
         Logger.info("Start TitleScene");
 
+        this.pushScript(() => { return new CommonScript.Fade(this.fadeRect, 0, 30) });
+        this.pushScript(() => { return new CommonScript.Run(() => {
+            this.isWaitingInput = true;
+        })});
         /*
         TODO: Show scoreboard (highlight latest score)
         */
-
-        this.showTitle();
     }
 
     public override update(keyStatus: KeyStatus): void {
@@ -60,10 +67,7 @@ export default class TitleScene extends Scene {
         this.bgSprite.render(context);
         this.headSprite.render(context);
         this.promptLabel.render(context);
-    }
-
-    private showTitle(): void {
-        this.isWaitingInput = true;
+        this.fadeRect.render(context);
     }
 
     private waitOkKey(keyStatus: KeyStatus): void {
