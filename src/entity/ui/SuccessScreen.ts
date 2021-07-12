@@ -98,7 +98,7 @@ export default class SuccessScreen extends Entity {
 
         this.scriptRunner.push(() => { return new CommonScript.Wait(50) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
-            this.scoreDuration = Math.min(40, this.score.angleScore);
+            this.scoreDuration = this.score.fuelScore <= 0 ? 1 : Math.min(40, this.score.fuelScore);
             this.scoreElapsedDuration = 0;
             this.score1Label.color.a = 1;
             this.currentUpdate = this.updateScore1;
@@ -120,7 +120,7 @@ export default class SuccessScreen extends Entity {
 
         this.scriptRunner.push(() => { return new CommonScript.Wait(30) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
-            this.scoreDuration = Math.min(40, this.score.angleScore);
+            this.scoreDuration = this.score.positionScore <= 0 ? 1 : Math.min(40, this.score.positionScore);
             this.scoreElapsedDuration = 0;
             this.score2Label.color.a = 1;
             this.currentUpdate = this.updateScore2;
@@ -142,7 +142,7 @@ export default class SuccessScreen extends Entity {
 
         this.scriptRunner.push(() => { return new CommonScript.Wait(30) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
-            this.scoreDuration = Math.min(40, this.score.angleScore);
+            this.scoreDuration = this.score.angleScore <= 0 ? 1 : Math.min(40, this.score.angleScore);
             this.scoreElapsedDuration = 0;
             this.score3Label.color.a = 1;
             this.currentUpdate = this.updateScore3;
