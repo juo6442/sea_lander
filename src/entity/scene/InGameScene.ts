@@ -224,7 +224,8 @@ export class DockingCriteria {
         this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -2.5, 2.5);
         this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -2.5, 2.5);
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
-        this.angle = NumberUtil.isBetween(head.radianAngle, -0.2, 0.2);
+        this.angle = !NumberUtil.isBetween(head.radianAngle, 0.2, -0.2 + (Math.PI * 2));
+
     }
 }
 

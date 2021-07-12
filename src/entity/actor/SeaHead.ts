@@ -113,6 +113,8 @@ export default class SeaHead extends Entity {
         this.position.left %= Environment.VIEWPORT_WIDTH;
         this.position.top  += this.velocity.top;
         this.radianAngle += this.radianAngleVelocity;
+        this.radianAngle += Math.PI * 2;
+        this.radianAngle %= Math.PI * 2;
     }
 
     private handleBoost(keyStatus: KeyStatus) {
