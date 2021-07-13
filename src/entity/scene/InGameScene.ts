@@ -112,7 +112,6 @@ export default class InGameScene extends Scene implements InGameListener {
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
-        this.enemyEntities.forEach(e => e.update(keyStatus));
         this.effectEntities.forEach(e => e.update(keyStatus));
         this.effectEntities = this.effectEntities.filter(e => !e.invalidated);
         this.lifeUi.update(keyStatus);
@@ -124,6 +123,7 @@ export default class InGameScene extends Scene implements InGameListener {
         if (this.status === GameStatus.PLAY) {
             this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
+            this.enemyEntities.forEach(e => e.update(keyStatus));
 
             this.dockingCriteria.update(this.seaHead);
 
