@@ -17,6 +17,8 @@ export default abstract class Actor extends Entity {
     }
 
     public isCollide(they: Actor): boolean {
+        if (this.invalidated || they.invalidated) return false;
+
         const xDiff = this.position.left - they.position.left;
         const yDiff = this.position.top - they.position.top;
 

@@ -18,6 +18,8 @@ import LifeIndicator from "../ui/LifeIndicator";
 import NumberIndicator from "../ui/NumberIndicator";
 import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
+import Actor from "../actor/Actor";
+import EnemyHead from "../actor/EnemyHead";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -34,6 +36,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private scoreUi: NumberIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
+    private enemyEntities: Actor[];
     private effectEntities: Entity[];
 
     private status: GameStatus;
@@ -58,7 +61,12 @@ export default class InGameScene extends Scene implements InGameListener {
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
         this.levelUi = new NumberIndicator(new Position(1170, 15), Resource.global?.getImage("carrot"));
         this.scoreUi = new NumberIndicator(new Position(1400, 15), Resource.global?.getImage("coin"));
+        this.enemyEntities = new Array();
         this.effectEntities = new Array();
+    }
+
+    onEnemyCollision(): void {
+        this.crash();
     }
 
     onSuccessScreenClosed(): void {
@@ -95,11 +103,16 @@ export default class InGameScene extends Scene implements InGameListener {
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400));
+
+        this.enemyEntities = new Array();
+        // TODO: test purpose
+        this.enemyEntities.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
         super.update(keyStatus);
 
+        this.enemyEntities.forEach(e => e.update(keyStatus));
         this.effectEntities.forEach(e => e.update(keyStatus));
         this.effectEntities = this.effectEntities.filter(e => !e.invalidated);
         this.lifeUi.update(keyStatus);
@@ -134,6 +147,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.bgSprite.render(context);
         this.seaBody?.render(context);
         this.seaHead?.render(context);
+        this.enemyEntities.forEach(e => e.render(context));
         this.effectEntities.forEach(e => e.render(context));
 
         this.lifeUi.render(context);
@@ -171,6 +185,8 @@ export default class InGameScene extends Scene implements InGameListener {
     private crash(): void {
         this.effectEntities.push(new CrashEffect(this.seaHead!.position));
         this.playerStatus.life--;
+
+        this.seaHead?.invalidate();
         this.seaHead = undefined;
 
         Logger.info(`Crashed, ${this.playerStatus.life} life remains`);
@@ -227,6 +243,7 @@ export class DockingCriteria {
 }
 
 export interface InGameListener {
+    onEnemyCollision(): void;
     onSuccessScreenClosed(): void;
     onGameOverScreenClosed(): void;
 }
