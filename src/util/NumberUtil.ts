@@ -6,7 +6,17 @@ export default {
      * @returns Random number
      */
     random: function(min: number, max: number): number {
-        return min + Math.floor(Math.random() * (max - min));
+        return min + Math.random() * (max - min);
+    },
+
+    /**
+     * Returns random integer number between [min, max)
+     * @param min - Range min
+     * @param max - Range max
+     * @returns Random int number
+     */
+     randomInt: function(min: number, max: number): number {
+        return Math.floor(this.random(min, max));
     },
 
     /**
