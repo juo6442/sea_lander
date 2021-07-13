@@ -19,7 +19,7 @@ export default class ActorGenerator {
         return results;
     }
 
-    public createBodys(seaHead: SeaHead, listener: InGameListener): SeaBody[] {
+    public createBodies(seaHead: SeaHead, listener: InGameListener): SeaBody[] {
         const results: SeaBody[] = new Array();
         results.push(new SeaBody(
                 new Position(
