@@ -1,10 +1,10 @@
 import { KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
-import NumberUtil from "../../util/NumberUtil";
 import { Position } from "../Entity";
 import { InGameListener } from "../scene/InGameScene";
 import Sprite from "../Sprite";
 import Actor from "./Actor";
+import { BodyType } from "./SeaBody";
 
 export default class EnemyBody extends Actor {
     static readonly SPRITE_INDEX_FEEL = 0;
@@ -15,7 +15,7 @@ export default class EnemyBody extends Actor {
     private player: Actor;
     private bodySprite: Sprite;
 
-    constructor(position: Position, player: Actor, listener: InGameListener) {
+    constructor(position: Position, type: BodyType, player: Actor, listener: InGameListener) {
         super(position, 45);
 
         this.position = position;
@@ -29,7 +29,7 @@ export default class EnemyBody extends Actor {
                 .addFrame(121, 0, 121, 114, 0)
                 .addFrame(242, 0, 121, 114, 0)
                 .build();
-        this.bodySprite.currentFrameIndex = NumberUtil.randomInt(0, 3);
+        this.bodySprite.currentFrameIndex = this.convertBodyTypeToSpriteIndex(type);
     }
 
     public update(keyStatus: KeyStatus): void {
@@ -45,5 +45,9 @@ export default class EnemyBody extends Actor {
         context.restore();
 
         super.render(context);
+    }
+
+    private convertBodyTypeToSpriteIndex(type: BodyType) {
+        return type - 1;
     }
 }

@@ -80,6 +80,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.effectEntities.push(new FogEffect(body.position));
         this.actors.push(new EnemyBody(
                 new Position(body.position.left, InGameScene.GROUND_TOP - 45),
+                body.type,
                 this.seaHead!,
                 this));
     }
