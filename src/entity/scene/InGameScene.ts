@@ -143,9 +143,7 @@ export default class InGameScene extends Scene implements InGameListener {
             if (this.isHeadOnGround()) {
                 this.crash();
             }
-        } else if (this.status === GameStatus.SUCCESS) {
-            this.resultScreen?.update(keyStatus);
-        } else if (this.status === GameStatus.GAMEOVER) {
+        } else if (this.status === GameStatus.RESULT) {
             this.resultScreen?.update(keyStatus);
         }
     }
@@ -200,7 +198,7 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private onSuccess(): void {
-        this.status = GameStatus.SUCCESS;
+        this.status = GameStatus.RESULT;
 
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
         this.seaHead!.setSuccessFace();
@@ -214,7 +212,8 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private onGameOver(): void {
-        this.status = GameStatus.GAMEOVER;
+        this.status = GameStatus.RESULT;
+
         this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
         Score.setScore(this.playerStatus.score);
     }
@@ -257,5 +256,5 @@ export interface InGameListener {
 }
 
 const enum GameStatus {
-    PLAY, SUCCESS, GAMEOVER
+    PLAY, RESULT
 }
