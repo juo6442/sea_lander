@@ -1,5 +1,5 @@
-import { Position } from "../entity/Entity";
-import Script, { EntityWithColor, EntityWithPosition } from "./Script";
+import { EntityWithColor, EntityWithPosition, Position } from "../entity/Entity";
+import Script from "./Script";
 
 export namespace CommonScript {
     export class Wait extends Script {

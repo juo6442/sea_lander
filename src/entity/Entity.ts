@@ -33,6 +33,18 @@ export default abstract class Entity {
     }
 }
 
+export interface EntityWithPosition {
+    position: Position;
+}
+
+export interface EntityWithSize {
+    size: Size;
+}
+
+export interface EntityWithColor {
+    color: Color;
+}
+
 export class Position {
     public left: number;
     public top: number;

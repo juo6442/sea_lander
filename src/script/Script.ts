@@ -31,15 +31,3 @@ export default abstract class Script {
         this._finished = true;
     }
 }
-
-export interface EntityWithPosition {
-    position: Position;
-}
-
-export interface EntityWithSize {
-    size: Size;
-}
-
-export interface EntityWithColor {
-    color: Color;
-}
