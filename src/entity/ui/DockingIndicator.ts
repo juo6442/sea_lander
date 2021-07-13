@@ -5,7 +5,7 @@ import Rect from "../Rect";
 import { DockingCriteria } from "../scene/InGameScene";
 import Sprite from "../Sprite";
 
-export default class FuelIndicator extends Entity {
+export default class DockingIndicator extends Entity {
     public position: Position;
 
     private readonly greenColor: Color;
