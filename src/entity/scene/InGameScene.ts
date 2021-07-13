@@ -97,7 +97,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.seaBody?.invalidate();
         this.seaBody = new SeaBody(new Position(
                 NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
-                InGameScene.GROUND_TOP - 95));
+                InGameScene.GROUND_TOP - 40));
 
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
@@ -179,7 +179,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
     private isHeadOnGround(): boolean {
         if (!this.seaHead) return false;
-        return (this.seaHead.position.top >= InGameScene.GROUND_TOP);
+        return (this.seaHead.position.top + this.seaHead.radius >= InGameScene.GROUND_TOP);
     }
 
     private crash(): void {
