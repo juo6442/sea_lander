@@ -101,6 +101,12 @@ export default class SeaHead extends Entity {
         this.headSprite.currentFrameIndex = 0;
     }
 
+    private normalizeAngle(radianAngle: number): number {
+        if (radianAngle > +Math.PI) return radianAngle - 2 * Math.PI;
+        if (radianAngle < -Math.PI) return radianAngle + 2 * Math.PI;
+        return radianAngle;
+    }
+
     private updateVelocity() {
         this.velocity.top += this.gravity;
         this.velocity.left *= this.airResistance;
@@ -113,8 +119,8 @@ export default class SeaHead extends Entity {
         this.position.left %= Environment.VIEWPORT_WIDTH;
         this.position.top  += this.velocity.top;
         this.radianAngle += this.radianAngleVelocity;
-        this.radianAngle += Math.PI * 2;
-        this.radianAngle %= Math.PI * 2;
+
+        this.radianAngle = this.normalizeAngle(this.radianAngle);
     }
 
     private handleBoost(keyStatus: KeyStatus) {
