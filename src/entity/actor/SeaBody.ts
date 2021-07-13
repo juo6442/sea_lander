@@ -11,6 +11,8 @@ export default class SeaBody extends Actor {
     private listener: InGameListener;
     private player: Actor;
 
+    private type: BodyType;
+
     private armLSprite: Sprite;
     private armRSprite: Sprite;
     private legLSprite: Sprite;
@@ -25,6 +27,7 @@ export default class SeaBody extends Actor {
         this.player = player;
 
         this.runVelocity = 0;
+        this.type = type;
 
         this.armLSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_arm_l"))
@@ -54,7 +57,13 @@ export default class SeaBody extends Actor {
     }
 
     public update(keyStatus: KeyStatus): void {
-        if (this.isCollide(this.player)) this.listener.onDocking();
+        if (!this.isCollide(this.player)) return;
+
+        if (this.type === BodyType.SEA) {
+            this.listener.onDocking();
+        } else {
+            this.listener.onNearFakeBody(this);
+        }
     }
 
     public override render(context: CanvasRenderingContext2D): void {

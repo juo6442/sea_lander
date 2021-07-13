@@ -74,6 +74,11 @@ export default class InGameScene extends Scene implements InGameListener {
         }
     }
 
+    onNearFakeBody(body: SeaBody): void {
+        // TODO: show effect and change body
+        Logger.log("Near fake body");
+    }
+
     onEnemyCollision(): void {
         this.crash();
     }
@@ -250,6 +255,7 @@ export class DockingCriteria {
 
 export interface InGameListener {
     onDocking(): void;
+    onNearFakeBody(body: SeaBody): void;
     onEnemyCollision(): void;
     onSuccessScreenClosed(): void;
     onGameOverScreenClosed(): void;
