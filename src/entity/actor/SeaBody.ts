@@ -21,7 +21,7 @@ export default class SeaBody extends Actor {
     private bodySprite: Sprite;
 
     constructor(position: Position, type: BodyType, player: Actor, listener: InGameListener) {
-        super(position, type === BodyType.SEA ? 40 : 100);
+        super(position, type === BodyType.SEA ? 40 : 120);
 
         this.position = position;
         this.listener = listener;
