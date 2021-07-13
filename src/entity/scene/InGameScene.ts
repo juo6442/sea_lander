@@ -10,7 +10,6 @@ import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import SuccessEffect from "../actor/SuccessEffect";
 import Entity, { Position } from "../Entity";
-import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";
 import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
@@ -32,6 +31,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private lifeUi: LifeIndicator;
     private fuelUi: FuelIndicator;
     private dockingUi: DockingIndicator;
+    private levelUi: NumberIndicator;
     private scoreUi: NumberIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
@@ -57,12 +57,13 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
+        this.levelUi = new NumberIndicator(new Position(1170, 15), Resource.global?.getImage("carrot"));
         this.scoreUi = new NumberIndicator(new Position(1400, 15), Resource.global?.getImage("coin"));
         this.effectEntities = new Array();
     }
 
     onSuccessScreenClosed(): void {
-        // TODO: stage++
+        this.playerStatus.level++;
         this.initGame();
     }
 
@@ -83,6 +84,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.resultScreen = undefined;
 
         this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
+        this.levelUi.number = this.playerStatus.level;
         this.scoreUi.number = this.playerStatus.score;
 
         this.seaBody?.invalidate();
@@ -104,6 +106,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi.update(keyStatus);
         this.fuelUi.update(keyStatus);
         this.dockingUi.update(keyStatus);
+        this.levelUi.update(keyStatus);
         this.scoreUi.update(keyStatus);
 
         if (this.status === GameStatus.PLAY) {
@@ -137,6 +140,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi.render(context);
         this.fuelUi.render(context);
         this.dockingUi.render(context);
+        this.levelUi.render(context);
         this.scoreUi.render(context);
 
         this.resultScreen?.render(context);

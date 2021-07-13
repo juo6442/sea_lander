@@ -65,6 +65,7 @@ export default class LoadScene extends Scene {
                 .setImage("life", "sprite/life.png")
                 .setImage("fuel", "sprite/fuel.png")
                 .setImage("docking", "sprite/docking.png")
+                .setImage("carrot", "sprite/carrot.png")
                 .setImage("coin", "sprite/coin.png")
                 .setImage("crash", "sprite/crash.png")
                 .setImage("sea_arm_l", "sprite/sea_arm_l.png")
