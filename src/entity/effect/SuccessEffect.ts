@@ -21,7 +21,7 @@ export default class SuccessEffect extends Entity {
 
         this.duration = 60;
         this.lineStart = 300;
-        this.lineLength = 300;
+        this.lineLength = 450;
         this.point1 = new EasingPoint(this.duration * 0.6, this.duration * 0.95, EasingUtil.easeInOutCubic);
         this.point2 = new EasingPoint(0, this.duration * 0.9, EasingUtil.easeInOutCubic);
 
