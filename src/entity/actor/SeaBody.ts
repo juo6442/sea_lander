@@ -7,22 +7,18 @@ import Actor from "./Actor";
 export default class SeaBody extends Actor {
     public runVelocity: number;
 
-    private moving: (() => void) | undefined;
-
     private armLSprite: Sprite;
     private armRSprite: Sprite;
     private legLSprite: Sprite;
     private legRSprite: Sprite;
     private bodySprite: Sprite;
 
-    constructor(position: Position, level: number) {
+    constructor(position: Position) {
         super(position, 40);
 
         this.position = position;
         this.radius = 40;
         this.runVelocity = 0;
-
-        if (level >= 3) this.moving = this.updateMove;
 
         this.armLSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_arm_l"))
@@ -51,9 +47,7 @@ export default class SeaBody extends Actor {
                 .build();
     }
 
-    public update(keyStatus: KeyStatus): void {
-        this.moving?.();
-    }
+    public update(keyStatus: KeyStatus): void {}
 
     public override render(context: CanvasRenderingContext2D): void {
         context.save();
@@ -68,9 +62,5 @@ export default class SeaBody extends Actor {
         context.restore();
 
         super.render(context);
-    }
-
-    private updateMove() {
-
     }
 }
