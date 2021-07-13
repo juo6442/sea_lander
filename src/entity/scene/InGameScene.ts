@@ -20,6 +20,7 @@ import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 import Actor from "../actor/Actor";
 import EnemyHead from "../actor/EnemyHead";
+import EnemyBody from "../actor/EnemyBody";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -107,6 +108,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.enemyEntities = new Array();
         // TODO: test purpose
         this.enemyEntities.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
+        this.enemyEntities.push(new EnemyBody(new Position(500, InGameScene.GROUND_TOP - 45), this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
