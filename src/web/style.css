@@ -16,10 +16,10 @@ div#container {
 }
 
 #screen {
-    width: 80vw;
-    height: 60vw;
+    max-width: 80vw;
+    max-height : 80vh;
     min-width: 512px;
-    min-height: 384;
+    min-height: 384px;
     background-color: black;
 }
 
