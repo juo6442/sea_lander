@@ -4,6 +4,7 @@ import { Position } from "../Entity";
 import { InGameListener } from "../scene/InGameScene";
 import Sprite from "../Sprite";
 import Actor from "./Actor";
+import EnemyBody from "./EnemyBody";
 
 export default class SeaBody extends Actor {
     public runVelocity: number;
@@ -82,9 +83,9 @@ export default class SeaBody extends Actor {
     }
 }
 
-export const enum BodyType {
+export enum BodyType {
     SEA = -1,
-    FEEL = 0,
-    VON = 1,
-    GI = 2,
+    FEEL = EnemyBody.SPRITE_INDEX_FEEL,
+    VON = EnemyBody.SPRITE_INDEX_VON,
+    GI = EnemyBody.SPRITE_INDEX_GI,
 }

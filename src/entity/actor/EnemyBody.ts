@@ -7,6 +7,10 @@ import Sprite from "../Sprite";
 import Actor from "./Actor";
 
 export default class EnemyBody extends Actor {
+    static readonly SPRITE_INDEX_FEEL = 0;
+    static readonly SPRITE_INDEX_VON = 1;
+    static readonly SPRITE_INDEX_GI = 2;
+
     private listener: InGameListener;
     private player: Actor;
     private bodySprite: Sprite;
