@@ -68,6 +68,7 @@ export default class LoadScene extends Scene {
                 .setImage("carrot", "sprite/carrot.png")
                 .setImage("coin", "sprite/coin.png")
                 .setImage("crash", "sprite/crash.png")
+                .setImage("fog", "sprite/fog.png")
                 .setImage("sea_arm_l", "sprite/sea_arm_l.png")
                 .setImage("sea_arm_r", "sprite/sea_arm_r.png")
                 .setImage("sea_leg_l", "sprite/sea_leg_l.png")
@@ -76,6 +77,8 @@ export default class LoadScene extends Scene {
                 .setImage("sea_head", "sprite/sea_head.png")
                 .setImage("sea_fire", "sprite/sea_fire.png")
                 .setImage("sea_arrow", "sprite/sea_arrow.png")
+                .setImage("enemy_head", "sprite/enemy_head.png")
+                .setImage("enemy_body", "sprite/enemy_body.png")
                 .load();
     }
 }
