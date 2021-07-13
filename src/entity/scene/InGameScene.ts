@@ -36,8 +36,9 @@ export default class InGameScene extends Scene implements InGameListener {
     private levelUi: NumberIndicator;
     private scoreUi: NumberIndicator;
     private seaHead: SeaHead | undefined;
+
     private seaBody: SeaBody | undefined;
-    private enemyEntities: Actor[];
+    private actors: Actor[];
     private effectEntities: Entity[];
 
     private status: GameStatus;
@@ -62,7 +63,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
         this.levelUi = new NumberIndicator(new Position(1170, 15), Resource.global?.getImage("carrot"));
         this.scoreUi = new NumberIndicator(new Position(1400, 15), Resource.global?.getImage("coin"));
-        this.enemyEntities = new Array();
+        this.actors = new Array();
         this.effectEntities = new Array();
     }
 
@@ -122,10 +123,10 @@ export default class InGameScene extends Scene implements InGameListener {
                 this.seaHead,
                 this);
 
-        this.enemyEntities = new Array();
+        this.actors = new Array();
         // TODO: test purpose
-        this.enemyEntities.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
-        this.enemyEntities.push(new EnemyBody(new Position(500, InGameScene.GROUND_TOP - 45), this.seaHead, this));
+        this.actors.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
+        this.actors.push(new EnemyBody(new Position(500, InGameScene.GROUND_TOP - 45), this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
@@ -142,7 +143,7 @@ export default class InGameScene extends Scene implements InGameListener {
         if (this.status === GameStatus.PLAY) {
             this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
-            this.enemyEntities.forEach(e => e.update(keyStatus));
+            this.actors.forEach(e => e.update(keyStatus));
             this.dockingCriteria.update(this.seaHead);
 
             if (this.isHeadOnGround()) {
@@ -157,7 +158,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.bgSprite.render(context);
         this.seaBody?.render(context);
         this.seaHead?.render(context);
-        this.enemyEntities.forEach(e => e.render(context));
+        this.actors.forEach(e => e.render(context));
         this.effectEntities.forEach(e => e.render(context));
 
         this.lifeUi.render(context);
