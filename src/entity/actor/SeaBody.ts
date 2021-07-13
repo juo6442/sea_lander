@@ -17,7 +17,6 @@ export default class SeaBody extends Actor {
         super(position, 40);
 
         this.position = position;
-        this.radius = 40;
         this.runVelocity = 0;
 
         this.armLSprite = new Sprite.Builder()
