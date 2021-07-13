@@ -66,9 +66,9 @@ export default class InGameScene extends Scene implements InGameListener {
         this.effectEntities = new Array();
     }
 
-    onDocking(): void {
+    onDocking(body: SeaBody): void {
         if (this.dockingCriteria.check()) {
-            this.onSuccess();
+            this.onSuccess(body);
         } else {
             this.crash();
         }
@@ -202,7 +202,7 @@ export default class InGameScene extends Scene implements InGameListener {
         }
     }
 
-    private onSuccess(): void {
+    private onSuccess(body: SeaBody): void {
         this.status = GameStatus.RESULT;
 
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
@@ -210,7 +210,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
         const score = new ScoreCalculator(
                 this.playerStatus.fuel,
-                this.seaHead!.position.left - this.seaBody!.position.left,
+                this.seaHead!.position.left - body!.position.left,
                 this.seaHead!.radianAngle);
         this.resultScreen = new SuccessScreen(score, this);
         this.playerStatus.score += score.totalScore;
@@ -254,7 +254,7 @@ export class DockingCriteria {
 }
 
 export interface InGameListener {
-    onDocking(): void;
+    onDocking(body: SeaBody): void;
     onNearFakeBody(body: SeaBody): void;
     onEnemyCollision(): void;
     onSuccessScreenClosed(): void;

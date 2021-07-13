@@ -61,7 +61,7 @@ export default class SeaBody extends Actor {
         if (!this.isCollide(this.player)) return;
 
         if (this.type === BodyType.SEA) {
-            this.listener.onDocking();
+            this.listener.onDocking(this);
         } else {
             this.listener.onNearFakeBody(this);
         }
