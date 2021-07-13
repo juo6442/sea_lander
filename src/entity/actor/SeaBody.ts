@@ -1,11 +1,15 @@
 import { KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
 import { Position } from "../Entity";
+import { InGameListener } from "../scene/InGameScene";
 import Sprite from "../Sprite";
 import Actor from "./Actor";
 
 export default class SeaBody extends Actor {
     public runVelocity: number;
+
+    private listener: InGameListener;
+    private player: Actor;
 
     private armLSprite: Sprite;
     private armRSprite: Sprite;
@@ -13,10 +17,13 @@ export default class SeaBody extends Actor {
     private legRSprite: Sprite;
     private bodySprite: Sprite;
 
-    constructor(position: Position) {
-        super(position, 40);
+    constructor(position: Position, type: BodyType, player: Actor, listener: InGameListener) {
+        super(position, type === BodyType.SEA ? 40 : 100);
 
         this.position = position;
+        this.listener = listener;
+        this.player = player;
+
         this.runVelocity = 0;
 
         this.armLSprite = new Sprite.Builder()
@@ -46,7 +53,9 @@ export default class SeaBody extends Actor {
                 .build();
     }
 
-    public update(keyStatus: KeyStatus): void {}
+    public update(keyStatus: KeyStatus): void {
+        if (this.isCollide(this.player)) this.listener.onDocking();
+    }
 
     public override render(context: CanvasRenderingContext2D): void {
         context.save();
@@ -62,4 +71,11 @@ export default class SeaBody extends Actor {
 
         super.render(context);
     }
+}
+
+export const enum BodyType {
+    SEA = -1,
+    FEEL = 0,
+    VON = 1,
+    GI = 2,
 }

@@ -6,7 +6,7 @@ import { Score, ScoreCalculator } from "../../game/Score";
 import Logger from "../../util/Logger";
 import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../effect/CrashEffect";
-import SeaBody from "../actor/SeaBody";
+import SeaBody, { BodyType } from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import SuccessEffect from "../effect/SuccessEffect";
 import Entity, { Position } from "../Entity";
@@ -66,6 +66,14 @@ export default class InGameScene extends Scene implements InGameListener {
         this.effectEntities = new Array();
     }
 
+    onDocking(): void {
+        if (this.dockingCriteria.check()) {
+            this.onSuccess();
+        } else {
+            this.crash();
+        }
+    }
+
     onEnemyCollision(): void {
         this.crash();
     }
@@ -95,15 +103,19 @@ export default class InGameScene extends Scene implements InGameListener {
         this.levelUi.number = this.playerStatus.level;
         this.scoreUi.number = this.playerStatus.score;
 
-        this.seaBody?.invalidate();
-        this.seaBody = new SeaBody(new Position(
-                NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
-                InGameScene.GROUND_TOP - 40));
-
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400));
+
+        this.seaBody?.invalidate();
+        this.seaBody = new SeaBody(
+                new Position(
+                    NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
+                    InGameScene.GROUND_TOP - 40),
+                BodyType.SEA,
+                this.seaHead,
+                this);
 
         this.enemyEntities = new Array();
         // TODO: test purpose
@@ -126,16 +138,9 @@ export default class InGameScene extends Scene implements InGameListener {
             this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
             this.enemyEntities.forEach(e => e.update(keyStatus));
-
             this.dockingCriteria.update(this.seaHead);
 
-            if (this.isDockingPosition()) {
-                if (this.dockingCriteria.check()) {
-                    this.onSuccess();
-                } else {
-                    this.crash();
-                }
-            } else if (this.isHeadOnGround()) {
+            if (this.isHeadOnGround()) {
                 this.crash();
             }
         } else if (this.status === GameStatus.SUCCESS) {
@@ -171,12 +176,6 @@ export default class InGameScene extends Scene implements InGameListener {
             context.closePath();
             context.restore();
         }
-    }
-
-    private isDockingPosition(): boolean {
-        if (!this.seaHead || !this.seaBody) return false;
-
-        return this.seaHead.isCollide(this.seaBody);
     }
 
     private isHeadOnGround(): boolean {
@@ -245,6 +244,7 @@ export class DockingCriteria {
 }
 
 export interface InGameListener {
+    onDocking(): void;
     onEnemyCollision(): void;
     onSuccessScreenClosed(): void;
     onGameOverScreenClosed(): void;

@@ -15,7 +15,6 @@ export default class EnemyBody extends Actor {
         super(position, 45);
 
         this.position = position;
-
         this.listener = listener;
         this.player = player;
 
