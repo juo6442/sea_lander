@@ -22,6 +22,7 @@ export default class SeaHead extends Actor {
 
     private playerStatus: PlayerStatus;
     private headSprite: Sprite;
+    private fireSprite: Sprite;
     private arrowSprite: Sprite;
     private arrowLabel: Label;
 
@@ -43,12 +44,17 @@ export default class SeaHead extends Actor {
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
                 .setOriginCenter()
-                .setAngle(this.radianAngle)
                 .setImage(Resource.global?.getImage("sea_head"))
                 .setPosition(0, 0)
                 .addFrame(0, 0, 212, 176, 0)
                 .addFrame(212, 0, 212, 176, 0)
                 .addFrame(424, 0, 212, 176, 0)
+                .build();
+        this.fireSprite = new Sprite.Builder()
+                .setImage(Resource.global?.getImage("sea_fire"))
+                .setColor(0, 0, 0, 0)
+                .setOrigin(19, 6)
+                .setPosition(0, 55)
                 .build();
         this.arrowSprite = new Sprite.Builder()
                 .setOriginCenter()
@@ -81,6 +87,7 @@ export default class SeaHead extends Actor {
 
             context.translate(this.position.left + loopOffset, this.position.top);
             context.rotate(this.radianAngle);
+            this.fireSprite.render(context);
             this.headSprite.render(context);
 
             context.restore();
@@ -94,13 +101,12 @@ export default class SeaHead extends Actor {
             this.arrowSprite.render(context);
         }
 
-        // TODO: draw fogs?
-
         super.render(context);
     }
 
-    public setSuccessFace(): void {
+    public setSuccess(): void {
         this.headSprite.currentFrameIndex = 0;
+        this.fireSprite.color.a = 0;
     }
 
     private normalizeAngle(radianAngle: number): number {
@@ -126,8 +132,11 @@ export default class SeaHead extends Actor {
     }
 
     private handleBoost(keyStatus: KeyStatus) {
-        const boosted = this.boostUp(keyStatus) || this.boostAngle(keyStatus);
-        this.headSprite.currentFrameIndex = (boosted ? 1 : 0);
+        const boosted = this.boostUp(keyStatus)
+        const angleBoosted = this.boostAngle(keyStatus);
+
+        this.fireSprite.color.a = (boosted ? 1 : 0);
+        this.headSprite.currentFrameIndex = (boosted || angleBoosted ? 1 : 0);
     }
 
     private boostUp(keyStatus: KeyStatus): boolean {

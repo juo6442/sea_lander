@@ -206,7 +206,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.status = GameStatus.RESULT;
 
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
-        this.seaHead!.setSuccessFace();
+        this.seaHead!.setSuccess();
 
         const score = new ScoreCalculator(
                 this.playerStatus.fuel,
