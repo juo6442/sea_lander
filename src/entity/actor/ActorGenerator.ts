@@ -1,7 +1,7 @@
 import Environment from "../../game/Environment";
 import { Position } from "../Entity";
 import { InGameListener } from "../scene/InGameScene";
-import EnemyHead from "./EnemyHead";
+import EnemyHead, { HeadType } from "./EnemyHead";
 import SeaBody, { BodyType } from "./SeaBody";
 import SeaHead from "./SeaHead";
 
@@ -103,7 +103,9 @@ class Level3ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 1
+        return new Array(
+            new EnemyHead(new Position(500, 650), new Position(3, 2), HeadType.FEEL, seaHead, listener),
+        );
     }
 }
 
@@ -111,7 +113,9 @@ class Level4ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.VON];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 1
+        return new Array(
+            new EnemyHead(new Position(1500, 1000), new Position(-1, 3), HeadType.VON, seaHead, listener),
+        );
     }
 }
 
@@ -119,7 +123,10 @@ class Level5ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 2
+        return new Array(
+            new EnemyHead(new Position(300, 1300), new Position(-2, 2), HeadType.FEEL, seaHead, listener),
+            new EnemyHead(new Position(900, 700), new Position(0.5, 2), HeadType.GI, seaHead, listener),
+        );
     }
 }
 
@@ -127,7 +134,10 @@ class Level6ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 2
+        return new Array(
+            new EnemyHead(new Position(1600, 1300), new Position(2, -1), HeadType.VON, seaHead, listener),
+            new EnemyHead(new Position(500, 500), new Position(3, 2), HeadType.EDITOR, seaHead, listener),
+        );
     }
 }
 
@@ -135,7 +145,10 @@ class Level7ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 2
+        return new Array(
+            new EnemyHead(new Position(200, 600), new Position(3.5, 0.5), HeadType.FEEL, seaHead, listener),
+            new EnemyHead(new Position(900, 700), new Position(0.5, -0.3), HeadType.VON, seaHead, listener),
+        );
     }
 }
 
@@ -143,7 +156,11 @@ class Level8ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.VON, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 3
+        return new Array(
+            new EnemyHead(new Position(1800, 300), new Position(1, 2.5), HeadType.FEEL, seaHead, listener),
+            new EnemyHead(new Position(900, 1200), new Position(3, -0.3), HeadType.EDITOR, seaHead, listener),
+            new EnemyHead(new Position(400, 1000), new Position(-1, -2), HeadType.GI, seaHead, listener),
+        );
     }
 }
 
@@ -151,7 +168,11 @@ class Level9ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 3
+        return new Array(
+            new EnemyHead(new Position(1000, 800), new Position(2, 1), HeadType.VON, seaHead, listener),
+            new EnemyHead(new Position(1900, 700), new Position(1, -0.5), HeadType.EDITOR, seaHead, listener),
+            new EnemyHead(new Position(100, 700), new Position(-2, 1), HeadType.GI, seaHead, listener),
+        );
     }
 }
 
@@ -159,19 +180,11 @@ class Level10ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array(); // TODO: 4
-    }
-}
-
-/*
-FIXME: ref
-class Level5ActorGenerator extends BaseActorGenerator {
-    protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
-
-    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
         return new Array(
-            new EnemyHead(new Position(500, 500), new Position(3, -2), seaHead, listener),
+            new EnemyHead(new Position(400, 400), new Position(1, 2), HeadType.FEEL, seaHead, listener),
+            new EnemyHead(new Position(1650, 400), new Position(-1, 2), HeadType.VON, seaHead, listener),
+            new EnemyHead(new Position(400, 1100), new Position(1, -2), HeadType.GI, seaHead, listener),
+            new EnemyHead(new Position(1650, 400), new Position(-1, -2), HeadType.EDITOR, seaHead, listener),
         );
     }
 }
-*/

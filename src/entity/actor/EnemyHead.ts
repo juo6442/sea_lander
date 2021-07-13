@@ -16,7 +16,8 @@ export default class EnemyHead extends Actor {
     private player: Actor;
     private headSprite: Sprite;
 
-    constructor(position: Position, velocity: Position, player: Actor, listener: InGameListener) {
+    constructor(position: Position, velocity: Position, type: HeadType,
+            player: Actor, listener: InGameListener) {
         super(position, 50);
 
         this.position = position;
@@ -35,7 +36,7 @@ export default class EnemyHead extends Actor {
                 .addFrame(494, 0, 247, 247, 0)
                 .addFrame(741, 0, 247, 247, 0)
                 .build();
-        this.headSprite.currentFrameIndex = NumberUtil.randomInt(0, 4);
+        this.headSprite.currentFrameIndex = this.convertHeadTypeToSpriteIndex(type);
     }
 
     public update(keyStatus: KeyStatus): void {
@@ -71,4 +72,15 @@ export default class EnemyHead extends Actor {
 
         super.render(context);
     }
+
+    private convertHeadTypeToSpriteIndex(type: HeadType) {
+        return type;
+    }
+}
+
+export enum HeadType {
+    FEEL = 0,
+    VON = 1,
+    GI = 2,
+    EDITOR = 3,
 }
