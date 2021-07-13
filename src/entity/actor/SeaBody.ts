@@ -1,6 +1,5 @@
 import Environment from "../../game/Environment";
 import { KeyStatus } from "../../game/KeyInput";
-import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import Entity, { Position } from "../Entity";
 import Sprite from "../Sprite";
@@ -9,7 +8,7 @@ export default class SeaBody extends Entity {
     public position: Position;
     public runVelocity: number;
 
-    private playerStatus: PlayerStatus;
+    private moving: (() => void) | undefined;
 
     private armLSprite: Sprite;
     private armRSprite: Sprite;
@@ -17,13 +16,13 @@ export default class SeaBody extends Entity {
     private legRSprite: Sprite;
     private bodySprite: Sprite;
 
-    constructor(playerStatus: PlayerStatus, position: Position) {
+    constructor(position: Position, level: number) {
         super();
 
         this.position = position;
         this.runVelocity = 0;
 
-        this.playerStatus = playerStatus;
+        if (level >= 3) this.moving = this.updateMove;
 
         this.armLSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_arm_l"))
@@ -52,7 +51,7 @@ export default class SeaBody extends Entity {
     }
 
     public update(keyStatus: KeyStatus): void {
-
+        this.moving?.();
     }
 
     public render(context: CanvasRenderingContext2D): void {
@@ -71,5 +70,9 @@ export default class SeaBody extends Entity {
         }
 
         context.restore();
+    }
+
+    private updateMove() {
+
     }
 }

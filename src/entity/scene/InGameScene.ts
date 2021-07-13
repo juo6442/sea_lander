@@ -89,8 +89,8 @@ export default class InGameScene extends Scene implements InGameListener {
 
         this.seaBody?.invalidate();
         this.seaBody = new SeaBody(
-                this.playerStatus,
-                new Position(Environment.VIEWPORT_WIDTH / 2, InGameScene.GROUND_TOP - 95));
+                new Position(NumberUtil.randomInt(150, Environment.VIEWPORT_WIDTH - 150), InGameScene.GROUND_TOP - 95),
+                this.playerStatus.level);
 
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
