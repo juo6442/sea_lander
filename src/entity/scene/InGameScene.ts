@@ -231,6 +231,12 @@ export class DockingCriteria {
     }
 
     public check(): boolean {
+        Logger.log("Docking criteria check");
+        Logger.log(`- hV: ${this.horizontalVelocity}`);
+        Logger.log(`- vV: ${this.verticalVelocity}`);
+        Logger.log(`- aV: ${this.angleVelocity}`);
+        Logger.log(`- angle: ${this.angle}`);
+
         return this.horizontalVelocity && this.verticalVelocity && this.angleVelocity && this.angle;
     }
 
