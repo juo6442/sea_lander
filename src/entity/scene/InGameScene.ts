@@ -6,7 +6,7 @@ import { Score, ScoreCalculator } from "../../game/Score";
 import Logger from "../../util/Logger";
 import NumberUtil from "../../util/NumberUtil";
 import CrashEffect from "../effect/CrashEffect";
-import SeaBody, { BodyType } from "../actor/SeaBody";
+import SeaBody from "../actor/SeaBody";
 import SeaHead from "../actor/SeaHead";
 import SuccessEffect from "../effect/SuccessEffect";
 import Entity, { Position } from "../Entity";
@@ -19,9 +19,9 @@ import NumberIndicator from "../ui/NumberIndicator";
 import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 import Actor from "../actor/Actor";
-import EnemyHead from "../actor/EnemyHead";
 import EnemyBody from "../actor/EnemyBody";
 import FogEffect from "../effect/FogEffect";
+import ActorGenerator from "../actor/ActorGenerator";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -118,16 +118,10 @@ export default class InGameScene extends Scene implements InGameListener {
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400));
 
-        this.actors = new Array();
-        // TODO: test purpose
-        this.actors.push(new SeaBody(
-                new Position(
-                    NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
-                    InGameScene.GROUND_TOP - 40),
-                BodyType.SEA,
-                this.seaHead,
-                this));
-        this.actors.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
+        const generator = new ActorGenerator(this.playerStatus.level);
+        this.actors = new Array().concat(
+                generator.createEnemyHeads(this.seaHead, this),
+                generator.createBodys(this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
