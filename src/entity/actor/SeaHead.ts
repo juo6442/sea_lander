@@ -19,6 +19,7 @@ export default class SeaHead extends Entity {
     private readonly fuelUpEfficiency: number;
     private readonly fuelAngleEfficiency: number;
     private readonly angleInstability: number;
+    private readonly angleGravityRate: number;
 
     private playerStatus: PlayerStatus;
     private headSprite: Sprite;
@@ -38,7 +39,8 @@ export default class SeaHead extends Entity {
         this.gravity = 0.075;
         this.fuelUpEfficiency = 0.4;
         this.fuelAngleEfficiency = 0.002;
-        this.angleInstability = 0.0001;
+        this.angleInstability = 0.00015;
+        this.angleGravityRate = 1.005;
 
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
@@ -139,6 +141,7 @@ export default class SeaHead extends Entity {
 
         this.radianAngleVelocity +=
                 NumberUtil.random(-this.angleInstability, +this.angleInstability);
+        this.radianAngle *= this.angleGravityRate;
 
         this.playerStatus.fuel -= 1;
 
