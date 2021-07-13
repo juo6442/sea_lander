@@ -6,7 +6,7 @@ import SeaBody, { BodyType } from "./SeaBody";
 import SeaHead from "./SeaHead";
 
 export default class ActorGenerator {
-    public static LEVEL_MAX = 4;
+    public static LEVEL_MAX = 10;
 
     private readonly level: BaseActorGenerator;
 
@@ -32,10 +32,16 @@ export default class ActorGenerator {
 
     private getLevel(level: number): BaseActorGenerator {
         switch (level) {
-            case 1: return new Level1ActorGenerator();
-            case 2: return new Level2ActorGenerator();
-            case 3: return new Level3ActorGenerator();
-            case 4: return new Level4ActorGenerator();
+            case 1:  return new Level1ActorGenerator();
+            case 2:  return new Level2ActorGenerator();
+            case 3:  return new Level3ActorGenerator();
+            case 4:  return new Level4ActorGenerator();
+            case 5:  return new Level5ActorGenerator();
+            case 6:  return new Level6ActorGenerator();
+            case 7:  return new Level7ActorGenerator();
+            case 8:  return new Level8ActorGenerator();
+            case 9:  return new Level9ActorGenerator();
+            case 10: return new Level10ActorGenerator();
             default: throw `${level} is not defined`;
         }
     }
@@ -94,18 +100,66 @@ class Level2ActorGenerator extends BaseActorGenerator {
 }
 
 class Level3ActorGenerator extends BaseActorGenerator {
-    protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON];
+    protected override BODYS = [BodyType.SEA];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array();
+        return new Array(); // TODO: 1
     }
 }
 
 class Level4ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.VON];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 1
+    }
+}
+
+class Level5ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.GI];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 2
+    }
+}
+
+class Level6ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 2
+    }
+}
+
+class Level7ActorGenerator extends BaseActorGenerator {
     protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
 
     public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
-        return new Array();
+        return new Array(); // TODO: 2
+    }
+}
+
+class Level8ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.VON, BodyType.GI];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 3
+    }
+}
+
+class Level9ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 3
+    }
+}
+
+class Level10ActorGenerator extends BaseActorGenerator {
+    protected override BODYS = [BodyType.SEA, BodyType.FEEL, BodyType.VON, BodyType.GI];
+
+    public createEnemyHeads(seaHead: SeaHead, listener: InGameListener): EnemyHead[] {
+        return new Array(); // TODO: 4
     }
 }
 

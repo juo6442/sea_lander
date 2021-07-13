@@ -91,7 +91,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
     onSuccessScreenClosed(): void {
         if (this.playerStatus.level >= ActorGenerator.LEVEL_MAX) {
-            this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
+            this.onGameOver();
         } else {
             this.playerStatus.level++;
             this.initGame();
