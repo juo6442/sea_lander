@@ -37,7 +37,6 @@ export default class InGameScene extends Scene implements InGameListener {
     private scoreUi: NumberIndicator;
     private seaHead: SeaHead | undefined;
 
-    private seaBody: SeaBody | undefined;
     private actors: Actor[];
     private effectEntities: Entity[];
 
@@ -114,16 +113,14 @@ export default class InGameScene extends Scene implements InGameListener {
                 this.playerStatus,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400));
 
-        this.seaBody?.invalidate();
-        this.seaBody = new SeaBody(
+        this.actors = new Array();
+        this.actors.push(new SeaBody(
                 new Position(
                     NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
                     InGameScene.GROUND_TOP - 40),
                 BodyType.SEA,
                 this.seaHead,
-                this);
-
-        this.actors = new Array();
+                this));
         // TODO: test purpose
         this.actors.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
         this.actors.push(new EnemyBody(new Position(500, InGameScene.GROUND_TOP - 45), this.seaHead, this));
@@ -141,7 +138,6 @@ export default class InGameScene extends Scene implements InGameListener {
         this.scoreUi.update(keyStatus);
 
         if (this.status === GameStatus.PLAY) {
-            this.seaBody?.update(keyStatus);
             this.seaHead?.update(keyStatus);
             this.actors.forEach(e => e.update(keyStatus));
             this.dockingCriteria.update(this.seaHead);
@@ -156,9 +152,8 @@ export default class InGameScene extends Scene implements InGameListener {
 
     public override render(context: CanvasRenderingContext2D): void {
         this.bgSprite.render(context);
-        this.seaBody?.render(context);
-        this.seaHead?.render(context);
         this.actors.forEach(e => e.render(context));
+        this.seaHead?.render(context);
         this.effectEntities.forEach(e => e.render(context));
 
         this.lifeUi.render(context);
