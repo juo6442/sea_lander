@@ -3,16 +3,15 @@ import { Key, KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import NumberUtil from "../../util/NumberUtil";
-import Entity, { Position } from "../Entity";
+import { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";
+import Actor from "./Actor";
 
-export default class SeaHead extends Entity {
-    public position: Position;
+export default class SeaHead extends Actor {
     public velocity: Position;
     public radianAngle: number;
     public radianAngleVelocity: number;
-    public radius: number;
 
     private readonly airResistance: number;
     private readonly gravity: number;
@@ -27,7 +26,7 @@ export default class SeaHead extends Entity {
     private arrowLabel: Label;
 
     constructor(playerStatus: PlayerStatus, position: Position) {
-        super();
+        super(position, 50);
 
         this.position = position;
         this.velocity = new Position(0, 0);
@@ -73,7 +72,7 @@ export default class SeaHead extends Entity {
         if (this.playerStatus.fuel <= 0) this.headSprite.currentFrameIndex = 2;
     }
 
-    public render(context: CanvasRenderingContext2D): void {
+    public override render(context: CanvasRenderingContext2D): void {
         [
             0,
             -Environment.VIEWPORT_WIDTH,
@@ -97,6 +96,8 @@ export default class SeaHead extends Entity {
         }
 
         // TODO: draw fogs?
+
+        super.render(context);
     }
 
     public setSuccessFace(): void {

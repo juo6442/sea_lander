@@ -21,7 +21,6 @@ import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
-    private static readonly DOCKING_TOLERANCE_X = 30;
 
     private resource: Resource;
     private playerStatus: PlayerStatus;
@@ -89,7 +88,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
         this.seaBody?.invalidate();
         this.seaBody = new SeaBody(
-                new Position(NumberUtil.randomInt(150, Environment.VIEWPORT_WIDTH - 150), InGameScene.GROUND_TOP - 95),
+                new Position(NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150), InGameScene.GROUND_TOP - 95),
                 this.playerStatus.level);
 
         this.seaHead?.invalidate();
@@ -147,7 +146,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
         if (Environment.DEBUG) {
             context.save();
-            context.strokeStyle = "rgb(0, 255, 0)";
+            context.strokeStyle = "red";
             context.lineWidth = 2;
             context.beginPath();
             context.moveTo(0, InGameScene.GROUND_TOP);
@@ -161,12 +160,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private isDockingPosition(): boolean {
         if (!this.seaHead || !this.seaBody) return false;
 
-        return (
-            (this.seaHead.position.top + this.seaHead.radius >= this.seaBody.position.top) &&
-            NumberUtil.isBetween(this.seaHead.position.left,
-                this.seaBody.position.left - InGameScene.DOCKING_TOLERANCE_X,
-                this.seaBody.position.left + InGameScene.DOCKING_TOLERANCE_X)
-        );
+        return this.seaHead.isCollide(this.seaBody);
     }
 
     private isHeadOnGround(): boolean {

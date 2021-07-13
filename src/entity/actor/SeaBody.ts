@@ -1,11 +1,10 @@
-import Environment from "../../game/Environment";
 import { KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
-import Entity, { Position } from "../Entity";
+import { Position } from "../Entity";
 import Sprite from "../Sprite";
+import Actor from "./Actor";
 
-export default class SeaBody extends Entity {
-    public position: Position;
+export default class SeaBody extends Actor {
     public runVelocity: number;
 
     private moving: (() => void) | undefined;
@@ -17,9 +16,10 @@ export default class SeaBody extends Entity {
     private bodySprite: Sprite;
 
     constructor(position: Position, level: number) {
-        super();
+        super(position, 40);
 
         this.position = position;
+        this.radius = 40;
         this.runVelocity = 0;
 
         if (level >= 3) this.moving = this.updateMove;
@@ -27,26 +27,27 @@ export default class SeaBody extends Entity {
         this.armLSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_arm_l"))
                 .setOrigin(36, 8)
-                .setPosition(-17, 6)
+                .setPosition(-17, -34)
                 .build();
         this.armRSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_arm_r"))
                 .setOrigin(9, 9)
-                .setPosition(15, 7)
+                .setPosition(15, -33)
                 .build();
         this.legLSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_leg_l"))
                 .setOrigin(14, 9)
-                .setPosition(-17, 69)
+                .setPosition(-17, 29)
                 .build();
         this.legRSprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_leg_r"))
                 .setOrigin(10, 10)
-                .setPosition(15, 69)
+                .setPosition(15, 29)
                 .build();
         this.bodySprite = new Sprite.Builder()
                 .setImage(Resource.global?.getImage("sea_body"))
                 .setOrigin(46, 3)
+                .setPosition(0, -40)
                 .build();
     }
 
@@ -54,7 +55,7 @@ export default class SeaBody extends Entity {
         this.moving?.();
     }
 
-    public render(context: CanvasRenderingContext2D): void {
+    public override render(context: CanvasRenderingContext2D): void {
         context.save();
         context.translate(this.position.left, this.position.top);
 
@@ -64,12 +65,9 @@ export default class SeaBody extends Entity {
             this.bodySprite
         ].forEach(e => e.render(context));
 
-        if (Environment.DEBUG) {
-            context.fillStyle = "rgb(0, 255, 0)";
-            context.fillRect(-2, -2, 4, 4);
-        }
-
         context.restore();
+
+        super.render(context);
     }
 
     private updateMove() {
