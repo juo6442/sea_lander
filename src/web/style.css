@@ -5,6 +5,10 @@
     font-weight: normal;
 }
 
+body {
+    font-family: Arial, sans-serif;
+}
+
 div#container {
     width: 100%;
     text-align: center;
