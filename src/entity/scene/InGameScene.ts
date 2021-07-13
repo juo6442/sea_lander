@@ -16,7 +16,7 @@ import DockingIndicator from "../ui/DockingIndicator";
 import FuelIndicator from "../ui/FuelIndicator";
 import GameOverScreen from "../ui/GameOverScreen";
 import LifeIndicator from "../ui/LifeIndicator";
-import ScoreIndicator from "../ui/ScoreIndicator";
+import NumberIndicator from "../ui/NumberIndicator";
 import SuccessScreen from "../ui/SuccessScreen";
 import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 
@@ -32,7 +32,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private lifeUi: LifeIndicator;
     private fuelUi: FuelIndicator;
     private dockingUi: DockingIndicator;
-    private scoreUi: ScoreIndicator;
+    private scoreUi: NumberIndicator;
     private seaHead: SeaHead | undefined;
     private seaBody: SeaBody | undefined;
     private effectEntities: Entity[];
@@ -57,7 +57,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
-        this.scoreUi = new ScoreIndicator(new Position(1400, 15));
+        this.scoreUi = new NumberIndicator(new Position(1400, 15), Resource.global?.getImage("coin"));
         this.effectEntities = new Array();
     }
 
@@ -83,7 +83,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.resultScreen = undefined;
 
         this.playerStatus.fuel = PlayerStatus.FUEL_FULL;
-        this.scoreUi.score = this.playerStatus.score;
+        this.scoreUi.number = this.playerStatus.score;
 
         this.seaBody?.invalidate();
         this.seaBody = new SeaBody(
