@@ -11,7 +11,7 @@ export class ScoreCalculator {
             angle: number) {
         this.fuelScore = fuel;
         this.positionScore = Math.floor(Math.pow(2, -Math.abs(positionDiff / 10)) * 500);
-        this.angleScore = Math.floor(Math.pow(2, -Math.abs(angle)) * 500);
+        this.angleScore = Math.floor(Math.pow(2, -Math.abs(angle * 5)) * 500);
 
         Logger.log("Score calculated");
         Logger.log(`- fuel: ${fuel} -> ${this.fuelScore}`);
