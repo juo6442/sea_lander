@@ -21,6 +21,7 @@ import Scene, { Bundle, SceneId, SceneManager } from "./Scene";
 import Actor from "../actor/Actor";
 import EnemyHead from "../actor/EnemyHead";
 import EnemyBody from "../actor/EnemyBody";
+import FogEffect from "../effect/FogEffect";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -75,8 +76,12 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     onNearFakeBody(body: SeaBody): void {
-        // TODO: show effect and change body
-        Logger.log("Near fake body");
+        body.invalidate();
+        this.effectEntities.push(new FogEffect(body.position));
+        this.actors.push(new EnemyBody(
+                new Position(body.position.left, InGameScene.GROUND_TOP - 45),
+                this.seaHead!,
+                this));
     }
 
     onEnemyCollision(): void {
@@ -114,6 +119,7 @@ export default class InGameScene extends Scene implements InGameListener {
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400));
 
         this.actors = new Array();
+        // TODO: test purpose
         this.actors.push(new SeaBody(
                 new Position(
                     NumberUtil.randomInt(190, Environment.VIEWPORT_WIDTH - 150),
@@ -121,9 +127,7 @@ export default class InGameScene extends Scene implements InGameListener {
                 BodyType.SEA,
                 this.seaHead,
                 this));
-        // TODO: test purpose
         this.actors.push(new EnemyHead(new Position(500, 500), new Position(3, -2), this.seaHead, this));
-        this.actors.push(new EnemyBody(new Position(500, InGameScene.GROUND_TOP - 45), this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
@@ -140,6 +144,7 @@ export default class InGameScene extends Scene implements InGameListener {
         if (this.status === GameStatus.PLAY) {
             this.seaHead?.update(keyStatus);
             this.actors.forEach(e => e.update(keyStatus));
+            this.actors = this.actors.filter(e => !e.invalidated);
             this.dockingCriteria.update(this.seaHead);
 
             if (this.isHeadOnGround()) {
