@@ -3,7 +3,9 @@ import { Key, KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
 import { Score } from "../../game/Score";
 import { CommonScript } from "../../script/CommonScript";
+import AudioResource from "../../sound/AudioResource";
 import Logger from "../../util/Logger";
+import NumberUtil from "../../util/NumberUtil";
 import { Color } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
@@ -17,15 +19,18 @@ export default class TitleScene extends Scene {
     private titleLabel: Label;
     private scoreLabels: Label[];
     private promptLabel: Label;
+    private startAudio: AudioResource;
     private headTransitionScript: CommonScript.WaveTransition;
     private promptBlinkScript: CommonScript.Blink | undefined;
 
     private isWaitingInput: boolean;
+    private sleepRemainDuration: number;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
         this.isWaitingInput = false;
+        this.sleepRemainDuration = NumberUtil.randomInt(40, 90) * Environment.FPS;
 
         this.fadeRect = new Rect.Builder()
                 .setSizeFullscreen()
@@ -62,6 +67,9 @@ export default class TitleScene extends Scene {
                 .setSize(70)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.85)
                 .build();
+        this.startAudio = new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(`start_${NumberUtil.randomInt(0, 4)}`))
+                .build();
         this.headTransitionScript = new CommonScript.WaveTransition(
                 this.headSprite, 0, 40, 240, CommonScript.WaveTransition.LOOP_INFINITE);
     }
@@ -85,6 +93,8 @@ export default class TitleScene extends Scene {
         this.promptBlinkScript?.update();
         this.headTransitionScript.update();
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
+
+        this.handleSleepVoice();
     }
 
     public render(context: CanvasRenderingContext2D): void {
@@ -99,10 +109,15 @@ export default class TitleScene extends Scene {
     private waitOkKey(keyStatus: KeyStatus): void {
         if (!keyStatus.isPressed(Key.OK)) return;
 
+        this.startAudio.play();
+
         this.isWaitingInput = false;
         this.promptLabel.color.a = 0;
 
-        this.changeScene(SceneId.INGAME);
+        this.pushScript(() => new CommonScript.Wait(90));
+        this.pushScript(() => new CommonScript.Run(() => {
+            this.changeScene(SceneId.INGAME);
+        }));
     }
 
     private showScoreBoard() {
@@ -116,5 +131,17 @@ export default class TitleScene extends Scene {
             e.color = (i == latestScoreIndex ? new Color(255, 0, 0) : new Color(0, 0, 0));
             e.text = `${i + 1}위  ${scores[i]}점`;
         });
+    }
+
+    private handleSleepVoice() {
+        if (this.sleepRemainDuration < 0) return;
+
+        this.sleepRemainDuration--;
+        if (this.sleepRemainDuration === 0) {
+            new AudioResource.Builder()
+                    .setBuffer(Resource.global?.getAudio(`sleep_${NumberUtil.randomInt(0, 4)}`))
+                    .build()
+                    .play();
+        }
     }
 }

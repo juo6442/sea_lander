@@ -1,3 +1,4 @@
+import AudioResource from "../sound/AudioResource";
 import Logger from "../util/Logger";
 
 const RES_DIR = "../../res/";
@@ -6,7 +7,7 @@ export default class Resource {
     public static global: Resource | undefined;
 
     private images: Map<string, HTMLImageElement>;
-    private audios: Map<string, HTMLAudioElement>;
+    private audios: Map<string, AudioBuffer>;
 
     private constructor() {
         this.images = new Map();
@@ -27,7 +28,7 @@ export default class Resource {
      * @param id - ID of audio
      * @returns Audio, or undefined if given ID is not exists
      */
-    public getAudio(id: string): HTMLAudioElement | undefined {
+    public getAudio(id: string): AudioBuffer | undefined {
         return this.getResource(id, this.audios);
     }
 
@@ -41,7 +42,7 @@ export default class Resource {
         this.images.set(id, res);
     }
 
-    private setAudio(id: string, res: HTMLAudioElement): void {
+    private setAudio(id: string, res: AudioBuffer): void {
         this.audios.set(id, res);
     }
 
@@ -106,16 +107,14 @@ export default class Resource {
         public setAudio(id: string, src: string): Loader {
             this.resourcesToLoad.push(new Promise(
                 resolve => {
-                    const audio = new Audio(RES_DIR + src);
-                    audio.oncanplaythrough = () => {
-                        this.resource.setAudio(id, audio);
-                        resolve();
-                    };
-                    audio.onerror = () => {
-                        Logger.error("Audio load error: " + src);
-                        resolve();
-                    };
-                    audio.load();
+                    fetch(RES_DIR + src)
+                            .then(response => response.arrayBuffer())
+                            .then(buffer => AudioResource.context.decodeAudioData(buffer))
+                            .then(buffer => {
+                                this.resource.setAudio(id, buffer);
+                                resolve();
+                            })
+                            .catch(() => Logger.error("Audio load error: " + src));
                 }));
             return this;
         };

@@ -1,5 +1,6 @@
 import { KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
+import AudioResource from "../../sound/AudioResource";
 import { Position } from "../Entity";
 import { InGameListener } from "../scene/InGameScene";
 import Sprite from "../Sprite";
@@ -61,6 +62,7 @@ export default class SeaBody extends Actor {
         if (this.type === BodyType.SEA) {
             this.listener.onDocking(this);
         } else {
+            this.playAudio();
             this.listener.onNearFakeBody(this);
         }
     }
@@ -78,6 +80,18 @@ export default class SeaBody extends Actor {
         context.restore();
 
         super.render(context);
+    }
+
+    private playAudio(): void {
+        new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(
+                    `fake_${this.convertBodyTypeToAudioIndex(this.type)}`))
+                .build()
+                .play();
+    }
+
+    private convertBodyTypeToAudioIndex(type: BodyType) {
+        return type - 1;
     }
 }
 

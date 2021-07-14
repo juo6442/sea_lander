@@ -79,6 +79,23 @@ export default class LoadScene extends Scene {
                 .setImage("sea_arrow", "sprite/sea_arrow.png")
                 .setImage("enemy_head", "sprite/enemy_head.png")
                 .setImage("enemy_body", "sprite/enemy_body.png")
+                .setAudio("logo", "sound/logo.wav")
+                .setAudio("sleep_0", "sound/sleep_0.wav")
+                .setAudio("sleep_1", "sound/sleep_1.wav")
+                .setAudio("sleep_2", "sound/sleep_2.wav")
+                .setAudio("sleep_3", "sound/sleep_3.wav")
+                .setAudio("start_0", "sound/start_0.wav")
+                .setAudio("start_1", "sound/start_1.wav")
+                .setAudio("start_2", "sound/start_2.wav")
+                .setAudio("start_3", "sound/start_3.wav")
+                .setAudio("boost", "sound/boost.wav")
+                .setAudio("crash_0", "sound/crash_0.wav")
+                .setAudio("crash_1", "sound/crash_1.wav")
+                .setAudio("crash_2", "sound/crash_2.wav")
+                .setAudio("crash_3", "sound/crash_3.wav")
+                .setAudio("fake_0", "sound/fake_0.wav")
+                .setAudio("fake_1", "sound/fake_1.wav")
+                .setAudio("fake_2", "sound/fake_2.wav")
                 .load();
     }
 }

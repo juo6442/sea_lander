@@ -2,6 +2,7 @@ import Environment from "../../game/Environment";
 import { Key, KeyStatus } from "../../game/KeyInput";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
+import AudioResource from "../../sound/AudioResource";
 import NumberUtil from "../../util/NumberUtil";
 import { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
@@ -25,6 +26,7 @@ export default class SeaHead extends Actor {
     private fireSprite: Sprite;
     private arrowSprite: Sprite;
     private arrowLabel: Label;
+    private boostSound: AudioResource;
 
     constructor(playerStatus: PlayerStatus, position: Position) {
         super(position, 50);
@@ -67,6 +69,10 @@ export default class SeaHead extends Actor {
                 .setSize(70)
                 .setPosition(0, 330)
                 .build();
+        this.boostSound = new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio("boost"))
+                .setLoop(true)
+                .build();
     }
 
     public update(keyStatus: KeyStatus): void {
@@ -74,7 +80,7 @@ export default class SeaHead extends Actor {
         this.updateVelocity();
         this.applyVelocity();
 
-        if (this.playerStatus.fuel <= 0) this.headSprite.currentFrameIndex = 2;
+        if (this.playerStatus.fuel <= 0) this.setExhausted();
     }
 
     public override render(context: CanvasRenderingContext2D): void {
@@ -104,9 +110,21 @@ export default class SeaHead extends Actor {
         super.render(context);
     }
 
+    public override invalidate(): void {
+        super.invalidate();
+        this.boostSound.stop();
+    }
+
     public setSuccess(): void {
         this.headSprite.currentFrameIndex = 0;
         this.fireSprite.color.a = 0;
+        this.boostSound.stop();
+    }
+
+    public setExhausted(): void {
+        this.headSprite.currentFrameIndex = 2;
+        this.fireSprite.color.a = 0;
+        this.boostSound.stop();
     }
 
     private normalizeAngle(radianAngle: number): number {
@@ -136,6 +154,10 @@ export default class SeaHead extends Actor {
         const angleBoosted = this.boostAngle(keyStatus);
 
         this.fireSprite.color.a = (boosted ? 1 : 0);
+
+        if (boosted) this.boostSound.play();
+        else this.boostSound.stop();
+
         this.headSprite.currentFrameIndex = (boosted || angleBoosted ? 1 : 0);
     }
 

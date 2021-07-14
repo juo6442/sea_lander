@@ -22,6 +22,7 @@ import Actor from "../actor/Actor";
 import EnemyBody from "../actor/EnemyBody";
 import FogEffect from "../effect/FogEffect";
 import ActorGenerator from "../actor/ActorGenerator";
+import AudioResource from "../../sound/AudioResource";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -36,8 +37,8 @@ export default class InGameScene extends Scene implements InGameListener {
     private dockingUi: DockingIndicator;
     private levelUi: NumberIndicator;
     private scoreUi: NumberIndicator;
-    private seaHead: SeaHead | undefined;
 
+    private seaHead: SeaHead | undefined;
     private actors: Actor[];
     private effectEntities: Entity[];
 
@@ -195,6 +196,11 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private crash(): void {
+        new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(`crash_${NumberUtil.randomInt(0, 4)}`))
+                .build()
+                .play();
+
         this.effectEntities.push(new CrashEffect(this.seaHead!.position));
         this.playerStatus.life--;
 
