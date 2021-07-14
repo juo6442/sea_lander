@@ -34,12 +34,12 @@ export default class SeaHead extends Actor {
         this.radianAngle = 0;
         this.radianAngleVelocity = 0;
 
-        this.airResistance = 0.995;
-        this.gravity = 0.075;
+        this.airResistance = 0.997;
+        this.gravity = 0.09;
         this.fuelUpEfficiency = 0.4;
         this.fuelAngleEfficiency = 0.002;
-        this.angleInstability = 0.00015;
-        this.angleGravityRate = 1.005;
+        this.angleInstability = 0.0002;
+        this.angleGravityRate = 1.008;
 
         this.playerStatus = playerStatus;
         this.headSprite = new Sprite.Builder()
