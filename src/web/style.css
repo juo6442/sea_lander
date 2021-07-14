@@ -7,6 +7,11 @@
 
 body {
     font-family: Arial, sans-serif;
+    color: rgb(35, 31, 41);
+    font-size: small;
+    text-align: center;
+    line-height: 140%;
+    word-wrap: break-word;
 }
 
 button#play {
@@ -29,13 +34,7 @@ div#container {
 
 footer {
     width: 100%;
-    margin: 0 0 0.5rem 0;
-
-    color: rgb(35, 31, 41);
-    font-size: small;
-    text-align: center;
-    line-height: 140%;
-    word-wrap: break-word;
+    margin: 0.5rem 0 0.5rem 0;
 }
 
 footer p {
