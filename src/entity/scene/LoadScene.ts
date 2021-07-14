@@ -85,6 +85,10 @@ export default class LoadScene extends Scene {
                 .setAudio("start_2", "sound/start_2.wav")
                 .setAudio("start_3", "sound/start_3.wav")
                 .setAudio("boost", "sound/boost.wav")
+                .setAudio("crash_0", "sound/crash_0.wav")
+                .setAudio("crash_1", "sound/crash_1.wav")
+                .setAudio("crash_2", "sound/crash_2.wav")
+                .setAudio("crash_3", "sound/crash_3.wav")
                 .load();
     }
 }
