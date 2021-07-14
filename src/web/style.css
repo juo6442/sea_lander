@@ -15,7 +15,7 @@ div#container {
     margin: 1em 0;
 }
 
-#screen {
+.content {
     max-width: 80vw;
     max-height : 80vh;
     min-width: 512px;

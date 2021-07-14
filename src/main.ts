@@ -2,6 +2,13 @@ import Environment from "./game/Environment";
 import Game from "./game/Game";
 
 window.onload = () => {
+    document.getElementById("play")
+            ?.addEventListener("click", startGame);
+}
+
+function startGame(): void {
+    document.getElementById("play")?.remove();
+
     const screen = createScreen();
     document.getElementById("container")
             ?.appendChild(screen);
@@ -12,7 +19,7 @@ window.onload = () => {
 
 function createScreen(): HTMLCanvasElement {
     const screen = document.createElement("canvas");
-    screen.id = "screen";
+    screen.className = "content";
     screen.width = Environment.VIEWPORT_WIDTH;
     screen.height = Environment.VIEWPORT_HEIGHT;
     return screen;
