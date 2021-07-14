@@ -24,11 +24,13 @@ export default class TitleScene extends Scene {
     private promptBlinkScript: CommonScript.Blink | undefined;
 
     private isWaitingInput: boolean;
+    private sleepRemainDuration: number;
 
     constructor(sceneManager: SceneManager, bundle?: Bundle) {
         super(sceneManager, bundle);
 
         this.isWaitingInput = false;
+        this.sleepRemainDuration = NumberUtil.randomInt(40, 90) * Environment.FPS;
 
         this.fadeRect = new Rect.Builder()
                 .setSizeFullscreen()
@@ -91,6 +93,8 @@ export default class TitleScene extends Scene {
         this.promptBlinkScript?.update();
         this.headTransitionScript.update();
         if (this.isWaitingInput) this.waitOkKey(keyStatus);
+
+        this.handleSleepVoice();
     }
 
     public render(context: CanvasRenderingContext2D): void {
@@ -127,5 +131,17 @@ export default class TitleScene extends Scene {
             e.color = (i == latestScoreIndex ? new Color(255, 0, 0) : new Color(0, 0, 0));
             e.text = `${i + 1}위  ${scores[i]}점`;
         });
+    }
+
+    private handleSleepVoice() {
+        if (this.sleepRemainDuration < 0) return;
+
+        this.sleepRemainDuration--;
+        if (this.sleepRemainDuration === 0) {
+            new AudioResource.Builder()
+                    .setBuffer(Resource.global?.getAudio(`sleep_${NumberUtil.randomInt(0, 4)}`))
+                    .build()
+                    .play();
+        }
     }
 }
