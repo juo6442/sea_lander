@@ -9,6 +9,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+button#play {
+    border: 0;
+}
+
 div#container {
     width: 100%;
     text-align: center;
