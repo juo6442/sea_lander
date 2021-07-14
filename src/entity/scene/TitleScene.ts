@@ -3,7 +3,9 @@ import { Key, KeyStatus } from "../../game/KeyInput";
 import Resource from "../../game/Resource";
 import { Score } from "../../game/Score";
 import { CommonScript } from "../../script/CommonScript";
+import AudioResource from "../../sound/AudioResource";
 import Logger from "../../util/Logger";
+import NumberUtil from "../../util/NumberUtil";
 import { Color } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Rect from "../Rect";
@@ -17,6 +19,7 @@ export default class TitleScene extends Scene {
     private titleLabel: Label;
     private scoreLabels: Label[];
     private promptLabel: Label;
+    private startAudio: AudioResource;
     private headTransitionScript: CommonScript.WaveTransition;
     private promptBlinkScript: CommonScript.Blink | undefined;
 
@@ -62,6 +65,9 @@ export default class TitleScene extends Scene {
                 .setSize(70)
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.85)
                 .build();
+        this.startAudio = new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(`start_${NumberUtil.randomInt(0, 4)}`))
+                .build();
         this.headTransitionScript = new CommonScript.WaveTransition(
                 this.headSprite, 0, 40, 240, CommonScript.WaveTransition.LOOP_INFINITE);
     }
@@ -99,10 +105,15 @@ export default class TitleScene extends Scene {
     private waitOkKey(keyStatus: KeyStatus): void {
         if (!keyStatus.isPressed(Key.OK)) return;
 
+        this.startAudio.play();
+
         this.isWaitingInput = false;
         this.promptLabel.color.a = 0;
 
-        this.changeScene(SceneId.INGAME);
+        this.pushScript(() => new CommonScript.Wait(90));
+        this.pushScript(() => new CommonScript.Run(() => {
+            this.changeScene(SceneId.INGAME);
+        }));
     }
 
     private showScoreBoard() {
