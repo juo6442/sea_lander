@@ -79,6 +79,7 @@ export default class LoadScene extends Scene {
                 .setImage("sea_arrow", "sprite/sea_arrow.png")
                 .setImage("enemy_head", "sprite/enemy_head.png")
                 .setImage("enemy_body", "sprite/enemy_body.png")
+                .setAudio("logo", "sound/logo.wav")
                 .setAudio("boost", "sound/boost.wav")
                 .load();
     }
