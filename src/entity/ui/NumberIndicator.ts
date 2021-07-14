@@ -9,20 +9,15 @@ export default class NumberIndicator extends Entity {
     private iconSprite: Sprite | undefined;
     private numberLabel: Label;
 
-    constructor(position: Position, icon: HTMLImageElement | undefined) {
+    constructor(position: Position, sprite: Sprite | undefined) {
         super();
 
         this.position = position;
-
-        if (icon) {
-            this.iconSprite = new Sprite.Builder()
-                    .setImage(icon)
-                    .build();
-        }
+        this.iconSprite = sprite;
         this.numberLabel = new Label.Builder()
                 .setAlign(TextAlign.START)
                 .setSize(100)
-                .setPosition(icon ? icon.width + 20 : 0, 55)
+                .setPosition(sprite ? sprite.size.width + 20 : 0, 55)
                 .build();
     }
 

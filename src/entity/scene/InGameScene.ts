@@ -61,8 +61,16 @@ export default class InGameScene extends Scene implements InGameListener {
         this.lifeUi = new LifeIndicator(new Position(10, 10), this.playerStatus);
         this.fuelUi = new FuelIndicator(new Position(450, 10), this.playerStatus);
         this.dockingUi = new DockingIndicator(new Position(700, 15), this.dockingCriteria);
-        this.levelUi = new NumberIndicator(new Position(1170, 15), Resource.global?.getImage("carrot"));
-        this.scoreUi = new NumberIndicator(new Position(1400, 15), Resource.global?.getImage("coin"));
+        this.levelUi = new NumberIndicator(
+                new Position(1170, 15),
+                new Sprite.Builder()
+                    .setImage(Resource.global?.getImage("carrot"))
+                    .build());
+        this.scoreUi = new NumberIndicator(
+                new Position(1400, 15),
+                new Sprite.Builder()
+                    .setImage(Resource.global?.getImage("coin"))
+                    .build());
         this.actors = new Array();
         this.effectEntities = new Array();
     }
