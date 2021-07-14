@@ -5,7 +5,6 @@ import SceneFactory from "../entity/scene/SceneFactory";
 
 export default class Game implements SceneManager {
     private screen: Canvas;
-    private buffer: Canvas;
 
     private keyListener: KeyListener;
 
@@ -13,9 +12,6 @@ export default class Game implements SceneManager {
 
     constructor(screen: HTMLCanvasElement) {
         this.screen = new Canvas(screen);
-        this.buffer = this.createSameCanvas(this.screen);
-        this.buffer.context.imageSmoothingEnabled = false;
-
         this.keyListener = new KeyListener();
     }
 
@@ -47,26 +43,8 @@ export default class Game implements SceneManager {
      * Draws current status to buffer and schedules next rendering.
      */
     private render(): void {
-        this.currentScene?.render(this.buffer.context);
-
-        this.screen.context.drawImage(this.buffer.canvas,
-                0, 0,
-                this.screen.width, this.screen.height);
-
+        this.currentScene?.render(this.screen.context);
         window.requestAnimationFrame(() => this.render());
-    }
-
-    /**
-     * Returns a new canvas with the same size of the given canvas.
-     *
-     * @param canvas - Original canvas to refer
-     * @returns A new canvas
-     */
-    private createSameCanvas(canvas: Canvas): Canvas {
-        const newCanvas = document.createElement("canvas");
-        newCanvas.width = canvas.width;
-        newCanvas.height = canvas.height;
-        return new Canvas(newCanvas);
     }
 }
 
