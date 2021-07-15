@@ -98,7 +98,7 @@ export default class SuccessScreen extends Entity {
     private updatePreScore1(keyStatus: KeyStatus): void {
         this.currentUpdate = undefined;
 
-        this.scriptRunner.push(() => { return new CommonScript.Wait(50) });
+        this.scriptRunner.push(() => { return new CommonScript.Wait(80) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.scoreDuration = this.score.fuelScore <= 0 ? 1 : Math.min(30, this.score.fuelScore);
             this.scoreElapsedDuration = 0;
@@ -164,7 +164,7 @@ export default class SuccessScreen extends Entity {
     private updateScore(keyStatus: KeyStatus): void {
         this.currentUpdate = undefined;
 
-        this.scriptRunner.push(() => { return new CommonScript.Wait(40) });
+        this.scriptRunner.push(() => { return new CommonScript.Wait(45) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.scoreLabel.color.a = 1;
             this.currentUpdate = this.updatePrePrompt;

@@ -241,6 +241,11 @@ export default class InGameScene extends Scene implements InGameListener {
                 this.seaHead!.radianAngle);
         this.resultScreen = new SuccessScreen(score, this);
         this.playerStatus.score += score.totalScore;
+
+        new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(`success_${NumberUtil.randomInt(0, 3)}`))
+                .build()
+                .play();
     }
 
     private onGameOver(): void {

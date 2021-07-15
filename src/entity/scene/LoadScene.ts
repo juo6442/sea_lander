@@ -96,6 +96,9 @@ export default class LoadScene extends Scene {
                 .setAudio("fake_0", "sound/fake_0.wav")
                 .setAudio("fake_1", "sound/fake_1.wav")
                 .setAudio("fake_2", "sound/fake_2.wav")
+                .setAudio("success_0", "sound/success_0.wav")
+                .setAudio("success_1", "sound/success_1.wav")
+                .setAudio("success_2", "sound/success_2.wav")
                 .load();
     }
 }
