@@ -99,6 +99,7 @@ export default class LoadScene extends Scene {
                 .setAudio("success_0", "sound/success_0.wav")
                 .setAudio("success_1", "sound/success_1.wav")
                 .setAudio("success_2", "sound/success_2.wav")
+                .setAudio("gameover", "sound/gameover.wav")
                 .load();
     }
 }

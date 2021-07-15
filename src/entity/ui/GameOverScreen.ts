@@ -10,10 +10,6 @@ import { InGameListener } from "../scene/InGameScene";
 export default class GameOverScreen extends Entity {
     private listener: InGameListener;
 
-    private scoreDuration: number;
-    private scoreElapsedDuration: number;
-    private score: number;
-
     private bgRect: Rect;
     private fadeRect: Rect;
     private titleLabel: Label;
@@ -29,12 +25,7 @@ export default class GameOverScreen extends Entity {
 
         this.listener = listener;
 
-        this.scoreDuration = score <= 0 ? 1 : Math.min(110, score);
-        this.scoreElapsedDuration = 0;
-        this.score = score;
-
         this.scriptRunner = new SequentialScriptRunner();
-
         this.bgRect = new Rect.Builder()
                 .setSizeFullscreen()
                 .setColor(0, 0, 0, 0.15)
@@ -57,6 +48,7 @@ export default class GameOverScreen extends Entity {
                 .setPosition(Environment.VIEWPORT_WIDTH / 2, Environment.VIEWPORT_HEIGHT * 0.49)
                 .setSize(120)
                 .setColor(0, 0, 0, 0)
+                .setText(`최종 점수: ${score}`)
                 .build();
         this.promptLabel = new Label.Builder()
                 .setAlign(TextAlign.CENTER)
@@ -88,24 +80,8 @@ export default class GameOverScreen extends Entity {
         this.scriptRunner.push(() => { return new CommonScript.Wait(50) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.scoreLabel.color.a = 1;
-            this.currentUpdate = this.updateScore;
         })});
-    }
-
-    private updateScore(keyStatus: KeyStatus): void {
-        this.scoreElapsedDuration++;
-        const displayingScore = Math.floor(this.score * (this.scoreElapsedDuration / this.scoreDuration));
-        this.scoreLabel.text = `최종 점수: ${displayingScore}`;
-
-        if (this.scoreElapsedDuration >= this.scoreDuration) {
-            this.currentUpdate = this.updatePrePrompt;
-        }
-    }
-
-    private updatePrePrompt(keyStatus: KeyStatus): void {
-        this.currentUpdate = undefined;
-
-        this.scriptRunner.push(() => { return new CommonScript.Wait(50) });
+        this.scriptRunner.push(() => { return new CommonScript.Wait(40) });
         this.scriptRunner.push(() => { return new CommonScript.Run(() => {
             this.promptLabel.color.a = 1;
             this.promptBlinkScript = new CommonScript.Blink(this.promptLabel, 60);

@@ -253,6 +253,11 @@ export default class InGameScene extends Scene implements InGameListener {
 
         this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
         Score.setScore(this.playerStatus.score);
+
+        new AudioResource.Builder()
+                .setBuffer(Resource.global?.getAudio(`gameover`))
+                .build()
+                .play();
     }
 }
 
