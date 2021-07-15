@@ -23,6 +23,7 @@ import EnemyBody from "../actor/EnemyBody";
 import FogEffect from "../effect/FogEffect";
 import ActorGenerator from "../actor/ActorGenerator";
 import AudioResource from "../../sound/AudioResource";
+import ParticleGenerator from "../ParticleGenerator";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -39,6 +40,7 @@ export default class InGameScene extends Scene implements InGameListener {
     private scoreUi: NumberIndicator;
 
     private seaHead: SeaHead | undefined;
+    private seaHeadParticle: ParticleGenerator;
     private actors: Actor[];
     private effectEntities: Entity[];
 
@@ -72,6 +74,14 @@ export default class InGameScene extends Scene implements InGameListener {
                 new Sprite.Builder()
                     .setImage(Resource.global?.getImage("coin"))
                     .build());
+        this.seaHeadParticle = new ParticleGenerator.Builder()
+                .setAngle(0, 20)
+                .setColor(255, 199, 0)
+                .setSpeed(5)
+                .setInterval(3)
+                .setRadius(0, 20)
+                .setDuration(50)
+                .build();
         this.actors = new Array();
         this.effectEntities = new Array();
     }
@@ -130,7 +140,8 @@ export default class InGameScene extends Scene implements InGameListener {
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
-                new Position(Environment.VIEWPORT_WIDTH / 2, 400));
+                new Position(Environment.VIEWPORT_WIDTH / 2, 400),
+                this.seaHeadParticle);
 
         const generator = new ActorGenerator(this.playerStatus.level);
         this.actors = new Array().concat(
@@ -143,6 +154,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
         this.effectEntities.forEach(e => e.update(keyStatus));
         this.effectEntities = this.effectEntities.filter(e => !e.invalidated);
+        this.seaHeadParticle.update(keyStatus);
         this.lifeUi.update(keyStatus);
         this.fuelUi.update(keyStatus);
         this.dockingUi.update(keyStatus);
@@ -166,6 +178,7 @@ export default class InGameScene extends Scene implements InGameListener {
     public override render(context: CanvasRenderingContext2D): void {
         this.bgSprite.render(context);
         this.actors.forEach(e => e.render(context));
+        this.seaHeadParticle.render(context);
         this.seaHead?.render(context);
         this.effectEntities.forEach(e => e.render(context));
 

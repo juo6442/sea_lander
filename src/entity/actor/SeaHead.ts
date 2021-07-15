@@ -6,6 +6,7 @@ import AudioResource from "../../sound/AudioResource";
 import NumberUtil from "../../util/NumberUtil";
 import { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
+import ParticleGenerator from "../ParticleGenerator";
 import Sprite from "../Sprite";
 import Actor from "./Actor";
 
@@ -27,12 +28,15 @@ export default class SeaHead extends Actor {
     private arrowSprite: Sprite;
     private arrowLabel: Label;
     private boostSound: AudioResource;
+    private particle: ParticleGenerator;
 
-    constructor(playerStatus: PlayerStatus, position: Position) {
+    constructor(playerStatus: PlayerStatus, position: Position, particle: ParticleGenerator) {
         super(position, 50);
 
         this.position = position;
         this.velocity = new Position(0, 0);
+        this.particle = particle;
+
         this.radianAngle = 0;
         this.radianAngleVelocity = 0;
 
@@ -113,18 +117,21 @@ export default class SeaHead extends Actor {
     public override invalidate(): void {
         super.invalidate();
         this.boostSound.stop();
+        this.particle.stop();
     }
 
     public setSuccess(): void {
         this.headSprite.currentFrameIndex = 0;
         this.fireSprite.color.a = 0;
         this.boostSound.stop();
+        this.particle.stop();
     }
 
     public setExhausted(): void {
         this.headSprite.currentFrameIndex = 2;
         this.fireSprite.color.a = 0;
         this.boostSound.stop();
+        this.particle.stop();
     }
 
     private normalizeAngle(radianAngle: number): number {
@@ -155,8 +162,13 @@ export default class SeaHead extends Actor {
 
         this.fireSprite.color.a = (boosted ? 1 : 0);
 
-        if (boosted) this.boostSound.play();
-        else this.boostSound.stop();
+        if (boosted) {
+            this.boostSound.play();
+            this.generateParticle();
+        } else {
+            this.boostSound.stop();
+            this.particle.stop();
+        }
 
         this.headSprite.currentFrameIndex = (boosted || angleBoosted ? 1 : 0);
     }
@@ -191,5 +203,14 @@ export default class SeaHead extends Actor {
         this.playerStatus.fuel -= 1;
 
         return true;
+    }
+
+    private generateParticle(): void {
+        const oppositeAngle = this.radianAngle + Math.PI;
+        this.particle.position.left = this.position.left + Math.sin(oppositeAngle) * 80;
+        this.particle.position.top = this.position.top - Math.cos(oppositeAngle) * 80;
+        this.particle.radianAngle = oppositeAngle;
+
+        this.particle.start();
     }
 }
