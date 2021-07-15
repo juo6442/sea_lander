@@ -31,7 +31,7 @@ export default class TitleScene extends Scene {
         super(sceneManager, bundle);
 
         this.isWaitingInput = false;
-        this.sleepRemainDuration = NumberUtil.randomInt(40, 90) * Environment.FPS;
+        this.sleepRemainDuration = NumberUtil.randomInt(30, 90) * Environment.FPS;
 
         this.fadeRect = new Rect.Builder()
                 .setSizeFullscreen()
