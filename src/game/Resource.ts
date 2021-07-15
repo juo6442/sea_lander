@@ -1,7 +1,7 @@
 import AudioResource from "../sound/AudioResource";
 import Logger from "../util/Logger";
 
-const RES_DIR = `${document.URL}/res/`;
+const RES_DIR = `${window.location.href}/res/`;
 
 export default class Resource {
     public static global: Resource | undefined;
