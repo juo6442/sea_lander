@@ -23,11 +23,20 @@ export default class Bgm {
         this.gainNode.gain.setValueAtTime(value, 0);
     }
 
+    /**
+     * Get a Bgm instance.
+     * @returns Singleton instance
+     */
     public static getInstance(): Bgm {
         if (!this.instance) this.instance = new Bgm();
         return this.instance
     }
 
+    /**
+     * Play the audio loop.
+     * @param audio - Audio buffer to play
+     * @param volume - Volume (0 ~ 1)
+     */
     public play(audio: AudioBuffer | undefined, volume?: number): void {
         if (!audio) return;
         if (this.playing) return;
@@ -45,6 +54,9 @@ export default class Bgm {
         this.node.start();
     }
 
+    /**
+     * Stop the audio. No resume.
+     */
     public stop(): void {
         if (!this.node) return;
         if (!this.playing) return;
@@ -53,6 +65,11 @@ export default class Bgm {
         this.node.stop();
     }
 
+    /**
+     * Change volume using exponential ramp.
+     * @param volume - Target volume (0 ~ 1)
+     * @param durationSeconds - Change duration in second
+     */
     public fadeVolume(volume: number, durationSeconds: number): void {
         this.gainNode.gain.exponentialRampToValueAtTime(
                 volume,
