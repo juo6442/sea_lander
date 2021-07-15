@@ -151,8 +151,8 @@ export default class InGameScene extends Scene implements InGameListener {
 
         const generator = new ActorGenerator(this.playerStatus.level);
         this.actors = new Array().concat(
-                generator.createEnemyHeads(this.seaHead, this),
-                generator.createBodies(this.seaHead, this));
+                generator.createBodies(this.seaHead, this),
+                generator.createEnemyHeads(this.seaHead, this));
     }
 
     public override update(keyStatus: KeyStatus): void {
