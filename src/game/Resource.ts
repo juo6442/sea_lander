@@ -114,7 +114,10 @@ export default class Resource {
                                 this.resource.setAudio(id, buffer);
                                 resolve();
                             })
-                            .catch(() => Logger.error("Audio load error: " + src));
+                            .catch(() => {
+                                Logger.error("Audio load error: " + src)
+                                resolve();
+                            });
                 }));
             return this;
         };
