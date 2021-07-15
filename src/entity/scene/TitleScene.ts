@@ -4,6 +4,7 @@ import Resource from "../../game/Resource";
 import { Score } from "../../game/Score";
 import { CommonScript } from "../../script/CommonScript";
 import AudioResource from "../../sound/AudioResource";
+import Bgm from "../../sound/Bgm";
 import Logger from "../../util/Logger";
 import NumberUtil from "../../util/NumberUtil";
 import { Color } from "../Entity";
@@ -79,6 +80,9 @@ export default class TitleScene extends Scene {
 
         this.pushScript(() => { return new CommonScript.Fade(this.fadeRect, 0, 30) });
         this.pushScript(() => { return new CommonScript.Run(() => {
+            Bgm.getInstance().play(Resource.global?.getAudio("bgm"));
+            Bgm.getInstance().fadeVolume(Bgm.VOLUME_DEFAULT, 2);
+
             this.promptLabel.color.a = 1;
             this.promptBlinkScript = new CommonScript.Blink(this.promptLabel, 60);
             this.isWaitingInput = true;

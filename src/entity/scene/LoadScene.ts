@@ -79,6 +79,7 @@ export default class LoadScene extends Scene {
                 .setImage("sea_arrow", "sprite/sea_arrow.png")
                 .setImage("enemy_head", "sprite/enemy_head.png")
                 .setImage("enemy_body", "sprite/enemy_body.png")
+                .setAudio("bgm", "bgm/PerituneMaterial_Laid_Back3_loop.m4a")
                 .setAudio("logo", "sound/logo.wav")
                 .setAudio("sleep_0", "sound/sleep_0.wav")
                 .setAudio("sleep_1", "sound/sleep_1.wav")

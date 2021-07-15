@@ -24,6 +24,7 @@ import FogEffect from "../effect/FogEffect";
 import ActorGenerator from "../actor/ActorGenerator";
 import AudioResource from "../../sound/AudioResource";
 import ParticleGenerator from "../ParticleGenerator";
+import Bgm from "../../sound/Bgm";
 
 export default class InGameScene extends Scene implements InGameListener {
     private static readonly GROUND_TOP = Environment.VIEWPORT_HEIGHT - 60;
@@ -130,6 +131,8 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     private initGame(): void {
+        Bgm.getInstance().fadeVolume(Bgm.VOLUME_INGAME, 2);
+
         this.status = GameStatus.PLAY;
         this.resultScreen = undefined;
 
@@ -232,6 +235,8 @@ export default class InGameScene extends Scene implements InGameListener {
     private onSuccess(body: SeaBody): void {
         this.status = GameStatus.RESULT;
 
+        Bgm.getInstance().fadeVolume(Bgm.VOLUME_QUIET, 2);
+
         this.effectEntities.push(new SuccessEffect(this.seaHead!.position));
         this.seaHead!.setSuccess();
 
@@ -250,6 +255,8 @@ export default class InGameScene extends Scene implements InGameListener {
 
     private onGameOver(): void {
         this.status = GameStatus.RESULT;
+
+        Bgm.getInstance().fadeVolume(Bgm.VOLUME_QUIET, 2);
 
         this.resultScreen = new GameOverScreen(this.playerStatus.score, this);
         Score.setScore(this.playerStatus.score);
