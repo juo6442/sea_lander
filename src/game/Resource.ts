@@ -105,20 +105,17 @@ export default class Resource {
          * @returns this for chaining
          */
         public setAudio(id: string, src: string): Loader {
-            this.resourcesToLoad.push(new Promise(
-                resolve => {
-                    fetch(RES_DIR + src)
-                            .then(response => response.arrayBuffer())
-                            .then(buffer => AudioResource.context.decodeAudioData(buffer))
-                            .then(buffer => {
-                                this.resource.setAudio(id, buffer);
-                                resolve();
-                            })
-                            .catch(() => {
-                                Logger.error("Audio load error: " + src)
-                                resolve();
-                            });
-                }));
+            this.resourcesToLoad.push(
+                fetch(RES_DIR + src)
+                        .then(response => response.arrayBuffer())
+                        .then(buffer => AudioResource.context.decodeAudioData(buffer))
+                        .then(buffer => {
+                            this.resource.setAudio(id, buffer);
+                        })
+                        .catch(() => {
+                            Logger.error("Audio load error: " + src)
+                        })
+            );
             return this;
         };
 
