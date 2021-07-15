@@ -88,6 +88,8 @@ export default class InGameScene extends Scene implements InGameListener {
     }
 
     onDocking(body: SeaBody): void {
+        this.dockingCriteria.log();
+
         if (this.dockingCriteria.check()) {
             this.onSuccess(body);
         } else {
@@ -143,6 +145,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.seaHead?.invalidate();
         this.seaHead = new SeaHead(
                 this.playerStatus,
+                this.dockingCriteria,
                 new Position(Environment.VIEWPORT_WIDTH / 2, 400),
                 this.seaHeadParticle);
 
@@ -279,12 +282,6 @@ export class DockingCriteria {
     }
 
     public check(): boolean {
-        Logger.log("Docking criteria check");
-        Logger.log(`- hV: ${this.horizontalVelocity}`);
-        Logger.log(`- vV: ${this.verticalVelocity}`);
-        Logger.log(`- aV: ${this.angleVelocity}`);
-        Logger.log(`- angle: ${this.angle}`);
-
         return this.horizontalVelocity && this.verticalVelocity && this.angleVelocity && this.angle;
     }
 
@@ -294,6 +291,14 @@ export class DockingCriteria {
         this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -4, 3.5);
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
         this.angle = NumberUtil.isBetween(head.radianAngle, -0.3, 0.3);
+    }
+
+    public log() {
+        Logger.log("Docking criteria");
+        Logger.log(`- hV: ${this.horizontalVelocity}`);
+        Logger.log(`- vV: ${this.verticalVelocity}`);
+        Logger.log(`- aV: ${this.angleVelocity}`);
+        Logger.log(`- angle: ${this.angle}`);
     }
 }
 

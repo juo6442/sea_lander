@@ -7,6 +7,7 @@ import NumberUtil from "../../util/NumberUtil";
 import { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import ParticleGenerator from "../ParticleGenerator";
+import { DockingCriteria } from "../scene/InGameScene";
 import Sprite from "../Sprite";
 import Actor from "./Actor";
 
@@ -23,6 +24,7 @@ export default class SeaHead extends Actor {
     private readonly angleGravityRate: number;
 
     private playerStatus: PlayerStatus;
+    private criteria: DockingCriteria;
     private headSprite: Sprite;
     private fireSprite: Sprite;
     private arrowSprite: Sprite;
@@ -30,7 +32,8 @@ export default class SeaHead extends Actor {
     private boostSound: AudioResource;
     private particle: ParticleGenerator;
 
-    constructor(playerStatus: PlayerStatus, position: Position, particle: ParticleGenerator) {
+    constructor(playerStatus: PlayerStatus, criteria: DockingCriteria,
+            position: Position, particle: ParticleGenerator) {
         super(position, 50);
 
         this.position = position;
@@ -48,6 +51,7 @@ export default class SeaHead extends Actor {
         this.angleGravityRate = 1.008;
 
         this.playerStatus = playerStatus;
+        this.criteria = criteria;
         this.headSprite = new Sprite.Builder()
                 .setOriginCenter()
                 .setImage(Resource.global?.getImage("sea_head"))
@@ -170,7 +174,12 @@ export default class SeaHead extends Actor {
             this.particle.stop();
         }
 
-        this.headSprite.currentFrameIndex = (boosted || angleBoosted ? 1 : 0);
+        if (boosted || angleBoosted) {
+            this.headSprite.currentFrameIndex = 1;
+        } else {
+            this.headSprite.currentFrameIndex = this.criteria.check() ? 0 : 2;
+        }
+
     }
 
     private boostUp(keyStatus: KeyStatus): boolean {
