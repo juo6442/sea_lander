@@ -1,6 +1,6 @@
 export default class PlayerStatus {
     public static readonly LIFE_FULL = 3;
-    public static readonly FUEL_FULL = 1000;
+    public static readonly FUEL_FULL = 600;
 
     public level: number;
     public score: number;

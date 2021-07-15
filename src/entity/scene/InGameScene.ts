@@ -290,7 +290,7 @@ export class DockingCriteria {
 
     public update(head: SeaHead | undefined): void {
         if (!head) return;
-        this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -2.5, 2.5);
+        this.horizontalVelocity = NumberUtil.isBetween(head.velocity.left, -3, 3);
         this.verticalVelocity = NumberUtil.isBetween(head.velocity.top, -4, 3.5);
         this.angleVelocity = NumberUtil.isBetween(head.radianAngleVelocity, -0.02, 0.02);
         this.angle = NumberUtil.isBetween(head.radianAngle, -0.3, 0.3);

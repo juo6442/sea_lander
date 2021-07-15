@@ -118,7 +118,7 @@ export default class TitleScene extends Scene {
         this.isWaitingInput = false;
         this.promptLabel.color.a = 0;
 
-        this.pushScript(() => new CommonScript.Wait(90));
+        this.pushScript(() => new CommonScript.Wait(80));
         this.pushScript(() => new CommonScript.Run(() => {
             this.changeScene(SceneId.INGAME);
         }));
