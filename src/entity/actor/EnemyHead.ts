@@ -16,12 +16,12 @@ export default class EnemyHead extends Actor {
     private player: Actor;
     private headSprite: Sprite;
 
-    constructor(position: Position, velocity: Position, type: HeadType,
+    constructor(position: Position, type: HeadType,
             player: Actor, listener: InGameListener) {
         super(position, 50);
 
         this.position = position;
-        this.velocity = velocity;
+        this.velocity = this.getRandomVelocity(type);
         this.radianAngle = NumberUtil.random(0, Math.PI * 2);
         this.radianAngleVelocity = NumberUtil.random(-0.05, 0.05);
 
@@ -71,6 +71,24 @@ export default class EnemyHead extends Actor {
         });
 
         super.render(context);
+    }
+
+    private getRandomVelocity(type: HeadType): Position {
+        const speed = this.getSpeed(type);
+        const angle = NumberUtil.random(0, Math.PI * 2);
+        const xProjection = Math.sin(angle) * speed;
+        const yProjection = Math.cos(angle) * speed;
+
+        return new Position(xProjection, yProjection);
+    }
+
+    private getSpeed(type: HeadType): number {
+        switch (type) {
+            case HeadType.FEEL: return 5;
+            case HeadType.VON: return 2;
+            case HeadType.GI: return 7;
+            case HeadType.EDITOR: return 10;
+        }
     }
 
     private convertHeadTypeToSpriteIndex(type: HeadType) {
