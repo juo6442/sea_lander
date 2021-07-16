@@ -23,7 +23,7 @@
     </head>
 
     <body>
-        <section>
+        <main>
             <noscript>Javascript를 지원하는 브라우저로 접속해 주세요!</noscript>
             <script type="module" src="dist/bundle.js"></script>
             <div id="container">
@@ -31,10 +31,21 @@
                     <img src="res/web/play.png" />
                 </button>
             </div>
+        </main>
 
-            <p>조작: ↑ ← →
-            </p>
-        </section>
+        <aside id="manual">
+            <hr />
+            - 게임방법 -
+            <ul>
+                <li>몸통을 찾아서 착륙해야 합니다.</li>
+                <li>위, 좌우 방향키로 추진 또는 회전을 하며 이 때마다 연료를 소모합니다.</li>
+                <li>이동속도, 회전속도가 너무 빠르거나 각도가 너무 틀어지면 도킹에 실패합니다.</li>
+                <li>도킹 조건은 화면 상단 계기판에 표시되며, 세아 표정으로도 간단히 확인 가능합니다. (0_0)일 때 도킹하면 실패합니다.</li>
+                <li>잘못된 몸통을 찾아가거나 다른 머리와 충돌하면 안 됩니다.</li>
+                <li>그럼 행운을 빕니다!</li>
+            </ul>
+            <hr />
+        </aside>
 
         <footer>
             <p>
@@ -46,7 +57,11 @@
                 <a class="footerLink" href="https://cafe.naver.com/seazummafo" target="_blank">팬카페</a>
             </p>
             <p>
-                BGM:
+                글꼴:
+                <a class="footerLink" href="https://neodgm.dalgona.dev" target="_blank">https://neodgm.dalgona.dev</a>
+            </p>
+            <p>
+                배경음악:
                 <a class="footerLink" href="https://peritune.com" target="_blank">https://peritune.com</a>
             </p>
             <p>
