@@ -24,5 +24,6 @@ https://juo6442.github.io/sea_lander/
 
 - 이미지: juo
 - 효과음: juo
+- 글꼴: https://neodgm.dalgona.dev
 - BGM: https://peritune.com/
 - 음성: 세아스토리
