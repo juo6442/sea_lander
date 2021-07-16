@@ -251,7 +251,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.playerStatus.score += score.totalScore;
 
         new AudioResource.Builder()
-                .setBuffer(Resource.global?.getAudio(`success_${NumberUtil.randomInt(0, 3)}`))
+                .setBuffer(Resource.global?.getAudio(`success_${NumberUtil.randomInt(0, 4)}`))
                 .build()
                 .play();
     }
