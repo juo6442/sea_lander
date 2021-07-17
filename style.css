@@ -1,0 +1,70 @@
+@font-face {
+    font-family: "NeoDgm";
+    src: url("./neodgm_pro.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: rgb(35, 31, 41);
+    font-size: small;
+    text-align: center;
+    line-height: 140%;
+    word-wrap: break-word;
+}
+
+ul {
+    text-align: start;
+}
+
+li {
+    list-style: inside;
+    list-style-type: circle;
+}
+
+hr {
+    border: 1px #af97ce;
+    border-style: dashed;
+}
+
+button#play {
+    border: 0;
+}
+
+div#container {
+    width: 100%;
+    text-align: center;
+    margin: 1em 0;
+}
+
+.content {
+    max-width: 80vw;
+    max-height : 80vh;
+    min-width: 512px;
+    min-height: 384px;
+    background-color: black;
+}
+
+aside#manual {
+    text-align: center;
+    width: fit-content;
+    padding: 5px;
+    display: inline-block;
+}
+
+footer {
+    width: 100%;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+footer p {
+    font-style: normal;
+}
+
+a.footerLink:link,
+a.footerLink:visited,
+a.footerLink:hover,
+a.footerLink:active {
+    color: rgb(120, 100, 150);
+}
