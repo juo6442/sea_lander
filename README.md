@@ -13,6 +13,8 @@ https://juo6442.github.io/sea_lander/
 
 ## 리소스
 
+이 게임에 사용된 [이미지](res/sprite), [효과음](res/sound), [미사용 리소스](res_unused)는 비상업 용도로 자유롭게 사용 가능합니다.
+
 - 이미지: juo
 - 효과음: juo
 - 글꼴: https://neodgm.dalgona.dev
