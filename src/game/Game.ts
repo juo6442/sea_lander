@@ -4,15 +4,19 @@ import Scene, { Bundle, SceneId, SceneManager } from "../entity/scene/Scene";
 import SceneFactory from "../entity/scene/SceneFactory";
 
 export default class Game implements SceneManager {
+    private readonly interval: number;
     private screen: Canvas;
-
     private keyListener: KeyListener;
-
     private currentScene: Scene | undefined;
 
+    private lastUpdateTimestamp: number;
+
     constructor(screen: HTMLCanvasElement) {
+        this.interval = 1000 / Environment.FPS;
         this.screen = new Canvas(screen);
         this.keyListener = new KeyListener();
+
+        this.lastUpdateTimestamp = 0;
     }
 
     public changeScene(scene: SceneId, bundle?: Bundle): void {
@@ -24,8 +28,7 @@ export default class Game implements SceneManager {
      * Starts main loop and rendering.
      */
     public start(): void {
-        setInterval(this.update.bind(this), 1000 / Environment.FPS);
-        window.requestAnimationFrame(() => this.render());
+        window.requestAnimationFrame(this.loop.bind(this));
 
         this.keyListener.registerEventListener();
 
@@ -33,18 +36,21 @@ export default class Game implements SceneManager {
     }
 
     /**
-     * Called for each frame to update and run logic.
+     * Updates and draws current frame and schedules next loop.
      */
-    private update(): void {
-        this.currentScene?.update(this.keyListener.keyStatus);
-    }
+    private loop(timestamp: number): void {
+        const timeDiff = timestamp - this.lastUpdateTimestamp;
+        const elapsedFrame = Math.floor(timeDiff / this.interval);
 
-    /**
-     * Draws current status to buffer and schedules next rendering.
-     */
-    private render(): void {
-        this.currentScene?.render(this.screen.context);
-        window.requestAnimationFrame(() => this.render());
+        for (let i = 0; i < elapsedFrame; i++) {
+            this.currentScene?.update(this.keyListener.keyStatus);
+        }
+
+        if (elapsedFrame > 0) this.currentScene?.render(this.screen.context);
+
+        this.lastUpdateTimestamp = timestamp - (timeDiff % this.interval);
+
+        window.requestAnimationFrame(this.loop.bind(this));
     }
 }
 
