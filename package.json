@@ -5,7 +5,9 @@
   "main": "dist/bundle.js",
   "scripts": {
     "build": "webpack --mode=development",
-    "dist": "webpack --mode=production"
+    "dist": "webpack --mode=production",
+    "predeploy": "npm run dist",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -16,9 +18,10 @@
   "bugs": {
     "url": "https://github.com/juo6442/sea_lander/issues"
   },
-  "homepage": "https://github.com/juo6442/sea_lander#readme",
+  "homepage": "https://juo6442.github.io/sea_lander",
   "devDependencies": {
     "copy-webpack-plugin": "^9.0.1",
+    "gh-pages": "^3.2.3",
     "ts-loader": "^9.2.3",
     "typescript": "^4.3.5",
     "webpack": "^5.42.0",
