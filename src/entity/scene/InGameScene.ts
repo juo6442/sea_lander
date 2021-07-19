@@ -216,7 +216,7 @@ export default class InGameScene extends Scene implements InGameListener {
 
     private crash(): void {
         new AudioResource.Builder()
-                .setBuffer(Resource.global?.getAudio(`crash_${NumberUtil.randomInt(0, 4)}`))
+                .setBuffer(Resource.global?.getAudio(`crash_${NumberUtil.randomInt(0, 5)}`))
                 .build()
                 .play();
 
@@ -251,7 +251,7 @@ export default class InGameScene extends Scene implements InGameListener {
         this.playerStatus.score += score.totalScore;
 
         new AudioResource.Builder()
-                .setBuffer(Resource.global?.getAudio(`success_${NumberUtil.randomInt(0, 4)}`))
+                .setBuffer(Resource.global?.getAudio(`success_${NumberUtil.randomInt(0, 5)}`))
                 .build()
                 .play();
     }

@@ -94,6 +94,7 @@ export default class LoadScene extends Scene {
                 .setAudio("crash_1", "sound/crash_1.wav")
                 .setAudio("crash_2", "sound/crash_2.wav")
                 .setAudio("crash_3", "sound/crash_3.wav")
+                .setAudio("crash_4", "sound/crash_4.wav")
                 .setAudio("fake_0", "sound/fake_0.wav")
                 .setAudio("fake_1", "sound/fake_1.wav")
                 .setAudio("fake_2", "sound/fake_2.wav")
@@ -101,6 +102,7 @@ export default class LoadScene extends Scene {
                 .setAudio("success_1", "sound/success_1.wav")
                 .setAudio("success_2", "sound/success_2.wav")
                 .setAudio("success_3", "sound/success_3.wav")
+                .setAudio("success_4", "sound/success_4.wav")
                 .setAudio("gameover", "sound/gameover.wav")
                 .load();
     }
