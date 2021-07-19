@@ -73,7 +73,7 @@ abstract class BaseActorGenerator {
     protected getRandomHorizontalPositions(n: number): number[] {
         const segments = new Array();
         for (let i = BaseActorGenerator.HORIZONTAL_SEGMENT_LENGTH;
-                i < Environment.VIEWPORT_WIDTH - BaseActorGenerator.HORIZONTAL_SEGMENT_LENGTH;
+                i <= Environment.VIEWPORT_WIDTH - BaseActorGenerator.HORIZONTAL_SEGMENT_LENGTH;
                 i += BaseActorGenerator.HORIZONTAL_SEGMENT_LENGTH) {
             segments.push(i);
         }
