@@ -186,10 +186,10 @@ export default class SeaHead extends Actor {
         if (!keyStatus.isPressed(Key.UP)) return false;
         if (this.playerStatus.fuel <= 0) return false;
 
-        const xProjection = Math.sin(this.radianAngle);
-        const yProjection = Math.cos(this.radianAngle);
+        const xProjection = +Math.sin(this.radianAngle);
+        const yProjection = -Math.cos(this.radianAngle);
         this.velocity.left += xProjection * this.fuelUpEfficiency;
-        this.velocity.top  -= yProjection * this.fuelUpEfficiency;
+        this.velocity.top  += yProjection * this.fuelUpEfficiency;
 
         this.radianAngleVelocity +=
                 NumberUtil.random(-this.angleInstability, +this.angleInstability);
