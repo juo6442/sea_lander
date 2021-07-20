@@ -29,7 +29,6 @@ export default class Game implements SceneManager {
      */
     public start(): void {
         window.requestAnimationFrame(this.loop.bind(this));
-
         this.keyListener.registerEventListener();
 
         this.changeScene(SceneId.LOAD);
@@ -45,7 +44,6 @@ export default class Game implements SceneManager {
         for (let i = 0; i < elapsedFrame; i++) {
             this.currentScene?.update(this.keyListener.keyStatus);
         }
-
         if (elapsedFrame > 0) this.currentScene?.render(this.screen.context);
 
         this.lastUpdateTimestamp = timestamp - (timeDiff % this.interval);

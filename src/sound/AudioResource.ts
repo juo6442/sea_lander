@@ -5,6 +5,18 @@ export default abstract class AudioResource {
     public abstract play(): void;
     public abstract stop(): void;
 
+    /**
+     * Enables Safari's audio auto-play for its context.
+     * Need be called by a user interection.
+     */
+    public static enableAutoPlay(): void {
+        const emptyAudio = new AudioResource.Builder()
+                .setBuffer(AudioResource.context.createBuffer(1, 1, 8000))
+                .build();
+        emptyAudio.play();
+        emptyAudio.stop();
+    }
+
     static Builder = class Builder {
         private buffer: AudioBuffer | undefined;
         private loop: boolean | undefined;

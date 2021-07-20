@@ -1,5 +1,7 @@
 import Environment from "./game/Environment";
 import Game from "./game/Game";
+import AudioResource from "./sound/AudioResource";
+import Bgm from "./sound/Bgm";
 
 window.onload = () => {
     document.getElementById("play")
@@ -8,6 +10,9 @@ window.onload = () => {
 
 function startGame(): void {
     document.getElementById("play")?.remove();
+
+    AudioResource.enableAutoPlay();
+    Bgm.enableAutoPlay();
 
     const screen = createScreen();
     document.getElementById("container")
