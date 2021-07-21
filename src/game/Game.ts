@@ -1,5 +1,5 @@
 import Environment from "./Environment";
-import { KeyListener } from "./KeyInput";
+import { KeyListener } from "./input/Input";
 import Scene, { Bundle, SceneId, SceneManager } from "../entity/scene/Scene";
 import SceneFactory from "../entity/scene/SceneFactory";
 

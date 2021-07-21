@@ -1,4 +1,4 @@
-import { KeyStatus } from "../game/KeyInput";
+import { KeyStatus } from "../game/input/Input";
 import Script from "./Script";
 
 export default class SequentialScriptRunner {

@@ -1,5 +1,5 @@
 import Environment from "../../game/Environment";
-import { Key, KeyStatus } from "../../game/KeyInput";
+import { Key, KeyStatus } from "../../game/input/Input";
 import { CommonScript } from "../../script/CommonScript";
 import SequentialScriptRunner from "../../script/SequencialScriptRunner";
 import Entity from "../Entity";
