@@ -1,44 +1,41 @@
+import KeyboardInput from "./KeyboardInput";
+
 export class KeyListener {
     private _keyStatus: SettableKeyStatus;
+    private keyboard: KeyboardInput;
 
     constructor() {
         this._keyStatus = new SettableKeyStatus();
+        this.keyboard = new KeyboardInput(this);
     }
 
     get keyStatus(): KeyStatus {
         return this._keyStatus;
     }
 
-    /**
-     * Starts to listen key event.
-     */
-    public registerEventListener(): void {
-        window.addEventListener("keydown", e => this.handleKeyEvent(e));
-        window.addEventListener("keyup", e => this.handleKeyEvent(e));
+    public onKeyInput(key: Key, pressed: boolean): void {
+        this._keyStatus.setPressed(key, pressed);
     }
 
-    private handleKeyEvent(event: KeyboardEvent): void {
-        this._keyStatus.setPressed(event.key, event.type === "keydown");
-        event.preventDefault();
+    /**
+     * Starts to listen key event from various source.
+     */
+    public registerEventListener(): void {
+        this.keyboard.registerEventListener();
     }
 }
 
-export enum Key {
-    UP = "ArrowUp",
-    LEFT = "ArrowLeft",
-    RIGHT = "ArrowRight",
-    PAUSE = "Escape",
-    OK = "Enter",
+export const enum Key {
+    UP, LEFT, RIGHT, OK
 }
 
 export class KeyStatus {
-    protected status: Map<string, boolean>;
+    protected status: Map<Key, boolean>;
 
     protected constructor() {
         this.status = new Map();
-        for (const k of Object.values(Key)) {
-            this.status.set(k, false);
-        }
+        [Key.UP, Key.LEFT, Key.RIGHT, Key.OK]
+                .forEach(k => this.status.set(k, false));
     }
 
     /**
@@ -60,10 +57,10 @@ class SettableKeyStatus extends KeyStatus {
     /**
      * Set key status.
      *
-     * @param key - Key string to set
+     * @param key - Key to set
      * @param pressed - True if the key is pressed
      */
-    public setPressed(key: string, pressed: boolean): void {
+    public setPressed(key: Key, pressed: boolean): void {
         if (this.status.has(key)) {
             this.status.set(key, pressed);
         }
