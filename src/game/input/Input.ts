@@ -1,12 +1,8 @@
-import KeyboardInput from "./KeyboardInput";
-
 export class KeyListener {
     private _keyStatus: SettableKeyStatus;
-    private keyboard: KeyboardInput;
 
     constructor() {
         this._keyStatus = new SettableKeyStatus();
-        this.keyboard = new KeyboardInput(this);
     }
 
     get keyStatus(): KeyStatus {
@@ -15,13 +11,6 @@ export class KeyListener {
 
     public onKeyInput(key: Key, pressed: boolean): void {
         this._keyStatus.setPressed(key, pressed);
-    }
-
-    /**
-     * Starts to listen key event from various source.
-     */
-    public registerEventListener(): void {
-        this.keyboard.registerEventListener();
     }
 }
 

@@ -1,12 +1,16 @@
 import Environment from "./Environment";
+import KeyboardInput from "./input/KeyboardInput";
 import { KeyListener } from "./input/Input";
 import Scene, { Bundle, SceneId, SceneManager } from "../entity/scene/Scene";
 import SceneFactory from "../entity/scene/SceneFactory";
+import TouchKeyInput from "./input/TouchKeyInput";
 
 export default class Game implements SceneManager {
     private readonly interval: number;
     private screen: Canvas;
     private keyListener: KeyListener;
+    private keyboardInput: KeyboardInput;
+    private touchKeyInput: TouchKeyInput;
     private currentScene: Scene | undefined;
 
     private lastUpdateTimestamp: number;
@@ -14,7 +18,10 @@ export default class Game implements SceneManager {
     constructor(screen: HTMLCanvasElement) {
         this.interval = 1000 / Environment.FPS;
         this.screen = new Canvas(screen);
+
         this.keyListener = new KeyListener();
+        this.keyboardInput = new KeyboardInput(this.keyListener);
+        this.touchKeyInput = new TouchKeyInput(this.keyListener);
 
         this.lastUpdateTimestamp = 0;
     }
@@ -29,7 +36,9 @@ export default class Game implements SceneManager {
      */
     public start(): void {
         window.requestAnimationFrame(this.loop.bind(this));
-        this.keyListener.registerEventListener();
+
+        this.keyboardInput.registerEventListener();
+        this.touchKeyInput.registerEventListener(this.screen.canvas);
 
         this.changeScene(SceneId.LOAD);
     }
