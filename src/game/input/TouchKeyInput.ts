@@ -1,46 +1,58 @@
-import Logger from "../../util/Logger";
 import { Key, KeyListener } from "./Input";
 
 export default class TouchKeyInput {
-    private canvas: HTMLElement | undefined;
     private listener: KeyListener;
 
     constructor(listener: KeyListener) {
         this.listener = listener;
     }
 
-    public registerEventListener(canvas: HTMLElement): void {
-        this.canvas = canvas;
-        canvas.addEventListener("touchstart", this.inspectTouches.bind(this));
-        canvas.addEventListener("touchmove", this.inspectTouches.bind(this));
-        canvas.addEventListener("touchend", this.inspectTouches.bind(this));
+    public registerEventListener(): void {
+        const keys = document.getElementsByClassName("touchKey");
+        for (let key of Array.from(keys)) {
+            if (key instanceof HTMLElement) {
+                key.addEventListener("touchstart", this.onTouchStart.bind(this));
+                key.addEventListener("touchend", this.onTouchEnd.bind(this));
+            }
+        }
+
+        const enterKey = document.getElementById("enterKey");
+        enterKey?.addEventListener("touchstart", this.onTouchStart.bind(this));
+        enterKey?.addEventListener("touchend", this.onTouchEnd.bind(this));
     }
 
-    private inspectTouches(event: TouchEvent): void {
-        for (let i = 0; i < event.targetTouches.length; i++) {
-            const touch = event.targetTouches.item(i);
-            if (!touch) continue;
+    private onTouchStart(event: TouchEvent): void {
+        this.onTouch(event, true);
+    }
 
-            // TODO: implement
-            console.log(this.getTouchOffset(touch));
+    private onTouchEnd(event: TouchEvent): void {
+        this.onTouch(event, false);
+    }
+
+    private onTouch(event: TouchEvent, touched: boolean): void {
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            const touch = event.changedTouches.item(i);
+            if (touch === null) continue;
+
+            const keyAttribute = (touch.target as HTMLElement).getAttribute("key");
+            if (keyAttribute === null) continue;
+
+            const key = this.keyAttributeToEnum(keyAttribute);
+            if (key === undefined) continue;
+
+            this.listener.onKeyInput(key, touched);
         }
 
         event.preventDefault();
     }
 
-    private getTouchOffset(touch: Touch): Position {
-        return new Position(
-                touch.pageX - this.canvas!.offsetLeft,
-                touch.pageY - this.canvas!.offsetTop);
-    }
-}
-
-class Position {
-    public left: number;
-    public top: number;
-
-    constructor(left: number, top: number) {
-        this.left = left;
-        this.top = top;
+    private keyAttributeToEnum(keyAttribute: string): Key | undefined {
+        switch (keyAttribute) {
+            case "up": return Key.UP;
+            case "left": return Key.LEFT;
+            case "right": return Key.RIGHT;
+            case "enter": return Key.OK;
+            default: return undefined;
+        }
     }
 }

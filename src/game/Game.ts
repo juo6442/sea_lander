@@ -38,7 +38,7 @@ export default class Game implements SceneManager {
         window.requestAnimationFrame(this.loop.bind(this));
 
         this.keyboardInput.registerEventListener();
-        this.touchKeyInput.registerEventListener(this.screen.canvas);
+        this.touchKeyInput.registerEventListener();
 
         this.changeScene(SceneId.LOAD);
     }

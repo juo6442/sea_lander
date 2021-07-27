@@ -24,8 +24,10 @@ function startGame(): void {
 
 function createScreen(): HTMLCanvasElement {
     const screen = document.createElement("canvas");
+    screen.id = "enterKey";
     screen.className = "content";
     screen.width = Environment.VIEWPORT_WIDTH;
     screen.height = Environment.VIEWPORT_HEIGHT;
+    screen.setAttribute("key", "enter");
     return screen;
 }
