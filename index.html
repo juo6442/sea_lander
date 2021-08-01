@@ -28,10 +28,25 @@
             <script type="module" src="./bundle.js"></script>
             <div id="container">
                 <button id="play" class="content" type="button" autofocus="true">
-                    <img src="./play.png" />
+                    <img src="./play.png" draggable="false" />
                 </button>
             </div>
         </main>
+
+        <section id="touchKeyContainer" class="touchKeyArea">
+            <div class="touchKeyArea">
+                <button class="touchKey" type="button" key="up">△</button>
+                <br />
+                <button class="touchKey" type="button" key="left">◁</button>
+            </div>
+            <div class="touchKeyArea">
+                <button class="touchKey" type="button" key="enter">⏎</button>
+                <br />
+                <button class="touchKey" type="button" key="up">△</button>
+                <br />
+                <button class="touchKey" type="button" key="right">▷</button>
+            </div>
+        </section>
 
         <aside id="manual">
             <hr />

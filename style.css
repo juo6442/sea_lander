@@ -30,6 +30,12 @@ hr {
 
 button#play {
     border: 0;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 div#container {
@@ -44,6 +50,40 @@ div#container {
     min-width: 512px;
     min-height: 384px;
     background-color: black;
+}
+
+#touchKeyContainer {
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    left: 0;
+    top: 0;
+    position: fixed;
+}
+
+.touchKeyArea {
+    pointer-events: none;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+button.touchKey {
+    pointer-events: auto;
+    font-size: max(9vmin, 64px);
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    border-color: rgba(0, 0, 0, 0.5);
+    border-width: 1px;
+    border-radius: 0.8em;
+    margin: 0.08em;
 }
 
 aside#manual {
