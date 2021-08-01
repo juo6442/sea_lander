@@ -1,5 +1,5 @@
 import { Color, Position, Size } from "../entity/Entity";
-import { KeyStatus } from "../game/KeyInput";
+import { KeyStatus } from "../game/input/Input";
 
 export default abstract class Script {
     readonly isInfinite: boolean;

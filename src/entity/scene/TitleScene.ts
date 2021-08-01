@@ -1,5 +1,5 @@
 import Environment from "../../game/Environment";
-import { Key, KeyStatus } from "../../game/KeyInput";
+import { Key, KeyStatus } from "../../game/input/Input";
 import Resource from "../../game/Resource";
 import { Score } from "../../game/Score";
 import { CommonScript } from "../../script/CommonScript";

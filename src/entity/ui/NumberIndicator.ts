@@ -1,4 +1,4 @@
-import { KeyStatus } from "../../game/KeyInput";
+import { KeyStatus } from "../../game/input/Input";
 import Entity, { Position } from "../Entity";
 import Label, { TextAlign } from "../Label";
 import Sprite from "../Sprite";

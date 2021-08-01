@@ -1,4 +1,4 @@
-import { KeyStatus } from "../../game/KeyInput";
+import { KeyStatus } from "../../game/input/Input";
 import Resource from "../../game/Resource";
 import Entity, { Color, Position } from "../Entity";
 import Rect from "../Rect";

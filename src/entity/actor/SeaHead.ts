@@ -1,5 +1,5 @@
 import Environment from "../../game/Environment";
-import { Key, KeyStatus } from "../../game/KeyInput";
+import { Key, KeyStatus } from "../../game/input/Input";
 import PlayerStatus from "../../game/PlayerStatus";
 import Resource from "../../game/Resource";
 import AudioResource from "../../sound/AudioResource";

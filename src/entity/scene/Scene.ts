@@ -1,5 +1,5 @@
 import Entity from "../Entity";
-import { KeyStatus } from "../../game/KeyInput";
+import { KeyStatus } from "../../game/input/Input";
 import Script from "../../script/Script";
 import SequentialScriptRunner from "../../script/SequencialScriptRunner";
 

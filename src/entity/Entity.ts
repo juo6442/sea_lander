@@ -1,4 +1,4 @@
-import { KeyStatus } from "../game/KeyInput";
+import { KeyStatus } from "../game/input/Input";
 import NumberUtil from "../util/NumberUtil";
 
 export default abstract class Entity {
