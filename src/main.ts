@@ -2,10 +2,26 @@ import Environment from "./game/Environment";
 import Game from "./game/Game";
 import AudioResource from "./sound/AudioResource";
 import Bgm from "./sound/Bgm";
+import Logger from "./util/Logger";
 
 window.onload = () => {
-    document.getElementById("play")
-            ?.addEventListener("click", startGame);
+    registerPlayKeyEvent();
+}
+
+function registerPlayKeyEvent() {
+    const playButton = document.getElementById("play");
+    if (!playButton) {
+        Logger.error("Play button element not found");
+        return;
+    }
+
+    playButton.addEventListener("click", startGame);
+    playButton.addEventListener("touchstart", e => {
+        const touchKey = document.getElementById("touchKeyContainer");
+        if (touchKey) touchKey.style.visibility = "visible";
+        startGame();
+        e.preventDefault();
+    });
 }
 
 function startGame(): void {
@@ -28,6 +44,5 @@ function createScreen(): HTMLCanvasElement {
     screen.className = "content";
     screen.width = Environment.VIEWPORT_WIDTH;
     screen.height = Environment.VIEWPORT_HEIGHT;
-    screen.setAttribute("key", "enter");
     return screen;
 }
