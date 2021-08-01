@@ -98,4 +98,8 @@ export class Color {
     get g() { return this._g; }
     get b() { return this._b; }
     get a() { return this._a; }
+
+    public toString(): string {
+        return `rgba(${this._r}, ${this._g}, ${this._b}, ${this._a})`;
+    }
 }

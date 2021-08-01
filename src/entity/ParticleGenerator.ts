@@ -185,8 +185,7 @@ class Particle extends Entity {
         context.save();
         context.translate(this.position.left, this.position.top);
 
-        context.fillStyle =
-                `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`;
+        context.fillStyle = this.color.toString();
         context.beginPath();
         context.arc(
                 0, 0, this.currentRadius(),

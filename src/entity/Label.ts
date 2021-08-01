@@ -48,8 +48,7 @@ export default class Label extends Entity {
 
         if (this.shadowColor && this.shadowDistance) {
             context.translate(this.shadowDistance.left, this.shadowDistance.top);
-            context.fillStyle =
-                    `rgba(${this.shadowColor.r}, ${this.shadowColor.g}, ${this.shadowColor.b}, ${this.shadowColor.a})`;
+            context.fillStyle = this.shadowColor.toString();
             context.fillText(this.text, 0, 0);
             context.translate(-this.shadowDistance.left, -this.shadowDistance.top);
         }
