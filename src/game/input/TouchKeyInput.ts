@@ -34,7 +34,10 @@ export default class TouchKeyInput {
             const touch = event.changedTouches.item(i);
             if (touch === null) continue;
 
-            const keyAttribute = (touch.target as HTMLElement).getAttribute("key");
+            const target = touch.target as HTMLElement;
+            target.style.backgroundColor =
+                    touched ? "rgba(200, 200, 200, 0.5)" : "rgba(255, 255, 255, 0.5)";
+            const keyAttribute = target.getAttribute("key");
             if (keyAttribute === null) continue;
 
             const key = this.keyAttributeToEnum(keyAttribute);
